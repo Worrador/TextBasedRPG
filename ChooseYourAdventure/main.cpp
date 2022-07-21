@@ -8,7 +8,7 @@
 using namespace std;
 
 
-/* Storylien struct, pointer next is added for loop possibilities */
+/* Storyline struct, pointer next is added for loop possibilities */
 typedef struct Storylines
 {
 	string currentLine;
@@ -84,12 +84,13 @@ int main()
 {
     SetConsoleOutputCP(CP_UTF8);
 
-    // Enable buffering to prevent VS from chopping up UTF-8 byte sequences
+	/* Enable buffering to prevent VS from chopping up UTF-8 byte sequences */
     setvbuf(stdout, nullptr, _IOFBF, 1000);
 
 	/* Start with the empty list */
 	Storylines_t* head = NULL;
 
+	//TODO parse excel or smthing
 	push(&head, u8"Éhes vagy", u8"Rendelsz", u8"Főzöl");
 	push(&head, u8"Rendelsz",									u8"Sokára jön meg a kaja, megvárod.",	u8"Sokára jön meg a kaja, nem várod meg.");
 	push(&head, u8"Sokára jön meg a kaja, megvárod.",			u8"Éhen haltál a gecibe.",				"");
@@ -100,10 +101,10 @@ int main()
 
 	Storylines_t* head_local = g_start;
 
-	cout << u8"Gépelj egyest az első opció választásához. Kettest a másodikéhoz. \n";
+	cout << u8"Gépelj egyest az első opció választásához. Kettest a másodikéhoz." << endl << endl;
 
 	while (1) {
-		cout << head_local->currentLine << endl;
+		cout << head_local->currentLine << endl << endl;
 
 		if ((head_local->optionA == NULL) && (head_local->optionB == NULL))
 		{
@@ -111,13 +112,19 @@ int main()
 			break;
 		}
 
-		if(head_local->optionA != NULL)
-			cout << head_local->optionA->currentLine << endl;
 
+		/* option A always exists */
 		if (head_local->optionB != NULL)
-			cout << head_local->optionB->currentLine << endl;
-
-		//TODO ha nincs B opcio akkor a kettest ne fogadjuk el
+		{
+			cout << "1: " << head_local->optionA->currentLine << endl;
+			cout << "2: " << head_local->optionB->currentLine << endl;
+			cout << "--------------------------------------------" << endl;
+		}
+		else
+		{
+			head_local = head_local->optionA;
+			continue;
+		}
 
 		int answer;
 		cin >> answer;
@@ -125,7 +132,5 @@ int main()
 			head_local = head_local->optionA;
 		else if (answer == 2)
 			head_local = head_local->optionB;
-
-
 	}
 }

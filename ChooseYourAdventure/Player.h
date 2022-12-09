@@ -2,6 +2,14 @@
 #define Player_H
 
 class Player {
+
+	// Operators
+
+	// Functions
+
+	// Accessors
+
+	// Modifiers
 private:
 	int hp;
 

@@ -20,7 +20,8 @@ public:
 	inline int getStaminaMax() const { return staminaMax; };
 
 	// Modifiers
-	inline int setStaminaToMax() { stamina = staminaMax; };
+	inline void setStamina(int stamina) { this->stamina = stamina; };
+	inline void setHp(int hp) { this->hp = hp; };
 
 private:
 	int level;

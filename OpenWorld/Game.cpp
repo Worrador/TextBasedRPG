@@ -69,7 +69,8 @@ int Game::mainMenu()
 	std::cout << "1: Shop" << std::endl;
 	std::cout << "2: Rest" << std::endl;
 	std::cout << "3: Stats" << std::endl;
-	std::cout << "4: Quit" << std::endl;
+	std::cout << "4: Inventory" << std::endl;
+	std::cout << "5: Quit" << std::endl;
 
 	std::cin >> mainMenuChoice;
 
@@ -87,9 +88,22 @@ void Game::printStats()
 	std::cout << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
 	std::cout << "Attack:  " << player.getDamageMax() << std::endl;
 	std::cout << "Defence: " << player.getDefence() << std::endl;
-	std::cout << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
+	std::cout << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl;
 
-	std::cout << "0: Return" << std::endl;
+	std::cout << std::endl << "0: Return" << std::endl;
+	auto Return = 1;
+	while (Return != 0) { std::cin >> Return; }
+	return;
+}
+
+void Game::printInventory()
+{
+	std::cout << "\033c";
+	std::cout << "INVENTORY" << std::endl;
+	std::cout << "---------" << std::endl;
+	std::cout << "Gold: " << player.getGold() << std::endl;
+
+	std::cout << std::endl << "0: Return" << std::endl;
 	auto Return = 1;
 	while (Return != 0) { std::cin >> Return; }
 	return;
@@ -101,15 +115,22 @@ void Game::gameLoop()
 	switch (mainMenu())
 	{
 	case 0:
+
 		break;
 	case 1:
+
 		break;
 	case 2:
+		player.setStamina(player.getStaminaMax());
 		break;
 	case 3:
 		printStats();
 		break;
 	case 4:
+		printInventory();
+		break;
+	case 5:
+		playing = false;
 		break;
 	default:
 		break;

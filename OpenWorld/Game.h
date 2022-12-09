@@ -15,7 +15,9 @@ public:
 	int mainMenu();
 	Player playerCreation();
 	void gameLoop();
+
 	void printStats();
+	void printInventory();
 
 	// Accessors
 	inline bool getPlaying() const { return playing; };

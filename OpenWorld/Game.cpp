@@ -68,7 +68,7 @@ int Game::mainMenu()
 	std::cout << "0: Travel" << std::endl;
 	std::cout << "1: Shop" << std::endl;
 	std::cout << "2: Rest" << std::endl;
-	std::cout << "3: Level up" << std::endl;
+	std::cout << "3: Stats" << std::endl;
 	std::cout << "4: Quit" << std::endl;
 
 	std::cin >> mainMenuChoice;
@@ -76,12 +76,44 @@ int Game::mainMenu()
 	return mainMenuChoice;
 }
 
+void Game::printStats()
+{
+	std::cout << "\033c";
+	std::cout << "STATS" << std::endl;
+	std::cout << "---------" << std::endl;
+	std::cout << "Name: " << player.getName() << std::endl;
+	std::cout << "Level: " << player.getLevel() << std::endl;
+	std::cout << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
+	std::cout << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
+	std::cout << "Attack:  " << player.getDamageMax() << std::endl;
+	std::cout << "Defence: " << player.getDefence() << std::endl;
+	std::cout << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
+
+	std::cout << "0: Return" << std::endl;
+	auto Return = 1;
+	while (Return != 0) { std::cin >> Return; }
+	return;
+}
+
 // Controls the playthrough stages
 void Game::gameLoop()
 {
-	int choice = mainMenu();
-	if (choice == 4)
-		playing = false;
+	switch (mainMenu())
+	{
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		printStats();
+		break;
+	case 4:
+		break;
+	default:
+		break;
+	}
 
 }
 

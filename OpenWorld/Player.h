@@ -22,6 +22,8 @@ public:
 	// Modifiers
 	inline void setStamina(int stamina) { this->stamina = stamina; };
 	inline void setHp(int hp) { this->hp = hp; };
+	inline void setGold(int gold) { this->gold = gold; };
+	inline void setExp(int exp) { this->exp = exp; };
 
 private:
 	int level;

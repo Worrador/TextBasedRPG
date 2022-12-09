@@ -77,6 +77,8 @@ int Game::mainMenu()
 	return mainMenuChoice;
 }
 
+//v3 = rand() % 30 + 1985;
+
 void Game::printStats()
 {
 	std::cout << "\033c";
@@ -109,13 +111,57 @@ void Game::printInventory()
 	return;
 }
 
+void Game::travel() 
+{
+	int chance = rand() % 1 + 4;
+	if (chance > 0) {
+		int difficulty = rand() % 1 + 10;
+		Enemy enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, player.getLevel() * difficulty, player.getLevel() * difficulty);
+		fight(enemy);
+	}
+
+}
+
+void Game::fight(Enemy& enemy)
+{
+	std::cout << "\033c";
+	std::cout << "You have met an enemy " << enemy.getName() << std::endl;
+	std::cout << "---------" << std::endl;
+	std::cout << "0: Attack" << std::endl;
+	std::cout << "1: Run" << std::endl;
+	std::cout << "2: Wait" << std::endl << std::endl;
+
+	int choice;
+	std::cin >> choice;
+	if (choice == 0) {
+		while ((player.getHp() > 0) && (enemy.getHp() > 0)) {
+			int dmgPlayer = rand() % player.getDamageMin() + player.getDamageMax() - enemy.getDefence();
+			std::cout << "You deal " << dmgPlayer << "damage." << std::endl;
+			enemy.setHp(enemy.getHp() - dmgPlayer);
+
+			int dmgEnemy = rand() % enemy.getDamageMin() + enemy.getDamageMax() - player.getDefence();
+			std::cout << "Your enemy deals " << dmgEnemy << "damage." << std::endl;
+			player.setHp(player.getHp() - dmgEnemy);
+		}
+		if (player.getHp() > 0) {
+			std::cout << "You have won the battle, your reward is: " << enemy.getGold() << "gold" << std::endl;
+			player.setGold(player.getGold() + enemy.getGold());
+			player.setExp(player.getExp() + enemy.getExpDrop());
+		}
+		else {
+			std::cout << "You dieded";
+		}
+
+	}
+}
+
 // Controls the playthrough stages
 void Game::gameLoop()
 {
 	switch (mainMenu())
 	{
 	case 0:
-
+		travel();
 		break;
 	case 1:
 

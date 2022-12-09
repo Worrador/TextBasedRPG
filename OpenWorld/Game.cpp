@@ -4,7 +4,7 @@
 Player Game::playerCreation()
 {
 	std::string name;
-	std::cout << "Plase input your name!" << std::endl;
+	std::cout << "Please input your name!" << std::endl;
 	std::cout << "---------" << std::endl;
 
 	std::cin >> name;

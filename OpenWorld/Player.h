@@ -6,7 +6,7 @@ class Player : public Character
 {
 public:
 	Player(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax) :
-		Character(name, hpMax, dmgMin, dmgMax, defence), level(0), exp(0), expNext(100), stamina(staminaMax), staminaMax(staminaMax) {};
+		Character(name, hpMax, dmgMin, dmgMax, defence), level(1), exp(0), expNext(100), stamina(staminaMax), staminaMax(staminaMax) {};
 
 	// Operators
 
@@ -20,6 +20,7 @@ public:
 	inline int getStaminaMax() const { return staminaMax; };
 
 	// Modifiers
+	inline int setStaminaToMax() { stamina = staminaMax; };
 
 private:
 	int level;

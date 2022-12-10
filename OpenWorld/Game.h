@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <thread>   // for std::this_thread::sleep_for
 #include <chrono>   // for std::chrono::seconds
+#include <conio.h>
 
 
 class Game

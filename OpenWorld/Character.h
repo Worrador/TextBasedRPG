@@ -6,13 +6,9 @@ class Character
 {
 public:
 	//TODO: utánna járni a sokconstrucotor eloadásnak
-	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, int gold) :
+	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, int gold = 0) :
 		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), stamina(staminaMax), 
 		staminaMax(staminaMax), gold(gold) {};
-
-	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax) :
-		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), stamina(staminaMax),
-		staminaMax(staminaMax), gold(0) {};
 
 	~Character();
 

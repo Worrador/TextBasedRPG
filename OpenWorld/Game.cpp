@@ -1,5 +1,20 @@
 #include "Game.h"
 
+int Game::getInputBetween(int lower, int higher)
+{
+	int choice;
+	std::cin >> choice;
+
+	// Validate the player's input
+	while (choice < lower || choice > higher || !std::cin) {
+		std::cin.clear(); // reset failbit
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //skip bad input
+
+		std::cout << "Invalid input. Please enter a number between " << lower << " and " << higher << "." << std::endl;
+		std::cin >> choice;
+	}
+	return choice;
+}
 
 Player Game::playerCreation()
 {
@@ -9,8 +24,6 @@ Player Game::playerCreation()
 
 	std::cin >> name;
 
-
-	int role;
 	std::cout << "Now choose a class!" << std::endl;
 	std::cout << "---------" << std::endl;
 	std::cout << "0: Warrior" << std::endl;
@@ -18,10 +31,9 @@ Player Game::playerCreation()
 	std::cout << "2: Rouge" << std::endl;
 	std::cout << "3: Ranger" << std::endl;
 
-	std::cin >> role;
 
 	int hpMax, dmg, def, sta;
-	switch (role) {
+	switch (getInputBetween(0, 3)) {
 	case 0:
 		hpMax = 12;
 		dmg = 3;
@@ -95,10 +107,8 @@ void Game::printStats()
 	std::cout << "Defence: " << player.getDefence() << std::endl;
 	std::cout << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl;
 
-	std::cout << std::endl << "0: Return" << std::endl;
-	auto Return = 1;
-	while (Return != 0) { std::cin >> Return; }
-	return;
+	std::cout << "Press a button to return.";
+	_getch();
 }
 
 void Game::printInventory()
@@ -108,10 +118,8 @@ void Game::printInventory()
 	std::cout << "---------" << std::endl;
 	std::cout << "Gold: " << player.getGold() << std::endl;
 
-	std::cout << std::endl << "0: Return" << std::endl;
-	auto Return = 1;
-	while (Return != 0) { std::cin >> Return; }
-	return;
+	std::cout << "Press a button to return.";
+	_getch();
 }
 
 void Game::buy()
@@ -195,29 +203,13 @@ int Game::rollBetween(int lower, int higher)
 	return roll_dist(rng);
 }
 
-int Game::getInputBetween(int lower, int higher)
-{
-	int choice;
-	std::cin >> choice;
-
-	// Validate the player's input
-	while (choice < lower || choice > higher || !std::cin) {
-		std::cin.clear(); // reset failbit
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //skip bad input
-
-		std::cout << "Invalid input. Please enter a number between 0 and 2." << std::endl;
-		std::cin >> choice;
-	}
-	return choice;
-}
-
 void Game::travel() 
 {
-	// Traveling costs stamina,mabye the more items you have, the more it costs
+	// Traveling costs stamina,maybe the more items you have, the more it costs
 	player.setStamina(player.getStamina() - 1);
 
 	// Chance for an encounter
-	int chance = rollBetween(1, 4);
+	auto chance = rollBetween(1, 4);
 	if (chance > 0) {
 
 		Enemy enemy = spawnEnemy(rollBetween(1, 10), 0);
@@ -246,9 +238,7 @@ void Game::travel()
 	}
 
 	std::cout << "Press a button to return.";
-	int Return;
-	std::cin >> Return;
-	return;
+	_getch();
 }
 
 void Game::makeAttack(Character& attacker, Character& defender)
@@ -277,14 +267,14 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 	while (enemy.getHp() > 0) {
 		makeAttack(enemy, player);
 		if (player.getHp() <= 0) {
-			std::cout << "You died." << std::endl;
+			std::cout << player.getName() << " has died." << std::endl;
 			return;
 		}
 
 		makeAttack(player, enemy);
 	}
 
-	std::cout << "You have won the battle, your reward is: " << enemy.getGold() << " gold" << std::endl;
+	std::cout << player.getName() << " has won the battle and is rewarded with " << enemy.getGold() << " gold." << std::endl;
 	player.setGold(player.getGold() + enemy.getGold());
 	player.setExp(player.getExp() + enemy.getExpDrop());
 	return;
@@ -293,7 +283,18 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 void Game::run(Enemy& enemy)
 {
 	// Running costs stamina, maybe the more items you have, the more it costs
-	player.setStamina(player.getStamina() - 2);
+	if (player.getStamina() >= 2) {
+		player.setStamina(player.getStamina() - 2);
+		std::cout << player.getName() << " has run away from battle." << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
+	else {
+		std::cout << player.getName() << " is too tired to run, so rests for a while to regain some stamina." << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		player.setStamina(std::min(3, player.getStaminaMax()));
+		wait(enemy);
+	}
+	
 }
 
 void Game::wait(Enemy& enemy)

@@ -59,7 +59,7 @@ Player Game::playerCreation()
 
 Enemy Game::spawnEnemy(int difficulty, int terrain)
 {
-	return std::move(Enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, player.getLevel() * difficulty, player.getLevel() * difficulty));
+	return std::move(Enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty));
 }
 
 
@@ -112,6 +112,78 @@ void Game::printInventory()
 	auto Return = 1;
 	while (Return != 0) { std::cin >> Return; }
 	return;
+}
+
+void Game::buy()
+{
+	while (1) {
+		std::cout << "\033c";
+		std::cout << "Buy" << std::endl;
+		std::cout << "---------" << std::endl;
+		std::cout << "0: Health potion: \t costs 3 gold, restores your hp to full." << std::endl;
+		std::cout << "1: Stamina potion: \t costs 1 gold, restores your stamina to full." << std::endl;
+		std::cout << "2: Sword: \t costs 10 gold, wielding this your attack damage increases by 3." << std::endl;
+		std::cout << "3: Armor: \t costs 8 gold, equiping this increases your defence skill by 2." << std::endl;
+		std::cout << "4: Return." << std::endl;
+		std::cout << std::endl << "Gold: " << player.getGold() << std::endl;
+
+		switch (getInputBetween(0, 4)) {
+		case 0:
+			if (player.getGold() >= 3) {
+				player.setGold(player.getGold() - 3);
+				player.setHp(player.getHpMax());
+			}
+			else {
+				std::cout << "Not enough money." << std::endl;
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+			break;
+		case 1:
+			break;
+		case 2:
+			if (player.getGold() >= 10) {
+				player.setGold(player.getGold() - 10);
+				player.setDamage(player.getDamageMax() + 3);
+			}
+			else {
+				std::cout << "Not enough money." << std::endl;
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+			break;
+		case 3:
+			if (player.getGold() >= 8) {
+				player.setGold(player.getGold() - 8);
+				player.setDefence(player.getDefence() + 2);
+			}
+			else {
+				std::cout << "Not enough money." << std::endl;
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+			break;
+		case 4:
+			return;
+		default:
+			break;
+		}
+	}
+}
+void Game::shop()
+{
+	std::cout << "\033c";
+	std::cout << "Shop" << std::endl;
+	std::cout << "---------" << std::endl;
+	std::cout << "0: Buy" << std::endl;
+	std::cout << "1: Sell" << std::endl;
+
+	switch (getInputBetween(0, 1)) {
+	case 0:
+		buy();
+		break;
+	case 1:
+		break;
+	default:
+		break;
+	}
 }
 
 int Game::rollBetween(int lower, int higher)
@@ -179,45 +251,48 @@ void Game::travel()
 	return;
 }
 
+void Game::makeAttack(Character& attacker, Character& defender)
+{
+	if (attacker.getStamina() > 0) {
+		int dmgAttacker = std::max(0, rollBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence());
+		std::cout << attacker.getName() << " deals " << dmgAttacker << " damage to " << defender.getName() << "." << std::endl;
+		defender.setHp(defender.getHp() - dmgAttacker);
+
+		// Fighting costs stamina, maybe the more items you have, the more it costs
+		attacker.setStamina(attacker.getStamina() - 1);
+	}
+	else {
+		std::cout << attacker.getName() << " rests for one round and regains some stamina." << std::endl;
+		attacker.setStamina(std::min(3, attacker.getStaminaMax()));
+	}
+
+}
+
 void Game::fight(Enemy& enemy, bool playerInitialize)
 {
 	if (playerInitialize) {
-		std::uniform_int_distribution<> player_dmg_dist(player.getDamageMin(), player.getDamageMax());
-		int dmgPlayer = std::max(0, rollBetween(player.getDamageMin(), player.getDamageMax()) - enemy.getDefence());
-
-		std::cout << "You deal " << dmgPlayer << "damage." << std::endl;
-		enemy.setHp(enemy.getHp() - dmgPlayer);
+		makeAttack(player, enemy);
 	}
 
-	while ((player.getHp() > 0) && (enemy.getHp() > 0)) {
-		int dmgEnemy = std::max(0, rollBetween(enemy.getDamageMin(), enemy.getDamageMax()) - player.getDefence());
-		std::cout << "Your enemy deals " << dmgEnemy << "damage.";
-		player.setHp(player.getHp() - dmgEnemy);
+	while (enemy.getHp() > 0) {
+		makeAttack(enemy, player);
 		if (player.getHp() <= 0) {
-			break;
+			std::cout << "You died." << std::endl;
+			return;
 		}
 
-		std::cout << "\t You have " << player.getHp() << " / " << player.getHpMax() << " hp remaining." << std::endl;
-		std::uniform_int_distribution<> player_dmg_dist(player.getDamageMin(), player.getDamageMax());
-		int dmgPlayer = std::max(0, rollBetween(player.getDamageMin(), player.getDamageMax()) - enemy.getDefence());
-
-		std::cout << "You deal " << dmgPlayer << "damage." << std::endl;
-		enemy.setHp(enemy.getHp() - dmgPlayer);
+		makeAttack(player, enemy);
 	}
 
-	if (player.getHp() > 0) {
-		std::cout << "You have won the battle, your reward is: " << enemy.getGold() << " gold" << std::endl;
-		player.setGold(player.getGold() + enemy.getGold());
-		player.setExp(player.getExp() + enemy.getExpDrop());
-	}
-	else {
-		std::cout << "You died." << std::endl;
-	}
+	std::cout << "You have won the battle, your reward is: " << enemy.getGold() << " gold" << std::endl;
+	player.setGold(player.getGold() + enemy.getGold());
+	player.setExp(player.getExp() + enemy.getExpDrop());
+	return;
 }
 
 void Game::run(Enemy& enemy)
 {
-	// Running costs stamina,mabye the more items you have, the more it costs
+	// Running costs stamina, maybe the more items you have, the more it costs
 	player.setStamina(player.getStamina() - 2);
 }
 
@@ -258,7 +333,7 @@ void Game::gameLoop()
 		travel();
 		break;
 	case 1:
-
+		shop();
 		break;
 	case 2:
 		player.setStamina(player.getStaminaMax());

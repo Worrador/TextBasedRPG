@@ -4,8 +4,8 @@
 class Enemy : public Character
 {
 public:
-	Enemy(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int gold, int expDrop) :
-		Character(name, hpMax, dmgMin, dmgMax, defence, gold), expDrop(expDrop) {};
+	Enemy(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, int gold, int expDrop) :
+		Character(name, hpMax, dmgMin, dmgMax, defence, staminaMax, gold), expDrop(expDrop) {};
 
 	// Operators
 
@@ -15,7 +15,6 @@ public:
 	inline int getExpDrop() const { return expDrop; };
 
 	// Modifiers
-	inline void setHp(int hp) { this->hp = hp; };
 
 private:
 	int expDrop;

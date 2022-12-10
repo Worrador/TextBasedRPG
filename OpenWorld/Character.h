@@ -5,11 +5,14 @@
 class Character
 {
 public:
-	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int gold) :
-		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), gold(gold) {};
+	//TODO: utánna járni a sokconstrucotor eloadásnak
+	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, int gold) :
+		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), stamina(staminaMax), 
+		staminaMax(staminaMax), gold(gold) {};
 
-	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence) :
-		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), gold(0) {};
+	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax) :
+		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), stamina(staminaMax),
+		staminaMax(staminaMax), gold(0) {};
 
 	~Character();
 
@@ -26,8 +29,12 @@ public:
 	virtual inline int getDamageMax() const { return damageMax; };
 	virtual inline int getDefence() const { return defence; };
 	virtual inline int getGold() const { return gold; };
+	virtual inline int getStamina() const { return stamina; };
+	virtual inline int getStaminaMax() const { return staminaMax; };
 
 	// Modifiers
+	inline void setHp(int hp) { this->hp = hp; };
+	inline void setStamina(int stamina) { this->stamina = stamina; };
 
 protected:
 	std::string name;
@@ -36,6 +43,8 @@ protected:
 	int damageMin;
 	int damageMax;
 	int defence;
+	int stamina;
+	int staminaMax;
 	int gold;
 };
 

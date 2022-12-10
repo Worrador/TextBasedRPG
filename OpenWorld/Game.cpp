@@ -57,6 +57,11 @@ Player Game::playerCreation()
 	return std::move(Player(name, hpMax, std::floor(dmg/2), dmg, def, sta));
 }
 
+Enemy Game::spawnEnemy(int difficulty, int terrain)
+{
+	return std::move(Enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, player.getLevel() * difficulty, player.getLevel() * difficulty));
+}
+
 
 
 
@@ -76,8 +81,6 @@ int Game::mainMenu()
 
 	return mainMenuChoice;
 }
-
-//v3 = rand() % 30 + 1985;
 
 void Game::printStats()
 {
@@ -111,47 +114,138 @@ void Game::printInventory()
 	return;
 }
 
-void Game::travel() 
+int Game::rollBetween(int lower, int higher)
 {
-	int chance = rand() % 1 + 4;
-	if (chance > 0) {
-		int difficulty = rand() % 1 + 10;
-		Enemy enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, player.getLevel() * difficulty, player.getLevel() * difficulty);
-		fight(enemy);
-	}
+	std::mt19937 rng(std::random_device{}());
 
+	std::uniform_int_distribution<> roll_dist(lower, higher);
+
+	return roll_dist(rng);
 }
 
-void Game::fight(Enemy& enemy)
+int Game::getInputBetween(int lower, int higher)
 {
-	std::cout << "\033c";
-	std::cout << "You have met an enemy " << enemy.getName() << std::endl;
-	std::cout << "---------" << std::endl;
-	std::cout << "0: Attack" << std::endl;
-	std::cout << "1: Run" << std::endl;
-	std::cout << "2: Wait" << std::endl << std::endl;
-
 	int choice;
 	std::cin >> choice;
-	if (choice == 0) {
-		while ((player.getHp() > 0) && (enemy.getHp() > 0)) {
-			int dmgPlayer = rand() % player.getDamageMin() + player.getDamageMax() - enemy.getDefence();
-			std::cout << "You deal " << dmgPlayer << "damage." << std::endl;
-			enemy.setHp(enemy.getHp() - dmgPlayer);
 
-			int dmgEnemy = rand() % enemy.getDamageMin() + enemy.getDamageMax() - player.getDefence();
-			std::cout << "Your enemy deals " << dmgEnemy << "damage." << std::endl;
-			player.setHp(player.getHp() - dmgEnemy);
+	// Validate the player's input
+	while (choice < lower || choice > higher || !std::cin) {
+		std::cin.clear(); // reset failbit
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //skip bad input
+
+		std::cout << "Invalid input. Please enter a number between 0 and 2." << std::endl;
+		std::cin >> choice;
+	}
+	return choice;
+}
+
+void Game::travel() 
+{
+	// Traveling costs stamina,mabye the more items you have, the more it costs
+	player.setStamina(player.getStamina() - 1);
+
+	// Chance for an encounter
+	int chance = rollBetween(1, 4);
+	if (chance > 0) {
+
+		Enemy enemy = spawnEnemy(rollBetween(1, 10), 0);
+
+		std::cout << "\033c";
+		std::cout << "You have met an enemy " << enemy.getName() << std::endl;
+		std::cout << "---------" << std::endl;
+		std::cout << "0: Attack" << std::endl;
+		std::cout << "1: Run" << std::endl;
+		std::cout << "2: Wait" << std::endl << std::endl;
+
+
+		switch (getInputBetween(0, 2)) {
+		case 0:
+			fight(enemy, true);
+			break;
+		case 1:
+			run(enemy);
+			break;
+		case 2:
+			wait(enemy);
+			break;
+		default:
+			break;
 		}
-		if (player.getHp() > 0) {
-			std::cout << "You have won the battle, your reward is: " << enemy.getGold() << "gold" << std::endl;
-			player.setGold(player.getGold() + enemy.getGold());
-			player.setExp(player.getExp() + enemy.getExpDrop());
-		}
-		else {
-			std::cout << "You dieded";
+	}
+
+	std::cout << "Press a button to return.";
+	int Return;
+	std::cin >> Return;
+	return;
+}
+
+void Game::fight(Enemy& enemy, bool playerInitialize)
+{
+	if (playerInitialize) {
+		std::uniform_int_distribution<> player_dmg_dist(player.getDamageMin(), player.getDamageMax());
+		int dmgPlayer = std::max(0, rollBetween(player.getDamageMin(), player.getDamageMax()) - enemy.getDefence());
+
+		std::cout << "You deal " << dmgPlayer << "damage." << std::endl;
+		enemy.setHp(enemy.getHp() - dmgPlayer);
+	}
+
+	while ((player.getHp() > 0) && (enemy.getHp() > 0)) {
+		int dmgEnemy = std::max(0, rollBetween(enemy.getDamageMin(), enemy.getDamageMax()) - player.getDefence());
+		std::cout << "Your enemy deals " << dmgEnemy << "damage.";
+		player.setHp(player.getHp() - dmgEnemy);
+		if (player.getHp() <= 0) {
+			break;
 		}
 
+		std::cout << "\t You have " << player.getHp() << " / " << player.getHpMax() << " hp remaining." << std::endl;
+		std::uniform_int_distribution<> player_dmg_dist(player.getDamageMin(), player.getDamageMax());
+		int dmgPlayer = std::max(0, rollBetween(player.getDamageMin(), player.getDamageMax()) - enemy.getDefence());
+
+		std::cout << "You deal " << dmgPlayer << "damage." << std::endl;
+		enemy.setHp(enemy.getHp() - dmgPlayer);
+	}
+
+	if (player.getHp() > 0) {
+		std::cout << "You have won the battle, your reward is: " << enemy.getGold() << " gold" << std::endl;
+		player.setGold(player.getGold() + enemy.getGold());
+		player.setExp(player.getExp() + enemy.getExpDrop());
+	}
+	else {
+		std::cout << "You died." << std::endl;
+	}
+}
+
+void Game::run(Enemy& enemy)
+{
+	// Running costs stamina,mabye the more items you have, the more it costs
+	player.setStamina(player.getStamina() - 2);
+}
+
+void Game::wait(Enemy& enemy)
+{
+	// The enemy might not attack you and you can continue your journey, 
+	// this could depend on your level difference, difficulty, terrain and a lot of other things.
+	int chance = rollBetween(1, 4);
+	if (chance > 3) {
+		std::cout << "The " << enemy.getName() << " does not look to attack you. You can continue your journey if you wish to." << std::endl;
+		std::cout << "---------" << std::endl;
+		std::cout << "0: Attack anyway" << std::endl;
+		std::cout << "1: Walk away" << std::endl;
+
+
+		switch (getInputBetween(0, 1)) {
+		case 0:
+			fight(enemy, true);
+			break;
+		case 1:
+			break;
+		default:
+			break;
+		}
+	}
+	else {
+		std::cout << "The " << enemy.getName() << " looks agressive and attacks you." << std::endl;
+		fight(enemy, false);
 	}
 }
 
@@ -180,6 +274,9 @@ void Game::gameLoop()
 		break;
 	default:
 		break;
+	}
+	if (player.getHp() <= 0) {
+		playing = false;
 	}
 
 }

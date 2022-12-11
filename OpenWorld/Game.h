@@ -4,9 +4,7 @@
 #include "Enemy.h"
 #include <random>
 #include <algorithm>
-#include <thread>   // for std::this_thread::sleep_for
-#include <chrono>   // for std::chrono::seconds
-#include <conio.h>
+#include "Menu.h"
 
 
 class Game
@@ -29,8 +27,6 @@ public:
 
 	int rollBetween(int lower, int higher);
 
-	int getInputBetween(int lower, int higher);
-
 
 	void travel();
 	void makeAttack(Character& attacker, Character& defender);
@@ -47,5 +43,6 @@ private:
 	int mainMenuChoice;
 	bool playing;
 	Player player;
+	Menu menu;
 };
 

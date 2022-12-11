@@ -1,28 +1,35 @@
 #include "Game.h"
 
-int Game::getInputBetween(int lower, int higher)
-{
-	int choice;
-	std::cin >> choice;
 
-	// Validate the player's input
-	while (choice < lower || choice > higher || !std::cin) {
-		std::cin.clear(); // reset failbit
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //skip bad input
-
-		std::cout << "Invalid input. Please enter a number between " << lower << " and " << higher << "." << std::endl;
-		std::cin >> choice;
-	}
-	return choice;
-}
 
 Player Game::playerCreation()
 {
 	std::string name;
-	std::cout << "Please input your name!" << std::endl;
+	std::cout << "Please enter your name!" << std::endl;
 	std::cout << "---------" << std::endl;
 
 	std::cin >> name;
+
+	std::cout << "What is your gender?" << std::endl;
+	std::cout << "---------" << std::endl;
+	std::cout << "0: Male" << std::endl;
+	std::cout << "1: Female" << std::endl;
+
+	bool isMale;
+
+	switch (menu.getInputBetween(0, 3)) {
+	case 0:
+		isMale = true;
+		break;
+	case 1:
+		isMale = false;
+		break;
+	default:
+		isMale = true;
+		break;
+
+	}
+
 
 	std::cout << "Now choose a class!" << std::endl;
 	std::cout << "---------" << std::endl;
@@ -33,7 +40,7 @@ Player Game::playerCreation()
 
 
 	int hpMax, dmg, def, sta;
-	switch (getInputBetween(0, 3)) {
+	switch (menu.getInputBetween(0, 3)) {
 	case 0:
 		hpMax = 12;
 		dmg = 3;
@@ -42,7 +49,7 @@ Player Game::playerCreation()
 		break;
 	case 1:
 		hpMax = 5;
-		dmg = 10;
+		dmg = 12;
 		def = 0;
 		sta = 5;
 		break;
@@ -66,7 +73,8 @@ Player Game::playerCreation()
 		break;
 
 	}
-	return std::move(Player(name, hpMax, std::floor(dmg/2), dmg, def, sta));
+
+	return std::move(Player(name, isMale, hpMax, std::floor(dmg/2), dmg, def, sta));
 }
 
 Enemy Game::spawnEnemy(int difficulty, int terrain)
@@ -85,9 +93,8 @@ int Game::mainMenu()
 	std::cout << "0: Travel" << std::endl;
 	std::cout << "1: Shop" << std::endl;
 	std::cout << "2: Rest" << std::endl;
-	std::cout << "3: Stats" << std::endl;
-	std::cout << "4: Inventory" << std::endl;
-	std::cout << "5: Quit" << std::endl;
+	std::cout << "3: Player sheet" << std::endl;
+	std::cout << "4: Quit" << std::endl;
 
 	std::cin >> mainMenuChoice;
 
@@ -96,19 +103,7 @@ int Game::mainMenu()
 
 void Game::printStats()
 {
-	std::cout << "\033c";
-	std::cout << "STATS" << std::endl;
-	std::cout << "---------" << std::endl;
-	std::cout << "Name: " << player.getName() << std::endl;
-	std::cout << "Level: " << player.getLevel() << std::endl;
-	std::cout << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
-	std::cout << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
-	std::cout << "Attack:  " << player.getDamageMax() << std::endl;
-	std::cout << "Defence: " << player.getDefence() << std::endl;
-	std::cout << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl;
 
-	std::cout << "Press a button to return.";
-	_getch();
 }
 
 void Game::printInventory()
@@ -135,7 +130,7 @@ void Game::buy()
 		std::cout << "4: Return." << std::endl;
 		std::cout << std::endl << "Gold: " << player.getGold() << std::endl;
 
-		switch (getInputBetween(0, 4)) {
+		switch (menu.getInputBetween(0, 4)) {
 		case 0:
 			if (player.getGold() >= 3) {
 				player.setGold(player.getGold() - 3);
@@ -183,7 +178,7 @@ void Game::shop()
 	std::cout << "0: Buy" << std::endl;
 	std::cout << "1: Sell" << std::endl;
 
-	switch (getInputBetween(0, 1)) {
+	switch (menu.getInputBetween(0, 1)) {
 	case 0:
 		buy();
 		break;
@@ -222,7 +217,7 @@ void Game::travel()
 		std::cout << "2: Wait" << std::endl << std::endl;
 
 
-		switch (getInputBetween(0, 2)) {
+		switch (menu.getInputBetween(0, 2)) {
 		case 0:
 			fight(enemy, true);
 			break;
@@ -309,7 +304,7 @@ void Game::wait(Enemy& enemy)
 		std::cout << "1: Walk away" << std::endl;
 
 
-		switch (getInputBetween(0, 1)) {
+		switch (menu.getInputBetween(0, 1)) {
 		case 0:
 			fight(enemy, true);
 			break;
@@ -340,12 +335,9 @@ void Game::gameLoop()
 		player.setStamina(player.getStaminaMax());
 		break;
 	case 3:
-		printStats();
+		menu.printPlayer(player);
 		break;
 	case 4:
-		printInventory();
-		break;
-	case 5:
 		playing = false;
 		break;
 	default:

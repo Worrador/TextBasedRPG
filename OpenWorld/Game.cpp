@@ -10,14 +10,14 @@ Player Game::playerCreation()
 
 	std::cin >> name;
 
-	std::cout << "What is your gender?" << std::endl;
+	std::cout << std::endl << "What is your gender?" << std::endl;
 	std::cout << "---------" << std::endl;
-	std::cout << "0: Male" << std::endl;
-	std::cout << "1: Female" << std::endl;
+	std::cout << "Male" << std::endl;
+	std::cout << "Female" << std::endl;
 
 	bool isMale;
 
-	switch (menu.getInputBetween(0, 3)) {
+	switch (menu.getInputBetween(0, 1)) {
 	case 0:
 		isMale = true;
 		break;
@@ -27,11 +27,10 @@ Player Game::playerCreation()
 	default:
 		isMale = true;
 		break;
-
 	}
 
 
-	std::cout << "Now choose a class!" << std::endl;
+	std::cout << std::endl << "Now choose a class!" << std::endl;
 	std::cout << "---------" << std::endl;
 	std::cout << "0: Warrior" << std::endl;
 	std::cout << "1: Mage" << std::endl;
@@ -41,25 +40,25 @@ Player Game::playerCreation()
 
 	int hpMax, dmg, def, sta;
 	switch (menu.getInputBetween(0, 3)) {
-	case 0:
+	case Role::Warrior:
 		hpMax = 12;
 		dmg = 3;
 		def = 2;
 		sta = 10;
 		break;
-	case 1:
+	case Role::Mage:
 		hpMax = 5;
 		dmg = 12;
 		def = 0;
 		sta = 5;
 		break;
-	case 2:
+	case Role::Rouge:
 		hpMax = 8;
 		dmg = 7;
 		def = 1;
 		sta = 7;
 		break;
-	case 3:
+	case Role::Ranger:
 		hpMax = 7;
 		dmg = 8;
 		def = 1;

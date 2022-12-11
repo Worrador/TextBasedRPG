@@ -68,9 +68,7 @@ void Menu::printPlayer(Player& player)
                 equipment(player);
                 break;
             case 1:
-                player.setLevel(player.getLevel() + 1);
-                player.setExp(player.getExp() - player.getExpNext());
-                player.setExpNext(player.getExpNext() * 2);
+                levelUp(player);
                 if (player.getExp() < player.getExpNext()) {
                     numberOfMenuPoints--;
                     selectedMenuPoint--;
@@ -117,5 +115,7 @@ void Menu::equipment(Player& player)
 
 void Menu::levelUp(Player& player)
 {
-
+    player.setLevel(player.getLevel() + 1);
+    player.setExp(player.getExp() - player.getExpNext());
+    player.setExpNext(player.getExpNext() * 2);
 }

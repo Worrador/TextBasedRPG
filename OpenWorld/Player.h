@@ -3,6 +3,13 @@
 #include <vector>
 #include <iostream>
 
+enum Role {
+	Warrior = 0,
+	Mage,
+	Rouge,
+	Ranger
+};
+
 class Player : public Character
 {
 public:
@@ -12,6 +19,7 @@ public:
 	// Operators
 
 	// Functions
+	void levelUp();
 
 	// Accessors
 	inline int getLevel() const { return level; };

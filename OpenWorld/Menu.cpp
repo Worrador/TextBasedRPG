@@ -7,6 +7,29 @@
 #define ESCAPE 27
 #define ENTER '\r'
 
+
+
+std::stringstream getStaticGenderQuestion(const void* playerVoid) {
+    // Build string stream object
+    std::stringstream ss;
+    ss << "\033c";
+    ss << "What is your gender?" << std::endl;
+    ss << "---------" << std::endl;
+
+    return ss;
+}
+
+std::stringstream getStaticClassQuestion(const void* playerVoid) {
+    // Build string stream object
+    std::stringstream ss;
+    ss << "\033c";
+    ss << "Now choose a class!" << std::endl;
+    ss << "---------" << std::endl;
+
+    return ss;
+}
+
+
 int Menu::getInputBetween(int lower, int higher)
 {
     int choice;
@@ -25,80 +48,6 @@ int Menu::getInputBetween(int lower, int higher)
 
 
 
-Player Menu::playerCreationMenu()
-{
-    std::string name;
-    std::cout << "Please enter your name!" << std::endl;
-    std::cout << "---------" << std::endl;
-
-    std::cin >> name;
-
-    std::cout << std::endl << "What is your gender?" << std::endl;
-    std::cout << "---------" << std::endl;
-    std::cout << "Male" << std::endl;
-    std::cout << "Female" << std::endl;
-
-    bool isMale;
-
-    switch (getInputBetween(0, 1)) {
-    case 0:
-        isMale = true;
-        break;
-    case 1:
-        isMale = false;
-        break;
-    default:
-        isMale = true;
-        break;
-    }
-
-
-    std::cout << std::endl << "Now choose a class!" << std::endl;
-    std::cout << "---------" << std::endl;
-    std::cout << "0: Warrior" << std::endl;
-    std::cout << "1: Mage" << std::endl;
-    std::cout << "2: Rouge" << std::endl;
-    std::cout << "3: Ranger" << std::endl;
-
-
-    int hpMax, dmg, def, sta;
-    switch (getInputBetween(0, 3)) {
-    case Role::Warrior:
-        hpMax = 12;
-        dmg = 3;
-        def = 2;
-        sta = 10;
-        break;
-    case Role::Mage:
-        hpMax = 5;
-        dmg = 12;
-        def = 0;
-        sta = 5;
-        break;
-    case Role::Rouge:
-        hpMax = 8;
-        dmg = 7;
-        def = 1;
-        sta = 7;
-        break;
-    case Role::Ranger:
-        hpMax = 7;
-        dmg = 8;
-        def = 1;
-        sta = 6;
-        break;
-    default:
-        hpMax = 7;
-        dmg = 7;
-        def = 1;
-        sta = 7;
-        break;
-
-    }
-
-    // Do not return with std::move as it prohibits copy elision.
-    return Player(name, isMale, hpMax, std::floor(dmg / 2), dmg, def, sta);
-}
 
 std::stringstream getStaticPlayerInfo( const void* playerVoid) {
     // Build string stream object
@@ -124,47 +73,14 @@ std::stringstream getStaticPlayerInfo( const void* playerVoid) {
 
 }
 
-int menuGenerator(const std::vector<std::string>& menuPoints, std::stringstream(*staticMenuFn)(const void*), const Player* player = nullptr) {
+int menuGenerator(const std::vector<std::string>& menuPoints, std::stringstream(*staticMenuFn)(const void*), const bool isEscapeable = true, const Player* player = nullptr) {
     // Call the pre-menu callback function, if it is provided
     std::stringstream ss;
     int numberOfMenuPoints = menuPoints.size() - 1;
     int selectedMenuPoint = 0;
 
-    if (staticMenuFn) {
-        ss = staticMenuFn(player);
-    }
-    for (auto index = 0; index < menuPoints.size(); index++)
-    {
-        if (index == selectedMenuPoint) {
-            ss << "> ";
-        }
-        else {
-            ss << "  ";
-        }
-        ss << menuPoints[index] << std::endl;
-    }
-
-    ss << std::endl << "Return with ESC.";
-    std::cout << ss.str();
-
-
     while (1)
     {
-        switch ((_getch())) {
-        case KEY_UP:
-            selectedMenuPoint = std::max(--selectedMenuPoint, 0);
-            break;
-        case KEY_DOWN:
-            selectedMenuPoint = std::min(++selectedMenuPoint, numberOfMenuPoints);
-            break;
-        case ENTER:
-            return selectedMenuPoint;
-        case ESCAPE:
-            return ESCAPE;
-        default:
-            break;
-        }
-
         if (staticMenuFn) {
             ss = staticMenuFn(player);
         }
@@ -179,13 +95,96 @@ int menuGenerator(const std::vector<std::string>& menuPoints, std::stringstream(
             ss << menuPoints[index] << std::endl;
         }
 
-        ss << std::endl << "Return with ESC.";
+        if(isEscapeable)
+            ss << std::endl << "Return with ESC.";
+
         std::cout << ss.str();
+        switch ((_getch())) {
+        case KEY_UP:
+            selectedMenuPoint = std::max(--selectedMenuPoint, 0);
+            break;
+        case KEY_DOWN:
+            selectedMenuPoint = std::min(++selectedMenuPoint, numberOfMenuPoints);
+            break;
+        case ENTER:
+            return selectedMenuPoint;
+        case ESCAPE:
+            if (isEscapeable)
+                return ESCAPE;
+            else break;
+        default:
+            break;
+        }
     }
 
     return 0;
 
 }
+
+Player Menu::playerCreationMenu()
+{
+    std::string name;
+    std::cout << "Please enter your name!" << std::endl;
+    std::cout << "---------" << std::endl;
+
+    std::cin >> name;
+    std::cout << "\033c";
+    std::cout << "Welcome " << name << "!" << std::endl << "This is a command line RPG game which you can play using only your keyboard." << std::endl;
+    std::cout << "Let's create your character!" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    bool isMale;
+
+    {
+        // List of menu points
+        std::vector <std::string> menuPoints = {
+            "Male",
+            "Female"
+        };
+
+        auto selectedMenuPoint = menuGenerator(menuPoints, getStaticGenderQuestion, false);
+        switch (selectedMenuPoint) {
+        case 0:
+            isMale = true;
+            break;
+        case 1:
+            isMale = false;
+            break;
+        default:
+            isMale = true;
+            break;
+        }
+    }
+
+    {
+        // List of menu points
+        std::vector <std::string> menuPoints = {
+          "Warrior",
+          "Mage",
+          "Rouge",
+          "Ranger"
+        };
+
+        auto selectedMenuPoint = menuGenerator(menuPoints, getStaticClassQuestion, false);
+        switch (selectedMenuPoint) {
+        case Role::Warrior:
+            return Player(name, isMale, 12, std::floor(3 / 2), 3, 2, 10);
+
+        case Role::Mage:
+            return Player(name, isMale, 6, std::floor(12 / 2), 12, 0, 5);
+
+        case Role::Rouge:
+            return Player(name, isMale, 9, std::floor(7 / 2), 7, 1, 7);
+
+        case Role::Ranger:
+            return Player(name, isMale, 8, std::floor(8 / 2), 8, 1, 6);
+
+        default:
+            return Player(name, isMale, 8, std::floor(7 / 2), 8, 1, 7);
+        }
+    }
+    // Do not return with std::move as it prohibits copy elision.
+}
+
 void Menu::playerMenu(Player& player)
 {
     while (1) {
@@ -197,7 +196,7 @@ void Menu::playerMenu(Player& player)
             menuPoints.push_back("Level up");
         }
 
-        auto selectedMenuPoint = menuGenerator(menuPoints, getStaticPlayerInfo, &player);
+        auto selectedMenuPoint = menuGenerator(menuPoints, getStaticPlayerInfo, true, &player);
 
         switch (selectedMenuPoint) {
         case 0:

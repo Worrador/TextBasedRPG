@@ -9,7 +9,7 @@
 class Game
 {
 public:
-	Game() :mainMenuChoice(0), playing(true), player(playerCreation()) {};
+	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()) {};
 
 	// Operators
 

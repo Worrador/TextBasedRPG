@@ -15,6 +15,7 @@ public:
 	// Operators
 
 	// Functions
+	Player playerCreationMenu();
 	void playerMenu(Player& player);
 	void equipment(Player& player);
 	void levelUp(Player& player);

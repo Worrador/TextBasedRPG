@@ -41,7 +41,7 @@ public:
 private:
 	int mainMenuChoice;
 	bool playing;
-	Player player;
 	Menu menu;
+	Player player;
 };
 

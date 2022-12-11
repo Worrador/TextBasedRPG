@@ -23,8 +23,86 @@ int Menu::getInputBetween(int lower, int higher)
     return choice;
 }
 
-std::stringstream getStaticPlayerInfo(Player& player) {
+
+
+Player Menu::playerCreationMenu()
+{
+    std::string name;
+    std::cout << "Please enter your name!" << std::endl;
+    std::cout << "---------" << std::endl;
+
+    std::cin >> name;
+
+    std::cout << std::endl << "What is your gender?" << std::endl;
+    std::cout << "---------" << std::endl;
+    std::cout << "Male" << std::endl;
+    std::cout << "Female" << std::endl;
+
+    bool isMale;
+
+    switch (getInputBetween(0, 1)) {
+    case 0:
+        isMale = true;
+        break;
+    case 1:
+        isMale = false;
+        break;
+    default:
+        isMale = true;
+        break;
+    }
+
+
+    std::cout << std::endl << "Now choose a class!" << std::endl;
+    std::cout << "---------" << std::endl;
+    std::cout << "0: Warrior" << std::endl;
+    std::cout << "1: Mage" << std::endl;
+    std::cout << "2: Rouge" << std::endl;
+    std::cout << "3: Ranger" << std::endl;
+
+
+    int hpMax, dmg, def, sta;
+    switch (getInputBetween(0, 3)) {
+    case Role::Warrior:
+        hpMax = 12;
+        dmg = 3;
+        def = 2;
+        sta = 10;
+        break;
+    case Role::Mage:
+        hpMax = 5;
+        dmg = 12;
+        def = 0;
+        sta = 5;
+        break;
+    case Role::Rouge:
+        hpMax = 8;
+        dmg = 7;
+        def = 1;
+        sta = 7;
+        break;
+    case Role::Ranger:
+        hpMax = 7;
+        dmg = 8;
+        def = 1;
+        sta = 6;
+        break;
+    default:
+        hpMax = 7;
+        dmg = 7;
+        def = 1;
+        sta = 7;
+        break;
+
+    }
+
+    // Do not return with std::move as it prohibits copy elision.
+    return Player(name, isMale, hpMax, std::floor(dmg / 2), dmg, def, sta);
+}
+
+std::stringstream getStaticPlayerInfo( const void* playerVoid) {
     // Build string stream object
+    Player player = *(Player*)playerVoid;
     std::stringstream ss;
     ss << "\033c";
     ss << "STATISTICS" << std::endl;
@@ -43,74 +121,97 @@ std::stringstream getStaticPlayerInfo(Player& player) {
     ss << "------------------" << std::endl;
 
     return ss;
+
 }
 
-void Menu::playerMenu(Player& player)
-{
+int menuGenerator(const std::vector<std::string>& menuPoints, std::stringstream(*staticMenuFn)(const void*), const Player* player = nullptr) {
+    // Call the pre-menu callback function, if it is provided
+    std::stringstream ss;
+    int numberOfMenuPoints = menuPoints.size() - 1;
+    int selectedMenuPoint = 0;
 
-
-    int numberOfMenuPoints = 0;
-    auto ss = getStaticPlayerInfo(player);
-
-    ss << "> Equip / Unequip items" << std::endl;
-    if (player.getExp() >= player.getExpNext()) {
-        ss << "  Level up" << std::endl;
-        numberOfMenuPoints++;
+    if (staticMenuFn) {
+        ss = staticMenuFn(player);
     }
+    for (auto index = 0; index < menuPoints.size(); index++)
+    {
+        if (index == selectedMenuPoint) {
+            ss << "> ";
+        }
+        else {
+            ss << "  ";
+        }
+        ss << menuPoints[index] << std::endl;
+    }
+
     ss << std::endl << "Return with ESC.";
     std::cout << ss.str();
-    int selectedMenuPoint = 0;
+
+
     while (1)
     {
         switch ((_getch())) {
         case KEY_UP:
-            selectedMenuPoint = std::min(selectedMenuPoint--, 0);
+            selectedMenuPoint = std::max(--selectedMenuPoint, 0);
             break;
         case KEY_DOWN:
-            selectedMenuPoint = std::max(selectedMenuPoint++, numberOfMenuPoints);
+            selectedMenuPoint = std::min(++selectedMenuPoint, numberOfMenuPoints);
             break;
         case ENTER:
-            switch (selectedMenuPoint) {
-            case 0:
-                equipment(player);
-                break;
-            case 1:
-                levelUp(player);
-                if (player.getExp() < player.getExpNext()) {
-                    numberOfMenuPoints--;
-                    selectedMenuPoint--;
-                }
-                break;
-            default:
-                break;
-            }
-            break;
+            return selectedMenuPoint;
         case ESCAPE:
-            return;
-        default:
-            break;
-        }
-        ss = getStaticPlayerInfo(player);
-        switch (selectedMenuPoint) {
-        case 0:
-            ss << "> Equip / Unequip items" << std::endl;
-            if (player.getExp() >= player.getExpNext()) {
-                ss << "  Level up" << std::endl;
-            }
-            break;
-        case 1:
-            selectedMenuPoint = std::min(selectedMenuPoint++, numberOfMenuPoints);
-            ss << "  Equip / Unequip items" << std::endl;
-            if (player.getExp() >= player.getExpNext()) {
-                ss << "> Level up" << std::endl;
-            }
-            break;
+            return ESCAPE;
         default:
             break;
         }
 
+        if (staticMenuFn) {
+            ss = staticMenuFn(player);
+        }
+        for (auto index = 0; index < menuPoints.size(); index++)
+        {
+            if (index == selectedMenuPoint) {
+                ss << "> ";
+            }
+            else {
+                ss << "  ";
+            }
+            ss << menuPoints[index] << std::endl;
+        }
+
         ss << std::endl << "Return with ESC.";
         std::cout << ss.str();
+    }
+
+    return 0;
+
+}
+void Menu::playerMenu(Player& player)
+{
+    while (1) {
+        // List of menu points
+        std::vector <std::string> menuPoints = {
+          "Equip / Unequip items"
+        };
+        if (player.getExp() >= player.getExpNext()) {
+            menuPoints.push_back("Level up");
+        }
+
+        auto selectedMenuPoint = menuGenerator(menuPoints, getStaticPlayerInfo, &player);
+
+        switch (selectedMenuPoint) {
+        case 0:
+            equipment(player);
+            break;
+        case 1:
+            levelUp(player);
+            break;
+        case ESCAPE:
+            return;
+            break;
+        default:
+            break;
+        }
     }
 }
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "Character.h"
 
+extern std::map<Role, std::vector<int>> Roles;
+
 class Enemy : public Character
 {
 public:

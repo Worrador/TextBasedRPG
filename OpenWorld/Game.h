@@ -2,9 +2,7 @@
 #include <ctime>
 #include "Enemy.h"
 #include <random>
-#include <algorithm>
 #include "Menu.h"
-
 
 class Game
 {
@@ -14,8 +12,6 @@ public:
 	// Operators
 
 	// Functions
-	int mainMenu();
-	Player playerCreation();
 	Enemy spawnEnemy(int difficulty, int terrain);
 	void gameLoop();
 

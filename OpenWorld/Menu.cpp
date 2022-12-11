@@ -45,6 +45,7 @@ std::stringstream getStaticPlayerInfo( const void* playerVoid) {
     ss << "STATISTICS" << std::endl << std::endl;
 
     ss << "Name: " << player.getName() << std::endl;
+    ss << "Class: " << player.getRoleName() << std::endl;
     ss << "Level: " << player.getLevel() << std::endl;
     ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
     ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
@@ -212,22 +213,22 @@ Player Menu::playerCreationMenu()
           "Ranger"
         };
 
-        auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, false);
+        auto selectedMenuPoint = (Role)menuGenerator(staticMenuLines, dynamiMenuPoints, false);
         switch (selectedMenuPoint) {
         case Role::Warrior:
-            return Player(name, isMale, 12, std::floor(3 / 2), 3, 2, 10);
+            return Player(name, isMale, Role::Warrior, "Warrior");
 
         case Role::Mage:
-            return Player(name, isMale, 6, std::floor(12 / 2), 12, 0, 5);
+            return Player(name, isMale, Role::Mage, "Mage");
 
         case Role::Rouge:
-            return Player(name, isMale, 9, std::floor(7 / 2), 7, 1, 7);
+            return Player(name, isMale, Role::Rouge, "Rouge");
 
         case Role::Ranger:
-            return Player(name, isMale, 8, std::floor(8 / 2), 8, 1, 6);
+            return Player(name, isMale, Role::Ranger, "Ranger");
 
         default:
-            return Player(name, isMale, 8, std::floor(7 / 2), 8, 1, 7);
+            return Player(name, isMale, selectedMenuPoint, "Acolyte");
         }
     }
     // Do not return with std::move as it prohibits copy elision.
@@ -288,7 +289,5 @@ void Menu::equipment(Player& player)
 
 void Menu::levelUp(Player& player)
 {
-    player.setLevel(player.getLevel() + 1);
-    player.setExp(player.getExp() - player.getExpNext());
-    player.setExpNext(player.getExpNext() * 2);
+    player.levelUp();
 }

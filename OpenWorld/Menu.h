@@ -16,10 +16,17 @@ public:
 
 	// Functions
 	Player playerCreationMenu();
+	int mainMenu();
 	void playerMenu(Player& player);
 	void equipment(Player& player);
 	void levelUp(Player& player);
 	int getInputBetween(int lower, int higher);
+
+	int menuGenerator(const std::vector<std::string>& dynamiMenuPoints, std::stringstream(*staticMenuFn)(const void*), 
+		const bool isEscapeable, const Player* player);
+
+	int menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, 
+		const bool isEscapeable);
 
 	// Accessors
 

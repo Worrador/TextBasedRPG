@@ -19,8 +19,6 @@ public:
 	Enemy spawnEnemy(int difficulty, int terrain);
 	void gameLoop();
 
-	void printStats();
-	void printInventory();
 	void shop();
 	void buy();
 

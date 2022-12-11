@@ -6,40 +6,6 @@ Enemy Game::spawnEnemy(int difficulty, int terrain)
 }
 
 
-
-
-int Game::mainMenu()
-{
-	std::cout << "\033c";
-	std::cout << "MAIN MENU" << std::endl;
-	std::cout << "---------" << std::endl;
-	std::cout << "0: Travel" << std::endl;
-	std::cout << "1: Shop" << std::endl;
-	std::cout << "2: Rest" << std::endl;
-	std::cout << "3: Player sheet" << std::endl;
-	std::cout << "4: Quit" << std::endl;
-
-	std::cin >> mainMenuChoice;
-
-	return mainMenuChoice;
-}
-
-void Game::printStats()
-{
-
-}
-
-void Game::printInventory()
-{
-	std::cout << "\033c";
-	std::cout << "INVENTORY" << std::endl;
-	std::cout << "---------" << std::endl;
-	std::cout << "Gold: " << player.getGold() << std::endl;
-
-	std::cout << "Press a button to return.";
-	_getch();
-}
-
 void Game::buy()
 {
 	while (1) {
@@ -132,15 +98,17 @@ void Game::travel()
 
 		Enemy enemy = spawnEnemy(rollBetween(1, 10), 0);
 
-		std::cout << "\033c";
-		std::cout << "You have met an enemy " << enemy.getName() << std::endl;
-		std::cout << "---------" << std::endl;
-		std::cout << "0: Attack" << std::endl;
-		std::cout << "1: Run" << std::endl;
-		std::cout << "2: Wait" << std::endl << std::endl;
+		std::vector <std::string> staticLines = {
+			"You have met an enemy " + enemy.getName()
+		};
+		std::vector <std::string> dynamiMenuPoints = {
+		  "Attack",
+		  "Run",
+		  "Wait"
+		};
 
 
-		switch (menu.getInputBetween(0, 2)) {
+		switch (menu.menuGenerator(staticLines, dynamiMenuPoints, false)) {
 		case 0:
 			fight(enemy, true);
 			break;
@@ -221,13 +189,15 @@ void Game::wait(Enemy& enemy)
 	// this could depend on your level difference, difficulty, terrain and a lot of other things.
 	int chance = rollBetween(1, 4);
 	if (chance > 3) {
-		std::cout << "The " << enemy.getName() << " does not look to attack you. You can continue your journey if you wish to." << std::endl;
-		std::cout << "---------" << std::endl;
-		std::cout << "0: Attack anyway" << std::endl;
-		std::cout << "1: Walk away" << std::endl;
+		std::vector <std::string> staticLines = {
+			"The " + enemy.getName() + " does not look to attack you. You can continue your journey if you wish to."
+		};
+		std::vector <std::string> dynamiMenuPoints = {
+		  "Attack anyway",
+		  "Walk away"
+		};
 
-
-		switch (menu.getInputBetween(0, 1)) {
+		switch (menu.menuGenerator(staticLines, dynamiMenuPoints, false)) {
 		case 0:
 			fight(enemy, true);
 			break;
@@ -246,7 +216,7 @@ void Game::wait(Enemy& enemy)
 // Controls the playthrough stages
 void Game::gameLoop()
 {
-	switch (mainMenu())
+	switch (menu.mainMenu())
 	{
 	case 0:
 		travel();

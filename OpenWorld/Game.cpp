@@ -73,12 +73,13 @@ Player Game::playerCreation()
 
 	}
 
-	return std::move(Player(name, isMale, hpMax, std::floor(dmg/2), dmg, def, sta));
+	// Do not return with std::move as it prohibits copy elision.
+	return Player(name, isMale, hpMax, std::floor(dmg / 2), dmg, def, sta);
 }
 
 Enemy Game::spawnEnemy(int difficulty, int terrain)
 {
-	return std::move(Enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty));
+	return Enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty);
 }
 
 
@@ -334,7 +335,7 @@ void Game::gameLoop()
 		player.setStamina(player.getStaminaMax());
 		break;
 	case 3:
-		menu.printPlayer(player);
+		menu.playerMenu(player);
 		break;
 	case 4:
 		playing = false;

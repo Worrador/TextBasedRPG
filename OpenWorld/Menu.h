@@ -3,6 +3,7 @@
 #include <thread>   // for std::this_thread::sleep_for
 #include <chrono>   // for std::chrono::seconds
 #include <conio.h>
+#include <sstream>
 
 
 
@@ -14,7 +15,7 @@ public:
 	// Operators
 
 	// Functions
-	void printPlayer(Player& player);
+	void playerMenu(Player& player);
 	void equipment(Player& player);
 	void levelUp(Player& player);
 	int getInputBetween(int lower, int higher);

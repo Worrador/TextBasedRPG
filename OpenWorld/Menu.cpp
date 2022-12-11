@@ -23,35 +23,42 @@ int Menu::getInputBetween(int lower, int higher)
     return choice;
 }
 
-void printP(Player& player) {
-    std::cout << "\033c";
-    std::cout << "STATISTIS" << std::endl;
-    std::cout << "---------" << std::endl;
-    std::cout << "Name: " << player.getName() << std::endl;
-    std::cout << "Level: " << player.getLevel() << std::endl;
-    std::cout << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
-    std::cout << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
-    std::cout << "Attack:  " << player.getDamageMax() << std::endl;
-    std::cout << "Defence: " << player.getDefence() << std::endl;
-    std::cout << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl;
-    std::cout << "------------------" << std::endl;
+std::stringstream getStaticPlayerInfo(Player& player) {
+    // Build string stream object
+    std::stringstream ss;
+    ss << "\033c";
+    ss << "STATISTICS" << std::endl;
+    ss << "-----------" << std::endl;
+    ss << "Name: " << player.getName() << std::endl;
+    ss << "Level: " << player.getLevel() << std::endl;
+    ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
+    ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
+    ss << "Attack:  " << player.getDamageMax() << std::endl;
+    ss << "Defence: " << player.getDefence() << std::endl;
+    ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl;
+    ss << "------------------" << std::endl;
+    ss << "INVENTORY" << std::endl;
+    ss << "---------" << std::endl;
+    ss << "Gold: " << player.getGold() << std::endl;
+    ss << "------------------" << std::endl;
 
-    std::cout << "INVENTORY" << std::endl;
-    std::cout << "---------" << std::endl;
-    std::cout << "Gold: " << player.getGold() << std::endl;
-
-    std::cout << "------------------" << std::endl;
+    return ss;
 }
 
-void Menu::printPlayer(Player& player)
+void Menu::playerMenu(Player& player)
 {
+
+
     int numberOfMenuPoints = 0;
-    printP(player);
-    std::cout << "> Equip / Unequip items" << std::endl;
+    auto ss = getStaticPlayerInfo(player);
+
+    ss << "> Equip / Unequip items" << std::endl;
     if (player.getExp() >= player.getExpNext()) {
-        std::cout << "  Level up" << std::endl;
+        ss << "  Level up" << std::endl;
         numberOfMenuPoints++;
     }
+    ss << std::endl << "Return with ESC.";
+    std::cout << ss.str();
     int selectedMenuPoint = 0;
     while (1)
     {
@@ -83,30 +90,28 @@ void Menu::printPlayer(Player& player)
         default:
             break;
         }
-        printP(player);
+        ss = getStaticPlayerInfo(player);
         switch (selectedMenuPoint) {
         case 0:
-            std::cout << "> Equip / Unequip items" << std::endl;
+            ss << "> Equip / Unequip items" << std::endl;
             if (player.getExp() >= player.getExpNext()) {
-                std::cout << "  Level up" << std::endl;
+                ss << "  Level up" << std::endl;
             }
             break;
         case 1:
             selectedMenuPoint = std::min(selectedMenuPoint++, numberOfMenuPoints);
-            std::cout << "  Equip / Unequip items" << std::endl;
+            ss << "  Equip / Unequip items" << std::endl;
             if (player.getExp() >= player.getExpNext()) {
-                std::cout << "> Level up" << std::endl;
+                ss << "> Level up" << std::endl;
             }
             break;
         default:
             break;
         }
+
+        ss << std::endl << "Return with ESC.";
+        std::cout << ss.str();
     }
-
-
-
-    std::cout << "Return with ESC.";
-    _getch();
 }
 
 void Menu::equipment(Player& player)

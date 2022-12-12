@@ -140,6 +140,40 @@ void Game::wait(Enemy& enemy)
 	}
 }
 
+void Game::rest(int restOption)
+{
+	int chance = 0;
+	switch (restOption)
+	{
+	case 0: // Chance to get Attacked, if survived then increment health and stamina?
+		std::cout << "\033c";
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		// Chance for an encounter
+		chance = rollBetween(0, 4);
+		if (chance > 0) {
+
+			Enemy enemy = spawnEnemy(rollBetween(1, 5), 0);
+			std::cout << "You have met an enemy " + enemy.getName() << std::endl;
+
+			fight(enemy, false);
+		}
+		break;
+	case 1:
+		std::cout << "\033c";
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		chance = rollBetween(0, 4);
+		if (chance > 0) {
+			player.setGold(player.getGold() - chance);
+			std::cout << "You have been mugged." << std::endl;
+		}
+		break;
+	default:
+		return;
+	}
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+}
+
+
 // Controls the playthrough stages
 void Game::gameLoop()
 {
@@ -152,7 +186,7 @@ void Game::gameLoop()
 		menu.shopMenu(player);
 		break;
 	case 2:
-		menu.restMenu(player);
+		rest(menu.restMenu(player));
 		break;
 	case 3:
 		menu.playerSheetMenu(player);
@@ -168,5 +202,6 @@ void Game::gameLoop()
 	}
 
 }
+
 
 

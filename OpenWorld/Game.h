@@ -14,7 +14,7 @@ public:
 	Enemy spawnEnemy(int difficulty, int terrain);
 	void gameLoop();
 
-	void shop();
+	void rest( int restOption );
 	void buy();
 
 	int rollBetween(int lower, int higher);

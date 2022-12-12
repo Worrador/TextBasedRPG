@@ -33,7 +33,7 @@ public:
 	void shopMenu(Player& player);
 	void buyMenu(Player& player);
 	void sellMenu(Player& player);
-	void restMenu(Player& player);
+	int restMenu(Player& player);
 	void playerSheetMenu(Player& player);
 
 

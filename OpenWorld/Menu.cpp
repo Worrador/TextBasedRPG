@@ -314,8 +314,59 @@ void Menu::sellMenu(Player& player)
 {
 }
 
-void Menu::restMenu(Player& player)
+int Menu::restMenu(Player& player)
 {
+    int selectedMenuPoint;
+
+    while (1) {
+        // List of menu points
+        std::vector <std::string> staticMenuLines = {
+            "REST"
+        };
+
+        std::vector <std::string> dynamiMenuPoints = {
+            "Sleep in the bushes: \t does not cost any gold, restores half of your missing hp and stamina. Chance to get attacked by animals.",
+            "Sleep on the street: \t does not cost any gold, restores half of your missing hp and stamina. Chance to get mugged.",
+            "Sleep in a shared room at an Inn: \t costs 4 gold, restores your hp and stamina to full.",
+            "Sleep in a private room at an Inn: \t costs 6 gold, restores your hp and stamina to full. Enchances some stats for the next fight."
+        };
+
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold, &player);
+
+        switch (selectedMenuPoint) {
+        case 0:
+        case 1:
+            player.setHp((int)(std::floor((player.getHpMax() + player.getHp()) / 2)));
+            player.setStamina((int)(std::floor((player.getStaminaMax() + player.getStamina()) / 2)));
+            return selectedMenuPoint;
+        case 2:
+            if (player.getGold() >= 4) {
+                player.setGold(player.getGold() - 4);
+                player.setHp(player.getHpMax());
+                player.setStamina(player.getStaminaMax());
+            }
+            else {
+                std::cout << "Not enough money." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+            break;
+        case 3:
+            if (player.getGold() >= 6) {
+                player.setGold(player.getGold() - 6);
+                player.setHp(player.getHpMax());
+                player.setStamina(player.getStaminaMax());
+            }
+            else {
+                std::cout << "Not enough money." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+            break;
+        case ESCAPE:
+            return ESCAPE;
+        default:
+            break;
+        }
+    }
 }
 
 void Menu::playerSheetMenu(Player& player)

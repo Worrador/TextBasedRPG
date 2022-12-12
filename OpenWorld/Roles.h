@@ -16,7 +16,7 @@ private:
     // Private constructor to prevent direct instantiation
     Roles();
 
-    // Map of roles to vectors of ints
+    // Map of roles to vectors of ints with the role specific stats
     std::map<Role, std::vector<int>> roles;
 
 public:

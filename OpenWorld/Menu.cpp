@@ -91,10 +91,10 @@ int Menu::menuGenerator(const std::vector<std::string>& dynamiMenuPoints, std::s
         std::cout << ss.str();
         switch ((_getch())) {
         case KEY_UP:
-            selectedMenuPoint = std::max(--selectedMenuPoint, 0);
+            selectedMenuPoint = (--selectedMenuPoint < 0) ? numberOfMenuPoints : selectedMenuPoint;
             break;
         case KEY_DOWN:
-            selectedMenuPoint = std::min(++selectedMenuPoint, numberOfMenuPoints);
+            selectedMenuPoint = (++selectedMenuPoint > numberOfMenuPoints) ? 0 : selectedMenuPoint;
             break;
         case ENTER:
             return selectedMenuPoint;
@@ -143,10 +143,10 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
         std::cout << ss.str();
         switch ((_getch())) {
         case KEY_UP:
-            selectedMenuPoint = std::max(--selectedMenuPoint, 0);
+            selectedMenuPoint = (--selectedMenuPoint < 0) ? numberOfMenuPoints : selectedMenuPoint;
             break;
         case KEY_DOWN:
-            selectedMenuPoint = std::min(++selectedMenuPoint, numberOfMenuPoints);
+            selectedMenuPoint = (++selectedMenuPoint > numberOfMenuPoints) ? 0 : selectedMenuPoint;
             break;
         case ENTER:
             return selectedMenuPoint;
@@ -165,15 +165,18 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
 
 Player Menu::playerCreationMenu()
 {
+    std::cout << "\033c";
+    std::cout << "Welcome player!" << std::endl << std::endl << "This is a command line RPG game which you can play using only your keyboard." <<
+        std::endl << "You can select between your options using the keyboard arrows and the Enter key." << std::endl << "If you want to step out of the current menu, use the ESC key." << std::endl << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::cout << "Let's create your character!" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
     std::string name;
     std::cout << "Please enter your name!" << std::endl;
-    std::cout << "---------" << std::endl;
-
     std::cin >> name;
-    std::cout << "\033c";
-    std::cout << "Welcome " << name << "!" << std::endl << "This is a command line RPG game which you can play using only your keyboard." << std::endl;
-    std::cout << "Let's create your character!" << std::endl;
-    //std::this_thread::sleep_for(std::chrono::seconds(5));
+
+
     bool isMale;
 
     {
@@ -203,7 +206,7 @@ Player Menu::playerCreationMenu()
 
     {
         std::vector <std::string> staticMenuLines = {
-            "What is your gender?"
+            "Now choose a class!"
         };
         // List of menu points
         std::vector <std::string> dynamiMenuPoints = {

@@ -1,5 +1,4 @@
 #pragma once
-#include <ctime>
 #include "Enemy.h"
 #include <random>
 #include "Menu.h"

@@ -13,7 +13,7 @@ public:
 		staminaMax(staminaMax), gold(gold) {};
 
 	Character(std::string name, std::vector<int> role, int gold = 0) :
-		name(name), hp(role[0]), hpMax(role[0]), damageMin(std::floor(role[1] / 2)), damageMax(role[1]), defence(role[2]), stamina(role[3]),
+		name(name), hp(role[0]), hpMax(role[0]), damageMin((int)std::floor(role[1] / 2)), damageMax(role[1]), defence(role[2]), stamina(role[3]),
 		staminaMax(role[3]), gold(gold) {};
 
 	virtual ~Character();

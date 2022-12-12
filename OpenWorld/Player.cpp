@@ -4,7 +4,7 @@ void Player::levelUp()
 {
 	level++;
 	exp = exp - expNext;
-	expNext = std::floor(expNext * 1.2 - std::pow(level, 2));
+	expNext = (int)std::floor(expNext * 1.2 - std::pow(level, 2));
 
 	// Role specific increments:
 	auto attrVector = Roles::getInstance().getRoles()[role];

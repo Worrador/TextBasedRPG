@@ -28,7 +28,7 @@ public:
 	inline void setExpNext(int expNext) { this->expNext = expNext; };
 	inline void setHpMax(int hpMax) { this->hpMax = hpMax; };
 	inline void setStaminaMax(int staminaMax) { this->staminaMax = staminaMax; };
-	inline void setDamage(int damage) { this->damageMax = damage; this->damageMin = std::floor(damage / 2); };
+	inline void setDamage(int damage) { this->damageMax = damage; this->damageMin = (int)std::floor(damage / 2); };
 	inline void setDefence(int defence) { this->defence = defence; };
 	inline void setLevel(int level) { this->level = level; };
 

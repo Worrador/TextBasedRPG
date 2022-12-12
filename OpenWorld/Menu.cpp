@@ -63,9 +63,9 @@ std::stringstream getStaticPlayerInfo( const void* playerVoid) {
 
 }
 
-int Menu::menuGenerator(const std::vector<std::string>& dynamiMenuPoints, std::stringstream(*staticMenuFn)(const void*), const bool isEscapeable = true, const Player* player = nullptr) {
+int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, const bool isEscapeable, std::stringstream(*staticMenuFn)(const void*), const Player* player) {
     // Call the pre-menu callback function, if it is provided
-    int numberOfMenuPoints = dynamiMenuPoints.size() - 1;
+    int numberOfMenuPoints = (int)(dynamiMenuPoints.size() - 1);
     int selectedMenuPoint = 0;
 
     while (1)
@@ -74,52 +74,9 @@ int Menu::menuGenerator(const std::vector<std::string>& dynamiMenuPoints, std::s
         if (staticMenuFn) {
             ss = staticMenuFn(player);
         }
-        for (auto index = 0; index < dynamiMenuPoints.size(); index++)
-        {
-            if (index == selectedMenuPoint) {
-                ss << "> ";
-            }
-            else {
-                ss << "  ";
-            }
-            ss << dynamiMenuPoints[index] << std::endl;
+        else {
+            ss << "\033c";
         }
-
-        if (isEscapeable)
-            ss << std::endl << "Return with ESC.";
-
-        std::cout << ss.str();
-        switch ((_getch())) {
-        case KEY_UP:
-            selectedMenuPoint = (--selectedMenuPoint < 0) ? numberOfMenuPoints : selectedMenuPoint;
-            break;
-        case KEY_DOWN:
-            selectedMenuPoint = (++selectedMenuPoint > numberOfMenuPoints) ? 0 : selectedMenuPoint;
-            break;
-        case ENTER:
-            return selectedMenuPoint;
-        case ESCAPE:
-            if (isEscapeable)
-                return ESCAPE;
-            else break;
-        default:
-            break;
-        }
-    }
-
-    return 0;
-
-}
-
-int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, const bool isEscapeable = true) {
-    // Call the pre-menu callback function, if it is provided
-    int numberOfMenuPoints = dynamiMenuPoints.size() - 1;
-    int selectedMenuPoint = 0;
-
-    while (1)
-    {
-        std::stringstream ss;
-        ss << "\033c";
         for (auto line: staticMenuLines)
         {
             ss << line << std::endl;
@@ -262,14 +219,16 @@ void Menu::playerSheetMenu(Player& player)
 
     while (1) {
         // List of menu points
-        std::vector <std::string> menuPoints = {
+        std::vector <std::string> staticMenuLines = {};
+
+        std::vector <std::string> dynamiMenuPoints = {
             "Equip / Unequip items"
         };
         if (player.getExp() >= player.getExpNext()) {
-            menuPoints.push_back("Level up");
+            dynamiMenuPoints.push_back("Level up");
         }
 
-        selectedMenuPoint = menuGenerator(menuPoints, getStaticPlayerInfo, true, &player);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerInfo , &player);
 
         switch (selectedMenuPoint) {
         case 0:

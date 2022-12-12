@@ -256,7 +256,7 @@ int Menu::mainMenu()
     return selectedMenuPoint;
 }
 
-void Menu::playerMenu(Player& player)
+void Menu::playerSheetMenu(Player& player)
 {
     int selectedMenuPoint;
 

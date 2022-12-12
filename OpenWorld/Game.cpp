@@ -8,6 +8,7 @@ Enemy Game::spawnEnemy(int difficulty, int terrain)
 
 void Game::buy()
 {
+
 	while (1) {
 		std::cout << "\033c";
 		std::cout << "Buy" << std::endl;
@@ -228,7 +229,7 @@ void Game::gameLoop()
 		player.setStamina(player.getStaminaMax());
 		break;
 	case 3:
-		menu.playerMenu(player);
+		menu.playerSheetMenu(player);
 		break;
 	case 4:
 		playing = false;

@@ -14,10 +14,15 @@ public:
 
 	// Operators
 
-	// Functions
+	// Menu functions:
 	Player playerCreationMenu();
 	int mainMenu();
-	void playerMenu(Player& player);
+	void travelMenu(Player& player);
+	void shopMenu(Player& player);
+	void restMenu(Player& player);
+	void playerSheetMenu(Player& player);
+
+
 	void equipment(Player& player);
 	void levelUp(Player& player);
 	int getInputBetween(int lower, int higher);

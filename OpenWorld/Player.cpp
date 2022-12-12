@@ -2,6 +2,7 @@
 
 void Player::levelUp()
 {
+	// The player levels himself up in game as well,is okay to be here
 	level++;
 	exp = exp - expNext;
 	expNext = (int)std::floor(expNext * 1.2 - std::pow(level, 2));

@@ -5,80 +5,6 @@ Enemy Game::spawnEnemy(int difficulty, int terrain)
 	return Enemy("Golem", player.getLevel() * difficulty, 1, difficulty, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty);
 }
 
-
-void Game::buy()
-{
-
-	while (1) {
-		std::cout << "\033c";
-		std::cout << "Buy" << std::endl;
-		std::cout << "---------" << std::endl;
-		std::cout << "0: Health potion: \t costs 3 gold, restores your hp to full." << std::endl;
-		std::cout << "1: Stamina potion: \t costs 1 gold, restores your stamina to full." << std::endl;
-		std::cout << "2: Sword: \t costs 10 gold, wielding this your attack damage increases by 3." << std::endl;
-		std::cout << "3: Armor: \t costs 8 gold, equiping this increases your defence skill by 2." << std::endl;
-		std::cout << "4: Return." << std::endl;
-		std::cout << std::endl << "Gold: " << player.getGold() << std::endl;
-
-		switch (menu.getInputBetween(0, 4)) {
-		case 0:
-			if (player.getGold() >= 3) {
-				player.setGold(player.getGold() - 3);
-				player.setHp(player.getHpMax());
-			}
-			else {
-				std::cout << "Not enough money." << std::endl;
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-			}
-			break;
-		case 1:
-			break;
-		case 2:
-			if (player.getGold() >= 10) {
-				player.setGold(player.getGold() - 10);
-				player.setDamage(player.getDamageMax() + 3);
-			}
-			else {
-				std::cout << "Not enough money." << std::endl;
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-			}
-			break;
-		case 3:
-			if (player.getGold() >= 8) {
-				player.setGold(player.getGold() - 8);
-				player.setDefence(player.getDefence() + 2);
-			}
-			else {
-				std::cout << "Not enough money." << std::endl;
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-			}
-			break;
-		case 4:
-			return;
-		default:
-			break;
-		}
-	}
-}
-void Game::shop()
-{
-	std::cout << "\033c";
-	std::cout << "Shop" << std::endl;
-	std::cout << "---------" << std::endl;
-	std::cout << "0: Buy" << std::endl;
-	std::cout << "1: Sell" << std::endl;
-
-	switch (menu.getInputBetween(0, 1)) {
-	case 0:
-		buy();
-		break;
-	case 1:
-		break;
-	default:
-		break;
-	}
-}
-
 int Game::rollBetween(int lower, int higher)
 {
 	std::mt19937 rng(std::random_device{}());
@@ -220,13 +146,13 @@ void Game::gameLoop()
 	switch (menu.mainMenu())
 	{
 	case 0:
-		travel();
+		menu.travelMenu(player);
 		break;
 	case 1:
-		shop();
+		menu.shopMenu(player);
 		break;
 	case 2:
-		player.setStamina(player.getStaminaMax());
+		menu.restMenu(player);
 		break;
 	case 3:
 		menu.playerSheetMenu(player);

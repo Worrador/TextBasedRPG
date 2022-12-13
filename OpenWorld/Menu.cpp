@@ -195,11 +195,11 @@ int Menu::mainMenu()
     };
     // List of menu points
     std::vector <std::string> dynamiMenuPoints = {
-      "Travel",
-      "Shop",
-      "Rest",
-      "Player sheet",
-      "Quit",
+        "Travel",
+        "Rest",
+        "Shop",
+        "Player sheet",
+        "Quit",
     };
 
     auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, false);
@@ -207,8 +207,31 @@ int Menu::mainMenu()
     return selectedMenuPoint;
 }
 
-void Menu::travelMenu(Player& player)
+int Menu::travelMenu(Player& player)
 {
+    if (player.getStamina() < 1) {
+        std::cout << std::endl << "You don't have enough stamina to travel." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        return ESCAPE;
+    }
+    player.setStamina(player.getStamina() - 1);
+    std::vector <std::string> staticMenuLines = {
+    "TRAVEL",
+    "",
+    "Where do you wish to travel?"
+    };
+    // List of menu points
+    std::vector <std::string> dynamiMenuPoints = {
+      "Nearby town, down the road",
+      "To the forest",
+      "To the Lake",
+      "Your moms ass",
+      "What do you care?"
+    };
+
+    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true);
+
+    return selectedMenuPoint;
 }
 
 void Menu::shopMenu(Player& player)
@@ -262,7 +285,7 @@ void Menu::buyMenu(Player& player)
 
         std::vector <std::string> dynamiMenuPoints = {
             "Health potion: \t costs 3 gold, restores your hp to full.",
-            "Stamina potion: \t costs 1 gold, restores your stamina to full.",
+            "Stamina potion: \t costs 2 gold, restores your stamina to full.",
             "Sword: \t costs 10 gold, wielding this your attack damage increases by 3.",
             "Armor: \t costs 8 gold, equiping this increases your defence skill by 2."
         };
@@ -281,6 +304,14 @@ void Menu::buyMenu(Player& player)
             }
             break;
         case 1:
+            if (player.getGold() >= 2) {
+                player.setGold(player.getGold() - 2);
+                player.setStamina(player.getStaminaMax());
+            }
+            else {
+                std::cout << "Not enough money." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
             break;
         case 2:
             if (player.getGold() >= 10) {
@@ -344,6 +375,7 @@ int Menu::restMenu(Player& player)
                 player.setGold(player.getGold() - 4);
                 player.setHp(player.getHpMax());
                 player.setStamina(player.getStaminaMax());
+                return selectedMenuPoint;
             }
             else {
                 std::cout << "Not enough money." << std::endl;
@@ -355,6 +387,7 @@ int Menu::restMenu(Player& player)
                 player.setGold(player.getGold() - 6);
                 player.setHp(player.getHpMax());
                 player.setStamina(player.getStaminaMax());
+                return selectedMenuPoint;
             }
             else {
                 std::cout << "Not enough money." << std::endl;
@@ -362,7 +395,7 @@ int Menu::restMenu(Player& player)
             }
             break;
         case ESCAPE:
-            return ESCAPE;
+            return selectedMenuPoint;
         default:
             break;
         }

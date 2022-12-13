@@ -14,43 +14,66 @@ int Game::rollBetween(int lower, int higher)
 	return roll_dist(rng);
 }
 
-void Game::travel() 
+void dramaticPause()
 {
-	// Traveling costs stamina,maybe the more items you have, the more it costs
-	player.setStamina(player.getStamina() - 1);
+	std::cout << "\033c";
+	std::cout << ".";
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::cout << ".";
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::cout << ".";
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::cout << "\033c";
+}
 
-	// Chance for an encounter
-	auto chance = rollBetween(1, 4);
-	if (chance > 0) {
+void Game::travel(int travelOption)
+{
+	int chance = 0;
 
-		Enemy enemy = spawnEnemy(rollBetween(1, 10), 0);
+	switch (travelOption)
+	{
+	case 0:
+		dramaticPause();
+		break;
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		// Chance for an encounter
+		chance = rollBetween(0, 4);
+		dramaticPause();
+		if (chance > 0) {
+			Enemy enemy = spawnEnemy(rollBetween(1, 10), 0);
 
-		std::vector <std::string> staticLines = {
-			"You have met an enemy " + enemy.getName()
-		};
-		std::vector <std::string> dynamiMenuPoints = {
-		  "Attack",
-		  "Run",
-		  "Wait"
-		};
-
-
-		switch (menu.menuGenerator(staticLines, dynamiMenuPoints, false)) {
-		case 0:
-			fight(enemy, true);
-			break;
-		case 1:
-			run(enemy);
-			break;
-		case 2:
-			wait(enemy);
-			break;
-		default:
-			break;
+			std::vector <std::string> staticLines = {
+				"You have met an enemy " + enemy.getName()
+			};
+			std::vector <std::string> dynamiMenuPoints = {
+				"Attack",
+				"Run",
+				"Wait"
+			};
+			switch (menu.menuGenerator(staticLines, dynamiMenuPoints, false)) {
+			case 0:
+				fight(enemy, true);
+				break;
+			case 1:
+				run(enemy);
+				break;
+			case 2:
+				wait(enemy);
+				break;
+			default:
+				break;
+			}
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			std::cout << std::endl;
 		}
+		break;
+	default:
+		return;
 	}
-
-	std::cout << "Press a button to return.";
+	std::cout << "You have arrived to your destination." << std::endl;
 	_getch();
 }
 
@@ -143,34 +166,38 @@ void Game::wait(Enemy& enemy)
 void Game::rest(int restOption)
 {
 	int chance = 0;
+	dramaticPause();
 	switch (restOption)
 	{
 	case 0: // Chance to get Attacked, if survived then increment health and stamina?
-		std::cout << "\033c";
-		std::this_thread::sleep_for(std::chrono::seconds(2));
 		// Chance for an encounter
 		chance = rollBetween(0, 4);
 		if (chance > 0) {
 
 			Enemy enemy = spawnEnemy(rollBetween(1, 5), 0);
-			std::cout << "You have met an enemy " + enemy.getName() << std::endl;
+			std::cout << "You wake up to a noise of a(n) " + enemy.getName() << std::endl;
 
 			fight(enemy, false);
 		}
+		else {
+			std::cout << "You wake somewhat rested." << std::endl;
+		}
 		break;
 	case 1:
-		std::cout << "\033c";
-		std::this_thread::sleep_for(std::chrono::seconds(2));
 		chance = rollBetween(0, 4);
 		if (chance > 0) {
 			player.setGold(player.getGold() - chance);
-			std::cout << "You have been mugged." << std::endl;
+			std::cout << "You wake somewhat rested. But as you touch your pockets you notice that you have been mugged." << std::endl;
+		}
+		else {
+			std::cout << "You wake somewhat rested." << std::endl;
 		}
 		break;
 	default:
-		return;
+		std::cout << "You wake fully rested." << std::endl;
+		break;
 	}
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	_getch();
 }
 
 
@@ -180,13 +207,13 @@ void Game::gameLoop()
 	switch (menu.mainMenu())
 	{
 	case 0:
-		menu.travelMenu(player);
+		travel(menu.travelMenu(player));
 		break;
 	case 1:
-		menu.shopMenu(player);
+		rest(menu.restMenu(player)); 
 		break;
 	case 2:
-		rest(menu.restMenu(player));
+		menu.shopMenu(player);
 		break;
 	case 3:
 		menu.playerSheetMenu(player);

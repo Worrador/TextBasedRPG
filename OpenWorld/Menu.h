@@ -12,24 +12,26 @@ enum class menuState {
 	Buy,
 	Sell,
 	Rest,
-	PlyaerSheet
+	PlayerSheet
 };
 
 class Menu
 {
 public:
+
+	// Constructors
 	Menu() : menuState(menuState::Main) {};
 
 	// Operators
 
 	
-	// Menu functions:
+	// Menu functions
 	int menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, 
 		const bool isEscapeable = true, void (*staticMenuFn)(std::stringstream&, const void*) = nullptr, const Player* player = nullptr);
 
 	Player playerCreationMenu();
 	int mainMenu();
-	void travelMenu(Player& player);
+	int travelMenu(Player& player);
 	void shopMenu(Player& player);
 	void buyMenu(Player& player);
 	void sellMenu(Player& player);

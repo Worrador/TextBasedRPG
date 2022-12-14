@@ -9,7 +9,7 @@ public:
 		Character(name, hpMax, dmgMin, dmgMax, defence, staminaMax), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
 
 	Player(const std::string& name, bool isMale, const Role& role, const std::string& roleName) :
-		Character(name, Roles::getInstance().getRoles()[role]), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
+		Character(name, RoleStats::getInstance().getRoleStats()[role]), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
 
 	// Operators
 
@@ -39,8 +39,8 @@ private:
 	int level;
 	int exp;
 	int expNext;
+	// Inventory
+	std::vector<Item> Inventory;
 
-
-	//std::vector<Item>
 };
 

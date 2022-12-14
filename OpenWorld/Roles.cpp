@@ -1,6 +1,6 @@
 #include "Roles.h"
 
-Roles::Roles() {
+RoleStats::RoleStats() {
 	//  Role			 hpMax,	dmgMax, defence, staminaMax, hpIncr, dmgIncr, defIncr, staminaIncr
 	roles = {
 		{Role::Warrior, { 12,	3,		2,		 10,		 2,		 1,		  1,	   3 }},

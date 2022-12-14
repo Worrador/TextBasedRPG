@@ -7,17 +7,6 @@
 #define ESCAPE 27
 #define ENTER '\r'
 
-std::stringstream getStaticClassQuestion(const void* playerVoid) {
-    // Build string stream object
-    std::stringstream ss;
-    ss << "\033c";
-    ss << "Now choose a class!" << std::endl;
-    ss << "---------" << std::endl;
-
-    return ss;
-}
-
-
 int Menu::getInputBetween(int lower, int higher)
 {
     int choice;
@@ -34,32 +23,8 @@ int Menu::getInputBetween(int lower, int higher)
     return choice;
 }
 
-
-
-
-void getStaticPlayerInfo( std::stringstream& ss, const void* playerVoid ) {
-    // Build string stream object
-    Player player = *(Player*)playerVoid;
-    ss << std::endl;
-    ss << "Name: " << player.getName() << std::endl;
-    ss << "Class: " << player.getRoleName() << std::endl;
-    ss << "Level: " << player.getLevel() << std::endl;
-    ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
-    ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
-    ss << "Attack:  " << player.getDamageMax() << std::endl;
-    ss << "Defence: " << player.getDefence() << std::endl;
-    ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
-
-    ss << "------------------------------------" << std::endl << std::endl;
-
-    ss << "INVENTORY" << std::endl << std::endl;
-
-    ss << "Gold: " << player.getGold() << std::endl << std::endl;
-
-}
-
 int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, 
-    const bool isEscapeable, void(*staticMenuFn)(std::stringstream&, const void*), const Player* player) {
+    const bool isEscapeable, const std::function <void(std::stringstream&)>& staticMenuFn) {
 
     // Call the pre-menu callback function, if it is provided
     int numberOfMenuPoints = (int)(dynamiMenuPoints.size() - 1);
@@ -74,7 +39,7 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
             ss << line << std::endl;
         }
         if (staticMenuFn) {
-            staticMenuFn(ss, player);
+            staticMenuFn(ss);
         }
         ss << std::endl;
 
@@ -266,16 +231,15 @@ void Menu::shopMenu(Player& player)
     }
 }
 
-void getStaticPlayerGold( std::stringstream& ss, const void* playerVoid ) {
-    // Build string stream object
-    Player player = *(Player*)playerVoid;
-    ss << std::endl << "Gold: " << player.getGold() << std::endl;
-}
-
 void Menu::buyMenu(Player& player)
 {
 
     int selectedMenuPoint;
+
+    auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
+        // Build string stream object
+        ss << std::endl << "Gold: " << player.getGold() << std::endl;
+    };
 
     while (1) {
         // List of menu points
@@ -290,7 +254,7 @@ void Menu::buyMenu(Player& player)
             "Armor: \t costs 8 gold, equiping this increases your defence skill by 2."
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold, &player);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -349,6 +313,11 @@ int Menu::restMenu(Player& player)
 {
     int selectedMenuPoint;
 
+    auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
+        // Build string stream object
+        ss << std::endl << "Gold: " << player.getGold() << std::endl;
+    };
+
     while (1) {
         // List of menu points
         std::vector <std::string> staticMenuLines = {
@@ -362,7 +331,7 @@ int Menu::restMenu(Player& player)
             "Sleep in a private room at an Inn: \t costs 6 gold, restores your hp and stamina to full. Enchances some stats for the next fight."
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold, &player);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -406,6 +375,25 @@ void Menu::playerSheetMenu(Player& player)
 {
     int selectedMenuPoint;
 
+    auto getStaticPlayerInfo = [player](std::stringstream& ss) ->void {
+        // Build string stream object
+        ss << std::endl;
+        ss << "Name: " << player.getName() << std::endl;
+        ss << "Class: " << player.getRoleName() << std::endl;
+        ss << "Level: " << player.getLevel() << std::endl;
+        ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
+        ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
+        ss << "Attack:  " << player.getDamageMax() << std::endl;
+        ss << "Defence: " << player.getDefence() << std::endl;
+        ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
+
+        ss << "------------------------------------" << std::endl << std::endl;
+
+        ss << "INVENTORY" << std::endl << std::endl;
+
+        ss << "Gold: " << player.getGold() << std::endl << std::endl;
+    };
+
     while (1) {
         // List of menu points
         std::vector <std::string> staticMenuLines = {
@@ -419,7 +407,7 @@ void Menu::playerSheetMenu(Player& player)
             dynamiMenuPoints.push_back("Level up");
         }
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerInfo , &player);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerInfo);
 
         switch (selectedMenuPoint) {
         case 0:

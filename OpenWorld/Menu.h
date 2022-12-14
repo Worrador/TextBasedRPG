@@ -4,6 +4,7 @@
 #include <chrono>   // for std::chrono::seconds
 #include <conio.h>
 #include <sstream>
+#include<functional> 
 
 enum class menuState {
 	Main = 0,
@@ -19,15 +20,15 @@ class Menu
 {
 public:
 
-	// Constructors
-	Menu() : menuState(menuState::Main) {};
+	// Constructors, explicit to avoid implicit conversions
+	explicit Menu() : menuState(menuState::Main) {};
 
 	// Operators
 
 	
 	// Menu functions
 	int menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, 
-		const bool isEscapeable = true, void (*staticMenuFn)(std::stringstream&, const void*) = nullptr, const Player* player = nullptr);
+		const bool isEscapeable = true, const std::function <void(std::stringstream&)>& staticMenuFn = nullptr);
 
 	Player playerCreationMenu();
 	int mainMenu();

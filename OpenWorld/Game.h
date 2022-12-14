@@ -3,6 +3,7 @@
 #include <random>
 #include "Menu.h"
 
+// Player is manipulated manipulated through this object
 class Game
 {
 public:

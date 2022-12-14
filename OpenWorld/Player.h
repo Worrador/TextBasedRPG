@@ -5,10 +5,10 @@ class Player : public Character
 {
 public:
 	// Constructors
-	Player(std::string name, bool isMale, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, Role role, const std::string roleName) :
+	Player(const std::string& name, bool isMale, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, const Role& role, const std::string& roleName) :
 		Character(name, hpMax, dmgMin, dmgMax, defence, staminaMax), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
 
-	Player(std::string name, bool isMale, Role role, const std::string roleName) :
+	Player(const std::string& name, bool isMale, const Role& role, const std::string& roleName) :
 		Character(name, Roles::getInstance().getRoles()[role]), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
 
 	// Operators

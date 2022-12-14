@@ -16,6 +16,7 @@ enum class menuState {
 	PlayerSheet
 };
 
+// Player can manipulate everything through this object
 class Menu
 {
 public:

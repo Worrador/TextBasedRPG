@@ -8,11 +8,11 @@
 class Character
 {
 public:
-	Character(std::string name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, int gold = 0) :
+	Character(const std::string& name, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, int gold = 0) :
 		name(name), hp(hpMax), hpMax(hpMax), damageMin(dmgMin), damageMax(dmgMax), defence(defence), stamina(staminaMax),
 		staminaMax(staminaMax), gold(gold) {};
 
-	Character(std::string name, std::vector<int> role, int gold = 0) :
+	Character(const std::string& name, const std::vector<int>& role, int gold = 0) :
 		name(name), hp(role[0]), hpMax(role[0]), damageMin((int)std::floor(role[1] / 2)), damageMax(role[1]), defence(role[2]), stamina(role[3]),
 		staminaMax(role[3]), gold(gold) {};
 

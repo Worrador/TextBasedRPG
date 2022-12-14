@@ -1,4 +1,4 @@
-#include "Roles.h"
+#include "RoleStats.h"
 
 RoleStats::RoleStats() {
 	//  Role			 hpMax,	dmgMax, defence, staminaMax, hpIncr, dmgIncr, defIncr, staminaIncr
@@ -11,3 +11,4 @@ RoleStats::RoleStats() {
 	};
 }
 
+//TODO: similar for items, stats

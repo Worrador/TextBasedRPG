@@ -4,7 +4,7 @@
 #include <chrono>   // for std::chrono::seconds
 #include <conio.h>
 #include <sstream>
-#include<functional> 
+#include <functional> 
 
 enum class menuState {
 	Main = 0,

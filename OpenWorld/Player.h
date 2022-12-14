@@ -8,6 +8,7 @@ public:
 	Player(const std::string& name, bool isMale, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, const Role& role, const std::string& roleName) :
 		Character(name, hpMax, dmgMin, dmgMax, defence, staminaMax), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
 
+	//TODO: map or fn that maps role to rolename
 	Player(const std::string& name, bool isMale, const Role& role, const std::string& roleName) :
 		Character(name, RoleStats::getInstance().getRoleStats()[role]), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
 

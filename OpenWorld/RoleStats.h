@@ -37,6 +37,4 @@ private:
 
     // Map of roles to vectors of ints with the role specific stats
     std::map<Role, std::vector<int>> roles;
-
-
 };

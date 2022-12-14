@@ -1,7 +1,5 @@
 #pragma once
 #include "Item.h"
-#include <iostream>
-#include <algorithm>
 
 class Character
 {

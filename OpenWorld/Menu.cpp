@@ -23,11 +23,11 @@ int Menu::getInputBetween(int lower, int higher)
     return choice;
 }
 
-int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, 
+int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamicMenuPoints, 
     const bool isEscapeable, const std::function <void(std::stringstream&)>& staticMenuFn) {
 
     // Call the pre-menu callback function, if it is provided
-    int numberOfMenuPoints = (int)(dynamiMenuPoints.size() - 1);
+    int numberOfMenuPoints = (int)(dynamicMenuPoints.size() - 1);
     int selectedMenuPoint = 0;
 
     while (1)
@@ -43,7 +43,7 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
         }
         ss << std::endl;
 
-        for (auto index = 0; index < dynamiMenuPoints.size(); index++)
+        for (auto index = 0; index < dynamicMenuPoints.size(); index++)
         {
             if (index == selectedMenuPoint) {
                 ss << "> ";
@@ -51,7 +51,7 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
             else {
                 ss << "  ";
             }
-            ss << dynamiMenuPoints[index] << std::endl;
+            ss << dynamicMenuPoints[index] << std::endl;
         }
 
         if (isEscapeable)
@@ -101,12 +101,12 @@ Player Menu::playerCreationMenu()
         std::vector <std::string> staticMenuLines = {
             "What is your gender?"
         };
-        std::vector <std::string> dynamiMenuPoints = {
+        std::vector <std::string> dynamicMenuPoints = {
             "Male",
             "Female"
         };
 
-        auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, false);
+        auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, false);
         switch (selectedMenuPoint) {
         case 0:
             isMale = true;
@@ -125,14 +125,14 @@ Player Menu::playerCreationMenu()
             "Now choose a class!"
         };
         // List of menu points
-        std::vector <std::string> dynamiMenuPoints = {
+        std::vector <std::string> dynamicMenuPoints = {
           "Warrior",
           "Mage",
           "Rouge",
           "Ranger"
         };
 
-        auto selectedMenuPoint = (Role)menuGenerator(staticMenuLines, dynamiMenuPoints, false);
+        auto selectedMenuPoint = (Role)menuGenerator(staticMenuLines, dynamicMenuPoints, false);
         switch (selectedMenuPoint) {
         case Role::Warrior:
             return Player(name, isMale, Role::Warrior, "Warrior");
@@ -159,7 +159,7 @@ int Menu::mainMenu()
         "MAIN MENU"
     };
     // List of menu points
-    std::vector <std::string> dynamiMenuPoints = {
+    std::vector <std::string> dynamicMenuPoints = {
         "Travel",
         "Rest",
         "Shop",
@@ -167,7 +167,7 @@ int Menu::mainMenu()
         "Quit",
     };
 
-    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, false);
+    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, false);
 
     return selectedMenuPoint;
 }
@@ -186,7 +186,7 @@ int Menu::travelMenu(Player& player)
     "Where do you wish to travel?"
     };
     // List of menu points
-    std::vector <std::string> dynamiMenuPoints = {
+    std::vector <std::string> dynamicMenuPoints = {
       "Nearby town, down the road",
       "To the forest",
       "To the Lake",
@@ -194,7 +194,7 @@ int Menu::travelMenu(Player& player)
       "What do you care?"
     };
 
-    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true);
+    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true);
 
     return selectedMenuPoint;
 }
@@ -209,12 +209,12 @@ void Menu::shopMenu(Player& player)
             "SHOP"
         };
 
-        std::vector <std::string> dynamiMenuPoints = {
+        std::vector <std::string> dynamicMenuPoints = {
             "Buy",
             "Sell"
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -247,14 +247,16 @@ void Menu::buyMenu(Player& player)
             "BUY"
         };
 
-        std::vector <std::string> dynamiMenuPoints = {
+        std::vector <std::string> dynamicMenuPoints = {
             "Health potion: \t costs 3 gold, restores your hp to full.",
             "Stamina potion: \t costs 2 gold, restores your stamina to full.",
-            "Sword: \t costs 10 gold, wielding this your attack damage increases by 3.",
             "Armor: \t costs 8 gold, equiping this increases your defence skill by 2."
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold);
+        Item item("Sword", { Role::Warrior }, itemType::oneHanded, 0, 3, 0, 0);
+        dynamicMenuPoints.push_back(item.getName() + ": \t costs " + std::to_string(item.getBuyGold()) + " gold.");
+
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -324,14 +326,14 @@ int Menu::restMenu(Player& player)
             "REST"
         };
 
-        std::vector <std::string> dynamiMenuPoints = {
+        std::vector <std::string> dynamicMenuPoints = {
             "Sleep in the bushes: \t does not cost any gold, restores half of your missing hp and stamina. Chance to get attacked by animals.",
             "Sleep on the street: \t does not cost any gold, restores half of your missing hp and stamina. Chance to get mugged.",
             "Sleep in a shared room at an Inn: \t costs 4 gold, restores your hp and stamina to full.",
             "Sleep in a private room at an Inn: \t costs 6 gold, restores your hp and stamina to full. Enchances some stats for the next fight."
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerGold);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -400,14 +402,14 @@ void Menu::playerSheetMenu(Player& player)
             "PLAYER SHEET"
         };
 
-        std::vector <std::string> dynamiMenuPoints = {
+        std::vector <std::string> dynamicMenuPoints = {
             "Equip / Unequip items"
         };
         if (player.getExp() >= player.getExpNext()) {
-            dynamiMenuPoints.push_back("Level up");
+            dynamicMenuPoints.push_back("Level up");
         }
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamiMenuPoints, true, getStaticPlayerInfo);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerInfo);
 
         switch (selectedMenuPoint) {
         case 0:

@@ -11,7 +11,8 @@ enum class itemType {
 	handPiece,
 	chestPiece,
 	legPiece,
-	shoes
+	shoes,
+	potion
 };
 
 class Item

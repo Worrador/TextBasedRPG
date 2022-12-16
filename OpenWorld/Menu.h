@@ -29,7 +29,8 @@ public:
 	
 	// Menu functions
 	int menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamiMenuPoints, 
-		const bool isEscapeable = true, const std::function <void(std::stringstream&)>& staticMenuFn = nullptr);
+		const bool isEscapeable = true, const std::function <void(std::stringstream&)>& staticMenuFn = nullptr,
+		const std::function <void(std::stringstream&, const int)>& dynamicMenuFn = nullptr);
 
 	Player playerCreationMenu();
 	int mainMenu();

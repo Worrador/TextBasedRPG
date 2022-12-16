@@ -24,7 +24,8 @@ int Menu::getInputBetween(int lower, int higher)
 }
 
 int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamicMenuPoints, 
-    const bool isEscapeable, const std::function <void(std::stringstream&)>& staticMenuFn) {
+    const bool isEscapeable, const std::function <void(std::stringstream&)>& staticMenuFn, 
+    const std::function <void(std::stringstream&, const int)>& dynamicMenuFn) {
 
     // Call the pre-menu callback function, if it is provided
     int numberOfMenuPoints = (int)(dynamicMenuPoints.size() - 1);
@@ -52,6 +53,10 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
                 ss << "  ";
             }
             ss << dynamicMenuPoints[index] << std::endl;
+        }
+
+        if (dynamicMenuFn) {
+            dynamicMenuFn(ss, selectedMenuPoint);
         }
 
         if (isEscapeable)
@@ -251,7 +256,7 @@ void Menu::buyMenu(Player& player)
         };
         std::vector <std::string> dynamicMenuPoints;
 
-         for (auto& option : shopOptions) {
+        for (auto& option : shopOptions) {
             dynamicMenuPoints.push_back(option.getName() + ": \t costs " + std::to_string(option.getBuyGold()) + " gold.");
         }
 
@@ -260,7 +265,22 @@ void Menu::buyMenu(Player& player)
             ss << std::endl << "Gold: " << player.getGold() << std::endl;
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
+        auto getDynamicItemStats = [shopOptions](std::stringstream& ss, const int selectedMenuPoint) ->void {
+            // Build string stream object
+            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << "Costs: " << shopOptions[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
+            ss << "Equipable by: ";
+            for (auto& role : shopOptions[selectedMenuPoint].getRoles()) {
+                ss << "fasz ";
+            }
+            ss << std::endl;
+            ss << "Max HP: " << shopOptions[selectedMenuPoint].getHpMax() << std::endl;
+            ss << "Max damage: " << shopOptions[selectedMenuPoint].getDamageMax() << std::endl;
+            ss << "Defence: " << shopOptions[selectedMenuPoint].getDefence() << std::endl;
+            ss << "Max stamina: " << shopOptions[selectedMenuPoint].getStaminaMax() << std::endl;
+        };
+
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicItemStats);
 
         if (selectedMenuPoint == ESCAPE) {
             return;
@@ -407,10 +427,11 @@ void Menu::playerSheetMenu(Player& player)
         ss << "------------------------------------" << std::endl << std::endl;
 
         ss << "INVENTORY" << std::endl << std::endl;
+        ss << player.getGold() << " gold" << std::endl;
         for (auto& item: player.getInventory()) {
             ss << item.getName() << std::endl;
         }
-        ss << "Gold: " << player.getGold() << std::endl << std::endl;
+        ss << std::endl;
     };
 
     while (1) {

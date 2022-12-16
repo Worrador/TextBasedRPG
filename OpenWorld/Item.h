@@ -29,7 +29,7 @@ public:
 
 	// Accessors
 	inline std::string getName() const { return name; };
-	inline std::vector<Role> getRole() const { return roles; };
+	inline std::vector<Role> getRoles() const { return roles; };
 	inline int getLevel() const { return level; };
 	inline int getBuyGold() const { return buyGold; };
 	inline int getSellGold() const { return sellGold; };

@@ -236,73 +236,42 @@ void Menu::buyMenu(Player& player)
 
     int selectedMenuPoint;
 
-    auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
-        // Build string stream object
-        ss << std::endl << "Gold: " << player.getGold() << std::endl;
-    };
-
     while (1) {
         // List of menu points
         std::vector <std::string> staticMenuLines = {
             "BUY"
         };
+        std::vector <std::string> dynamicMenuPoints;
 
-        std::vector <std::string> dynamicMenuPoints = {
-            "Health potion: \t costs 3 gold, restores your hp to full.",
-            "Stamina potion: \t costs 2 gold, restores your stamina to full.",
-            "Armor: \t costs 8 gold, equiping this increases your defence skill by 2."
+        std::vector<Item> shopOptions;
+        shopOptions.push_back(Item("Sword", { Role::Warrior, Role::Rouge }, itemType::oneHanded, 0, 3, 0, 0));
+        shopOptions.push_back(Item("Bow", { Role::Ranger, Role::Rouge }, itemType::twoHanded, 0, 5, 0, -1));
+        shopOptions.push_back(Item("Staff", { Role::Mage }, itemType::oneHanded, 0, 7, 0, 0));
+        shopOptions.push_back(Item("Great Sword", { Role::Warrior }, itemType::oneHanded, 0, 5, 0, -2));
+        shopOptions.push_back(Item("Light armor", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte }, itemType::chestPiece, 1, 0, 1, -1));
+        shopOptions.push_back(Item("Robes", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte, Role::Mage }, itemType::chestPiece, 1, 0, 0, 0));
+        for (auto& option : shopOptions) {
+            dynamicMenuPoints.push_back(option.getName() + ": \t costs " + std::to_string(option.getBuyGold()) + " gold.");
+        }
+
+        auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
+            // Build string stream object
+            ss << std::endl << "Gold: " << player.getGold() << std::endl;
         };
-
-        Item item("Sword", { Role::Warrior }, itemType::oneHanded, 0, 3, 0, 0);
-        dynamicMenuPoints.push_back(item.getName() + ": \t costs " + std::to_string(item.getBuyGold()) + " gold.");
 
         selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
 
-        switch (selectedMenuPoint) {
-        case 0:
-            if (player.getGold() >= 3) {
-                player.setGold(player.getGold() - 3);
-                player.setHp(player.getHpMax());
-            }
-            else {
-                std::cout << "Not enough money." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            break;
-        case 1:
-            if (player.getGold() >= 2) {
-                player.setGold(player.getGold() - 2);
-                player.setStamina(player.getStaminaMax());
-            }
-            else {
-                std::cout << "Not enough money." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            break;
-        case 2:
-            if (player.getGold() >= 10) {
-                player.setGold(player.getGold() - 10);
-                player.setDamage(player.getDamageMax() + 3);
-            }
-            else {
-                std::cout << "Not enough money." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            break;
-        case 3:
-            if (player.getGold() >= 8) {
-                player.setGold(player.getGold() - 8);
-                player.setDefence(player.getDefence() + 2);
-            }
-            else {
-                std::cout << "Not enough money." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            break;
-        case ESCAPE:
+        if (selectedMenuPoint == ESCAPE) {
             return;
-        default:
-            break;
+        }
+
+        if (player.getGold() >= shopOptions[selectedMenuPoint].getBuyGold()) {
+            player.setGold(player.getGold() - shopOptions[selectedMenuPoint].getBuyGold());
+            player.addItem(std::move(shopOptions[selectedMenuPoint]));
+        }
+        else {
+            std::cout << "Not enough money." << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
 }
@@ -392,7 +361,9 @@ void Menu::playerSheetMenu(Player& player)
         ss << "------------------------------------" << std::endl << std::endl;
 
         ss << "INVENTORY" << std::endl << std::endl;
-
+        for (auto& item: player.getInventory()) {
+            ss << item.getName() << std::endl;
+        }
         ss << "Gold: " << player.getGold() << std::endl << std::endl;
     };
 

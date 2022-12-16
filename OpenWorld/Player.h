@@ -16,14 +16,18 @@ public:
 
 	// Functions
 	void levelUp();
+	void addItem( const Item& item );
+	void equipItem( const Item& item );
+	void unequipItem( const Item& item );
 
 	// Accessors
-	inline int getLevel() const { return level; };
-	inline const std::string getRoleName() const { return roleName; };
-	inline int getExp() const { return exp; };
-	inline int getExpNext() const { return expNext; };
+	inline const int & getLevel() const { return level; };
+	inline const std::string& getRoleName() const { return roleName; };
+	inline const int& getExp() const { return exp; };
+	inline const int& getExpNext() const { return expNext; };
+	inline const std::vector<Item>& getInventory() const { return Inventory; };
 
-	// Modifiers
+	// Stat Modifiers
 	inline void setGold(int gold) { this->gold = std::max(gold, 0); };
 	inline void setExp(int exp) { this->exp = exp; };
 	inline void setExpNext(int expNext) { this->expNext = expNext; };

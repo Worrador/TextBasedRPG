@@ -16,3 +16,9 @@ void Player::levelUp()
 	setStaminaMax(staminaMax + attrVector[7]);
 	setStamina(staminaMax);
 }
+
+void Player::addItem(const Item& item)
+{
+	Inventory.push_back(item);
+	//Sort items based on name?
+}

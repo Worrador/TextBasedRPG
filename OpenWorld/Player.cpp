@@ -17,8 +17,10 @@ void Player::levelUp()
 	setStamina(staminaMax);
 }
 
-void Player::addItem(const Item& item)
+// Take by value, so that both rvalues and lvalues will be accepted. Rvalues are moved twice, lvalues are first copied then moved. 
+// If the item object will be only moveable in the future, then taking it as a right value ref is better. (Item&& item)
+void Player::addItem(Item item)
 {
-	Inventory.push_back(item);
+	Inventory.push_back(std::move(item));
 	//Sort items based on name?
 }

@@ -235,6 +235,14 @@ void Menu::buyMenu(Player& player)
 {
 
     int selectedMenuPoint;
+    std::vector<Item> shopOptions;
+    shopOptions.push_back(Item("Sword", { Role::Warrior, Role::Rouge }, itemType::oneHanded, 0, 3, 0, 0));
+    shopOptions.push_back(Item("Bow", { Role::Ranger, Role::Rouge }, itemType::twoHanded, 0, 5, 0, -1));
+    shopOptions.push_back(Item("Staff", { Role::Mage }, itemType::oneHanded, 0, 7, 0, 0));
+    shopOptions.push_back(Item("Great Sword", { Role::Warrior }, itemType::oneHanded, 0, 5, 0, -2));
+    shopOptions.push_back(Item("Light armor", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte }, itemType::chestPiece, 1, 0, 1, -1));
+    shopOptions.push_back(Item("Robes", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte, Role::Mage }, itemType::chestPiece, 1, 0, 0, 0));
+
 
     while (1) {
         // List of menu points
@@ -243,14 +251,7 @@ void Menu::buyMenu(Player& player)
         };
         std::vector <std::string> dynamicMenuPoints;
 
-        std::vector<Item> shopOptions;
-        shopOptions.push_back(Item("Sword", { Role::Warrior, Role::Rouge }, itemType::oneHanded, 0, 3, 0, 0));
-        shopOptions.push_back(Item("Bow", { Role::Ranger, Role::Rouge }, itemType::twoHanded, 0, 5, 0, -1));
-        shopOptions.push_back(Item("Staff", { Role::Mage }, itemType::oneHanded, 0, 7, 0, 0));
-        shopOptions.push_back(Item("Great Sword", { Role::Warrior }, itemType::oneHanded, 0, 5, 0, -2));
-        shopOptions.push_back(Item("Light armor", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte }, itemType::chestPiece, 1, 0, 1, -1));
-        shopOptions.push_back(Item("Robes", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte, Role::Mage }, itemType::chestPiece, 1, 0, 0, 0));
-        for (auto& option : shopOptions) {
+         for (auto& option : shopOptions) {
             dynamicMenuPoints.push_back(option.getName() + ": \t costs " + std::to_string(option.getBuyGold()) + " gold.");
         }
 
@@ -267,7 +268,13 @@ void Menu::buyMenu(Player& player)
 
         if (player.getGold() >= shopOptions[selectedMenuPoint].getBuyGold()) {
             player.setGold(player.getGold() - shopOptions[selectedMenuPoint].getBuyGold());
+            // Moving a const object invoks its copy constructor, since const objects cannot be modified
+            // We can move item since local variables are not needed anymore
             player.addItem(std::move(shopOptions[selectedMenuPoint]));
+
+            // Delete the moved item
+            shopOptions.erase(shopOptions.begin() + selectedMenuPoint);
+
         }
         else {
             std::cout << "Not enough money." << std::endl;
@@ -275,6 +282,45 @@ void Menu::buyMenu(Player& player)
         }
     }
 }
+/*
+#include <cel/celfile.h>
+#include <cel/celdatabase.h>
+
+int main()
+{
+    // Open the Excel file
+    CELFile file("myfile.xlsx");
+
+    // Create a database from the Excel file
+    CELDatabase database(file);
+
+    // Iterate through the sheets in the Excel file
+    for (int i = 0; i < database.GetSheetCount(); i++)
+    {
+        // Get the sheet at the current index
+        CELSheet sheet = database.GetSheet(i);
+
+        // Iterate through the rows in the sheet
+        for (int j = 0; j < sheet.GetRowCount(); j++)
+        {
+            // Get the row at the current index
+            CELRow row = sheet.GetRow(j);
+
+            // Iterate through the cells in the row
+            for (int k = 0; k < row.GetCellCount(); k++)
+            {
+                // Get the cell at the current index
+                CELValue cell = row.GetCell(k);
+
+                // Do something with the cell value
+                // ...
+            }
+        }
+    }
+
+    return 0;
+}
+*/
 
 void Menu::sellMenu(Player& player)
 {

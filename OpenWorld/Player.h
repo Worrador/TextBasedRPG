@@ -16,7 +16,7 @@ public:
 
 	// Functions
 	void levelUp();
-	void addItem( const Item& item );
+	void addItem( Item item );
 	void equipItem( const Item& item );
 	void unequipItem( const Item& item );
 

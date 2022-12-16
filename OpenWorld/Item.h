@@ -28,31 +28,33 @@ public:
 	// Functions
 
 	// Accessors
-	inline const std::string getName() const { return name; };
-	inline const std::vector<Role> getRole() const { return roles; };
-	inline const int getLevel() const { return level; };
-	inline const int getBuyGold() const { return buyGold; };
-	inline const int getSellGold() const { return sellGold; };
-	inline const int getHpMax()	const { return hpMax; };
-	inline const int getDamageMax() const { return damageMax; };
-	inline const int getDefence() const { return defence; };
-	inline const int getStaminaMax() const { return staminaMax; };
+	inline std::string getName() const { return name; };
+	inline std::vector<Role> getRole() const { return roles; };
+	inline int getLevel() const { return level; };
+	inline int getBuyGold() const { return buyGold; };
+	inline int getSellGold() const { return sellGold; };
+	inline int getHpMax()	const { return hpMax; };
+	inline int getDamageMax() const { return damageMax; };
+	inline int getDefence() const { return defence; };
+	inline int getStaminaMax() const { return staminaMax; };
 
 	// Modifiers
 	inline void equip() { this->isEquipped = true; };
 	inline void unequip() { this->isEquipped = false; };
 
 private:
-	const std::string name;
-	const std::vector<Role> roles;	// multiple classes could use it
-	const itemType itemType;
-	const int level;
-	const int buyGold;
-	const int sellGold;
-	const int hpMax;
-	const int damageMax;
-	const int defence;
-	const int staminaMax;
+	// const, the compiler will implicitly delete the copy assignment operator, 
+	// as it is not possible to change the value of a const data member.
+	std::string name;
+	std::vector<Role> roles;	// multiple classes could use it
+	itemType itemType;
+	int level;
+	int buyGold;
+	int sellGold;
+	int hpMax;
+	int damageMax;
+	int defence;
+	int staminaMax;
 
 	bool isEquipped = false;
 };

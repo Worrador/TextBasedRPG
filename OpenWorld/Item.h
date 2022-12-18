@@ -1,6 +1,5 @@
 #pragma once
-#include "RoleStats.h"
-#include <string>
+#include "RoleInfo.h"
 #include <algorithm>
 #include <iostream>
 
@@ -37,10 +36,12 @@ public:
 	inline int getDamageMax() const { return damageMax; };
 	inline int getDefence() const { return defence; };
 	inline int getStaminaMax() const { return staminaMax; };
+	inline int getIsEquipped() const { return isEquipped; };
 
 	// Modifiers
 	inline void equip() { this->isEquipped = true; };
 	inline void unequip() { this->isEquipped = false; };
+	inline void switchEquipStatus() { this->isEquipped = ~this->isEquipped; };
 
 private:
 	// const, the compiler will implicitly delete the copy assignment operator, 

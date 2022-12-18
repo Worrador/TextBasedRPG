@@ -5,12 +5,12 @@ class Player : public Character
 {
 public:
 	// Constructors
-	Player(const std::string& name, bool isMale, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, const Role& role, const std::string& roleName) :
-		Character(name, hpMax, dmgMin, dmgMax, defence, staminaMax), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
+	Player(const std::string& name, bool isMale, int hpMax, int dmgMin, int dmgMax, int defence, int staminaMax, const Role& role) :
+		Character(name, hpMax, dmgMin, dmgMax, defence, staminaMax), isMale(isMale), level(1), exp(0), expNext(50), role(role) {};
 
 	//TODO: map or fn that maps role to rolename
-	Player(const std::string& name, bool isMale, const Role& role, const std::string& roleName) :
-		Character(name, RoleStats::getInstance().getRoleStats()[role]), isMale(isMale), level(1), exp(0), expNext(50), role(role), roleName(roleName) {};
+	Player(const std::string& name, bool isMale, const Role& role) :
+		Character(name, RoleInfo::getInstance().getRoleStats()[role]), isMale(isMale), level(1), exp(0), expNext(50), role(role) {};
 
 	// Operators
 
@@ -22,7 +22,7 @@ public:
 
 	// Accessors
 	inline const int & getLevel() const { return level; };
-	inline const std::string& getRoleName() const { return roleName; };
+	inline const Role& getRole() const { return role; };
 	inline const int& getExp() const { return exp; };
 	inline const int& getExpNext() const { return expNext; };
 	inline const std::vector<Item>& getInventory() const { return Inventory; };
@@ -37,10 +37,12 @@ public:
 	inline void setDefence(int defence) { this->defence = std::max(defence, 0); };
 	inline void setLevel(int level) { this->level = level; };
 
+	//TODO: this itemporary
+	inline void setInv(std::vector<Item>& Inventory) { this->Inventory = std::move(Inventory); };
+
 private:
 	const bool isMale;
 	const Role role;
-	const std::string roleName;
 	int level;
 	int exp;
 	int expNext;

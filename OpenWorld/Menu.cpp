@@ -433,7 +433,8 @@ void Menu::playerSheetMenu(Player& player)
         };
 
         std::vector <std::string> dynamicMenuPoints = {
-            "Equip / Unequip items"
+            "Equip items",
+            "Unequip items"
         };
         if (player.getExp() >= player.getExpNext()) {
             dynamicMenuPoints.push_back("Level up");
@@ -443,9 +444,12 @@ void Menu::playerSheetMenu(Player& player)
 
         switch (selectedMenuPoint) {
         case 0:
-            equipment(player);
+            equipItems(player);
             break;
         case 1:
+            unequipItems(player);
+            break;
+        case 2:
             levelUp(player);
             break;
         case ESCAPE:
@@ -455,54 +459,41 @@ void Menu::playerSheetMenu(Player& player)
         }
     }
 }
-
-void Menu::equipment(Player& player)
+void Menu::equipItems(Player& player)
 {
     // List already equipped items
 
     // List inventory.
 
     // Player can choose between both, when enter is hit then the items equipment status changes
-    if (player.getInventory().size() == 0) {
-        std::cout << "You don't have any items." << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        return;
-    }
+
 
     int selectedMenuPoint;
 
     while (1) {
+        if (player.getInventory().size() == 0) {
+            std::cout << "You don't have any items unequipped." << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            return;
+        }
         // List of menu points
         std::vector <std::string> staticMenuLines = {
-            "EQUIPPED",
+            "EQUIP ITEMS",
             ""
         };
         // List the eqipped items
-        std::vector <Item> orderedInventory; //TODO: Maybe reorder it automatically on addition or smthing
         std::vector <std::string> dynamicMenuPoints = {};
-        for (auto& item: player.getInventory()) {
-            if (item.getIsEquipped()) {
-                dynamicMenuPoints.push_back(item.getName());
-                orderedInventory.push_back(item);
-            }
+        std::vector <Item> itemList = player.getInventory();
+        for (auto& item : itemList) {
+            dynamicMenuPoints.push_back(item.getName());
         }
-        //dynamicMenuPoints.push_back("");
-        //dynamicMenuPoints.push_back("------------------------------------");
-        //dynamicMenuPoints.push_back("NOT EQUIPPED");
-        for (auto& item : player.getInventory()) {
-            if (!item.getIsEquipped()){
-                dynamicMenuPoints.push_back(item.getName());
-                orderedInventory.push_back(item);
-            }
-        }
-        dynamicMenuPoints.push_back("");
 
-        auto getDynamicItemStats = [orderedInventory](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicItemStats = [itemList](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             ss << std::endl << "------------------------------------" << std::endl;
-            ss << std::endl << "Sells for: " << orderedInventory[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
+            ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<Role> roles = orderedInventory[selectedMenuPoint].getRoles();
+            std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
 
             for (auto roleIndex = 0; roleIndex < roles.size(); roleIndex++) {
                 ss << RoleInfo::getInstance().getRoleNames()[roles[roleIndex]];
@@ -512,10 +503,10 @@ void Menu::equipment(Player& player)
                 ss << ", ";
             }
             ss << std::endl;
-            ss << "Max HP: " << orderedInventory[selectedMenuPoint].getHpMax() << std::endl;
-            ss << "Max damage: " << orderedInventory[selectedMenuPoint].getDamageMax() << std::endl;
-            ss << "Defence: " << orderedInventory[selectedMenuPoint].getDefence() << std::endl;
-            ss << "Max stamina: " << orderedInventory[selectedMenuPoint].getStaminaMax() << std::endl;
+            ss << "Max HP: " << itemList[selectedMenuPoint].getHpMax() << std::endl;
+            ss << "Max damage: " << itemList[selectedMenuPoint].getDamageMax() << std::endl;
+            ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;
+            ss << "Max stamina: " << itemList[selectedMenuPoint].getStaminaMax() << std::endl;
         };
 
         selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicItemStats);
@@ -523,15 +514,67 @@ void Menu::equipment(Player& player)
         if (selectedMenuPoint == ESCAPE) {
             return;
         }
-        std::vector<Role> roles = orderedInventory[selectedMenuPoint].getRoles();
-        if (std::find(roles.begin(), roles.end(), player.getRole()) != roles.end()) {
-            orderedInventory[selectedMenuPoint].switchEquipStatus();
-            player.setInv(orderedInventory);
-        }
-        else {
-            std::cout << "You cannot equip this item." << std::endl;
+        player.equipItem(selectedMenuPoint);
+    }
+}
+
+
+void Menu::unequipItems(Player& player)
+{
+    // List already equipped items
+
+    // List inventory.
+
+    // Player can choose between both, when enter is hit then the items equipment status changes
+
+
+    int selectedMenuPoint;
+
+    while (1) {
+        if (player.getEquipment().size() == 0) {
+            std::cout << "You don't have any items equipped." << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
+            return;
         }
+        // List of menu points
+        std::vector <std::string> staticMenuLines = {
+            "UNEQUIP ITEMS",
+            ""
+        };
+        // List the eqipped items
+        std::vector <std::string> dynamicMenuPoints = {};
+        std::vector <Item> itemList = player.getEquipment();
+        for (auto& item: itemList) {
+            dynamicMenuPoints.push_back(item.getName());
+        }
+
+        auto getDynamicItemStats = [itemList](std::stringstream& ss, const int selectedMenuPoint) ->void {
+            // Build string stream object
+            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
+            ss << "Equipable by: ";
+            std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
+
+            for (auto roleIndex = 0; roleIndex < roles.size(); roleIndex++) {
+                ss << RoleInfo::getInstance().getRoleNames()[roles[roleIndex]];
+                if (roleIndex >= roles.size() - 1) {
+                    break;
+                }
+                ss << ", ";
+            }
+            ss << std::endl;
+            ss << "Max HP: " << itemList[selectedMenuPoint].getHpMax() << std::endl;
+            ss << "Max damage: " << itemList[selectedMenuPoint].getDamageMax() << std::endl;
+            ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;
+            ss << "Max stamina: " << itemList[selectedMenuPoint].getStaminaMax() << std::endl;
+        };
+
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicItemStats);
+
+        if (selectedMenuPoint == ESCAPE) {
+            return;
+        }
+        player.unequipItem(selectedMenuPoint);
     }
 }
 

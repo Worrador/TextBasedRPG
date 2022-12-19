@@ -24,3 +24,30 @@ void Player::addItem(Item item)
 	Inventory.push_back(std::move(item));
 	//Sort items based on name?
 }
+
+void Player::equipItem(const int& itemPos)
+{
+	// Check if player can equip item. 
+	std::vector<Role> itemRoles = Inventory[itemPos].getRoles();
+
+	// If role fits
+	if (std::find(itemRoles.begin(), itemRoles.end(), role) != itemRoles.end()) {
+
+		// If similar piece is not already worn, maybe switch it automatically later
+		if ([&]() {for (auto checkPos = 0; checkPos < Equipment.size(); checkPos++) { if(Equipment[checkPos].getItemType() == Inventory[itemPos].getItemType()) return false; } return true; }()) {
+			Equipment.push_back(std::move(Inventory[itemPos]));
+			Inventory.erase(Inventory.begin() + itemPos);
+			return;
+		}
+	}
+
+	std::cout << "You cannot equip this item." << std::endl;
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+}
+
+void Player::unequipItem(const int& itemPos)
+{
+	// Unequip item without question
+	Inventory.push_back(std::move(Equipment[itemPos]));
+	Equipment.erase(Equipment.begin() + itemPos);
+}

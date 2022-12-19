@@ -1,7 +1,5 @@
 #pragma once
 #include "Player.h"
-#include <thread>   // for std::this_thread::sleep_for
-#include <chrono>   // for std::chrono::seconds
 #include <conio.h>
 #include <sstream>
 #include <functional> 
@@ -42,7 +40,8 @@ public:
 	void playerSheetMenu(Player& player);
 
 
-	void equipment(Player& player);
+	void equipItems(Player& player);
+	void unequipItems(Player& player);
 	void levelUp(Player& player);
 	int getInputBetween(int lower, int higher);
 

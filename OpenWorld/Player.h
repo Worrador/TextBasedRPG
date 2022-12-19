@@ -1,5 +1,7 @@
 #pragma once
 #include "Character.h"
+#include <thread>   // for std::this_thread::sleep_for
+#include <chrono>   // for std::chrono::seconds
 
 class Player : public Character
 {
@@ -17,8 +19,8 @@ public:
 	// Functions
 	void levelUp();
 	void addItem( Item item );
-	void equipItem( const Item& item );
-	void unequipItem( const Item& item );
+	void equipItem( const int& item );
+	void unequipItem( const int& item );
 
 	// Accessors
 	inline const int & getLevel() const { return level; };
@@ -26,6 +28,7 @@ public:
 	inline const int& getExp() const { return exp; };
 	inline const int& getExpNext() const { return expNext; };
 	inline const std::vector<Item>& getInventory() const { return Inventory; };
+	inline const std::vector<Item>& getEquipment() const { return Equipment; };
 
 	// Stat Modifiers
 	inline void setGold(int gold) { this->gold = std::max(gold, 0); };
@@ -37,9 +40,6 @@ public:
 	inline void setDefence(int defence) { this->defence = std::max(defence, 0); };
 	inline void setLevel(int level) { this->level = level; };
 
-	//TODO: this itemporary
-	inline void setInv(std::vector<Item>& Inventory) { this->Inventory = std::move(Inventory); };
-
 private:
 	const bool isMale;
 	const Role role;
@@ -47,6 +47,7 @@ private:
 	int exp;
 	int expNext;
 	// Inventory
+	std::vector<Item> Equipment;
 	std::vector<Item> Inventory;
 
 };

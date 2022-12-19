@@ -73,8 +73,10 @@ void Game::travel(int travelOption)
 	default:
 		return;
 	}
-	std::cout << "You have arrived to your destination." << std::endl;
-	_getch();
+	if (playing) {
+		std::cout << "You have arrived to your destination." << std::endl;
+		_getch();
+	}
 }
 
 void Game::makeAttack(Character& attacker, Character& defender)
@@ -104,6 +106,7 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 		makeAttack(enemy, player);
 		if (player.getHp() <= 0) {
 			std::cout << player.getName() << " has died." << std::endl;
+			playing = false;
 			return;
 		}
 
@@ -224,10 +227,6 @@ void Game::gameLoop()
 	default:
 		break;
 	}
-	if (player.getHp() <= 0) {
-		playing = false;
-	}
-
 }
 
 

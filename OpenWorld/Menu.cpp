@@ -5,6 +5,7 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 #define ESCAPE 27
+#define UNIQUE -1
 #define ENTER '\r'
 
 int Menu::getInputBetween(int lower, int higher)
@@ -30,7 +31,7 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
 
     // Call the pre-menu callback function, if it is provided
     int numberOfMenuPoints = (int)(dynamicMenuPoints.size() - 1);
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint = std::min(numberOfMenuPoints, 0);
 
     while (1)
     {
@@ -60,10 +61,11 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
             dynamicMenuFn(ss, selectedMenuPoint);
         }
 
-        if (isEscapeable)
-            ss << std::endl << "Return with ESC." << std::endl;
-
         std::cout << ss.str();
+        if (selectedMenuPoint < 0) {
+            _getch();
+            return ESCAPE;
+        }
         switch ((_getch())) {
         case KEY_UP:
             selectedMenuPoint = (--selectedMenuPoint < 0) ? numberOfMenuPoints : selectedMenuPoint;
@@ -471,16 +473,26 @@ void Menu::equipItems(Player& player)
     int selectedMenuPoint;
 
     while (1) {
-        if (player.getInventory().size() == 0) {
-            std::cout << "You don't have any items unequipped." << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-            return;
-        }
         // List of menu points
         std::vector <std::string> staticMenuLines = {
-            "EQUIP ITEMS",
+            "EQUIPPED ITEMS:",
             ""
         };
+
+        auto getStaticEquippedItems = [player](std::stringstream& ss) ->void {
+            // Build string stream object
+            for (auto& equippedItem : player.getEquipment()) {
+                ss << "  " << equippedItem.getName() << std::endl;
+            }
+            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl;
+            if (player.getInventory().size() == 0) {
+                ss << std::endl << "You don't have anything to equip." << std::endl;
+                return;
+            }
+            
+        };
+
         // List the eqipped items
         std::vector <std::string> dynamicMenuPoints = {};
         std::vector <Item> itemList = player.getInventory();
@@ -490,7 +502,11 @@ void Menu::equipItems(Player& player)
 
         auto getDynamicItemStats = [itemList](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
+            if (selectedMenuPoint < 0) {
+                return;
+            }
             ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
             std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
@@ -509,12 +525,13 @@ void Menu::equipItems(Player& player)
             ss << "Max stamina: " << itemList[selectedMenuPoint].getStaminaMax() << std::endl;
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicItemStats);
+        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticEquippedItems, getDynamicItemStats);
 
-        if (selectedMenuPoint == ESCAPE) {
+        if (selectedMenuPoint == ESCAPE){
             return;
         }
         player.equipItem(selectedMenuPoint);
+        std::cout << std::endl;
     }
 }
 
@@ -531,26 +548,34 @@ void Menu::unequipItems(Player& player)
     int selectedMenuPoint;
 
     while (1) {
-        if (player.getEquipment().size() == 0) {
-            std::cout << "You don't have any items equipped." << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-            return;
-        }
         // List of menu points
         std::vector <std::string> staticMenuLines = {
-            "UNEQUIP ITEMS",
+            "EQUIPPED ITEMS:",
             ""
         };
+
         // List the eqipped items
         std::vector <std::string> dynamicMenuPoints = {};
         std::vector <Item> itemList = player.getEquipment();
         for (auto& item: itemList) {
             dynamicMenuPoints.push_back(item.getName());
         }
+        if (itemList.size() == 0) {
+            staticMenuLines.push_back("You don't have anything to unequip.");
+        }
 
-        auto getDynamicItemStats = [itemList](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicItemStats = [itemList, player](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
+            ss << "------------------------------------" << std::endl;
+            ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl << std::endl;
+            for (auto& inventoryItem : player.getInventory()) {
+                ss << "  " << inventoryItem.getName() << std::endl;
+            }
+            if (player.getEquipment().size() == 0) {
+                return;
+            }
             ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
             std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
@@ -575,6 +600,7 @@ void Menu::unequipItems(Player& player)
             return;
         }
         player.unequipItem(selectedMenuPoint);
+        std::cout << std::endl;
     }
 }
 

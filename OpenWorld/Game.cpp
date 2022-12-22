@@ -82,7 +82,7 @@ void Game::travel(int travelOption)
 void Game::makeAttack(Character& attacker, Character& defender)
 {
 	if (attacker.getStamina() > 0) {
-		int dmgAttacker = std::max(0, rollBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence());
+		int dmgAttacker = max(0, rollBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence());
 		std::cout << attacker.getName() << " deals " << dmgAttacker << " damage to " << defender.getName() << "." << std::endl;
 		defender.setHp(defender.getHp() - dmgAttacker);
 
@@ -91,7 +91,7 @@ void Game::makeAttack(Character& attacker, Character& defender)
 	}
 	else {
 		std::cout << attacker.getName() << " rests for one round and regains some stamina." << std::endl;
-		attacker.setStamina(std::min(3, attacker.getStaminaMax()));
+		attacker.setStamina(min(3, attacker.getStaminaMax()));
 	}
 
 }
@@ -130,7 +130,7 @@ void Game::run(Enemy& enemy)
 	else {
 		std::cout << player.getName() << " is too tired to run, so rests for a while to regain some stamina." << std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		player.setStamina(std::min(3, player.getStaminaMax()));
+		player.setStamina(min(3, player.getStaminaMax()));
 		wait(enemy);
 	}
 	

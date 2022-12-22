@@ -6,7 +6,6 @@ int main()
 {
     // Get game instance
     Game& game = Game::getInstance();
-
     // If playing is true, then loop the game
     while (game.getPlaying()) {
         game.gameLoop();

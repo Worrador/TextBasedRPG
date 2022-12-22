@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <cmath>
 
 enum class Role {
     Warrior = 0,

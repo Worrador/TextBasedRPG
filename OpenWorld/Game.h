@@ -2,6 +2,8 @@
 #include "Enemy.h"
 #include <random>
 #include "Menu.h"
+#include <windows.h>
+#include <mmsystem.h>
 
 // Player is manipulated manipulated through this object
 class Game
@@ -9,7 +11,14 @@ class Game
 public:
 
 	// Constructors
-	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()) {};
+	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()) 
+	{
+		// Start palying music
+		PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+		DWORD leftVolume = 500;
+		DWORD rightVolume = 500;
+		waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
+	};
 
 	// Delete copy and move constructor to prevent copying or moving
 	Game(const Game&) = delete;

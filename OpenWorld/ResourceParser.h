@@ -21,7 +21,7 @@ public:
     }
 
     // Method to access the roleStats map
-    std::map<Role, std::vector<int>>& getRoleStats() { return RoleStats; }
+    std::map<Role, std::vector<int>>& getItem() { return RoleStats; }
 
     // Method to access the roleNames map
     std::map<Role, std::string>& getRoleNames() { return RoleNames; }

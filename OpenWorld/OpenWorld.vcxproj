@@ -148,6 +148,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ResourceParser.cpp" />
     <ClCompile Include="RoleInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,13 +158,16 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="ResourceParser.h" />
     <ClInclude Include="RoleInfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Items.xlsx" />
+    <Media Include="1.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="1.wav" />
+    <None Include="Resources\Enemies.xlsx" />
+    <None Include="Resources\Items.xlsx" />
+    <None Include="Resources\Locations.xlsx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

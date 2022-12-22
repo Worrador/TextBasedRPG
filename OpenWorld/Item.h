@@ -4,14 +4,14 @@
 #include <iostream>
 
 enum class itemType {
-	oneHanded = 0,
+	consumable = 0,
+	oneHanded,
 	twoHanded,
 	headPiece,
 	handPiece,
 	chestPiece,
 	legPiece,
-	shoes,
-	potion
+	shoes
 };
 
 class Item

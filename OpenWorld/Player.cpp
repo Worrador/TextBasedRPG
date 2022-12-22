@@ -27,6 +27,9 @@ void Player::addItem(Item item)
 
 void Player::equipItem(const int& itemPos)
 {
+	if (Inventory[itemPos].getItemType() == itemType::consumable) {
+		
+	}
 	// Check if player can equip item. 
 	std::vector<Role> itemRoles = Inventory[itemPos].getRoles();
 

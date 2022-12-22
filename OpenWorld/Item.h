@@ -20,7 +20,7 @@ public:
 	Item(const std::string& name, const std::vector<Role>& roles, const itemType& itemType, int hpMax, int damageMax, int defence, int staminaMax) :
 		name(name), roles(roles), itemType(itemType),level((int)std::floor((hpMax + damageMax + defence + staminaMax) / 2)), hpMax(hpMax),
 		buyGold(hpMax * 2 + damageMax * 2 + defence * 3 + staminaMax), sellGold((int)std::floor(buyGold / 2)), damageMax(damageMax),
-		defence(defence), staminaMax(staminaMax) {};
+		defence(defence), staminaMax(staminaMax), rarity((int)std::floor(100 / buyGold)) {};
 
 	// Operators
 
@@ -53,4 +53,5 @@ private:
 	int damageMax;
 	int defence;
 	int staminaMax;
+	int rarity;
 };

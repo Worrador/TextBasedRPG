@@ -232,7 +232,7 @@ void Menu::buyMenu(Player& player)
     shopOptions.push_back(Item("Sword", { Role::Warrior, Role::Rouge }, itemType::oneHanded, 0, 3, 0, 0));
     shopOptions.push_back(Item("Bow", { Role::Ranger, Role::Rouge }, itemType::twoHanded, 0, 5, 0, -1));
     shopOptions.push_back(Item("Staff", { Role::Mage }, itemType::oneHanded, 0, 7, 0, 0));
-    shopOptions.push_back(Item("Great Sword", { Role::Warrior }, itemType::oneHanded, 0, 5, 0, -2));
+    shopOptions.push_back(Item("Great Sword", { Role::Warrior }, itemType::twoHanded, 0, 5, 0, -2));
     shopOptions.push_back(Item("Light armor", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte }, itemType::chestPiece, 1, 0, 1, -1));
     shopOptions.push_back(Item("Robes", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte, Role::Mage }, itemType::chestPiece, 1, 0, 0, 0));
 
@@ -296,45 +296,6 @@ void Menu::buyMenu(Player& player)
         }
     }
 }
-/*
-#include <cel/celfile.h>
-#include <cel/celdatabase.h>
-
-int main()
-{
-    // Open the Excel file
-    CELFile file("myfile.xlsx");
-
-    // Create a database from the Excel file
-    CELDatabase database(file);
-
-    // Iterate through the sheets in the Excel file
-    for (int i = 0; i < database.GetSheetCount(); i++)
-    {
-        // Get the sheet at the current index
-        CELSheet sheet = database.GetSheet(i);
-
-        // Iterate through the rows in the sheet
-        for (int j = 0; j < sheet.GetRowCount(); j++)
-        {
-            // Get the row at the current index
-            CELRow row = sheet.GetRow(j);
-
-            // Iterate through the cells in the row
-            for (int k = 0; k < row.GetCellCount(); k++)
-            {
-                // Get the cell at the current index
-                CELValue cell = row.GetCell(k);
-
-                // Do something with the cell value
-                // ...
-            }
-        }
-    }
-
-    return 0;
-}
-*/
 
 void Menu::sellMenu(Player& player)
 {

@@ -3,17 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-enum class itemType {
-	consumable = 0,
-	oneHanded,
-	twoHanded,
-	headPiece,
-	handPiece,
-	chestPiece,
-	legPiece,
-	shoes
-};
-
+using itemType = std::string;
 
 class Item
 {

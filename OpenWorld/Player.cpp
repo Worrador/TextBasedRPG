@@ -29,7 +29,7 @@ void Player::addItem(Item item)
 void Player::equipItem(const int& itemPos)
 {
 	//TODO: temporary consumable
-	if (Inventory[itemPos].getItemType() == itemType::consumable) {
+	if (Inventory[itemPos].getItemType() == "consumable") {
 		this->hp = this->hpMax;
 		return;
 	}

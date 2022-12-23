@@ -21,11 +21,15 @@ public:
 
     // Method to access the parsedItems vector
     std::vector<Item>& getParsedItems() { return parsedItems; }
+    std::vector<Role>& getParsedRoles() { return parsedRoles; }
 
 private:
     // Private constructor to prevent direct instantiation
     ResourceParser();
     ~ResourceParser();
 
+    void parseRoles();
+    void parseItems();
+    std::vector<Role> parsedRoles;
     std::vector<Item> parsedItems;
 };

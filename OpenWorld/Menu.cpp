@@ -133,15 +133,11 @@ Player Menu::playerCreationMenu()
             "Now choose a class!"
         };
         // List of menu points
-        std::vector <std::string> dynamicMenuPoints = {
-          "Warrior",
-          "Mage",
-          "Rouge",
-          "Ranger"
-        };
+        std::vector <std::string> dynamicMenuPoints = ResourceParser::getInstance().getParsedRoles();
 
-        auto selectedMenuPoint = (Role)menuGenerator(staticMenuLines, dynamicMenuPoints, false);
-        return Player(name, isMale, selectedMenuPoint);
+        // Move so we dont have to copy
+        auto selectedMenuPoint = menuGenerator(staticMenuLines, std::move(dynamicMenuPoints), false);
+        return Player(name, isMale, dynamicMenuPoints[selectedMenuPoint]);
     }
     // Do not return with std::move as it prohibits copy elision.
 }
@@ -229,8 +225,6 @@ void Menu::buyMenu(Player& player)
 
     int selectedMenuPoint;
     std::vector<Item> shopOptions = ResourceParser::getInstance().getParsedItems();
-    shopOptions.push_back(Item("Light armor", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte }, itemType::chestPiece, 1, 0, 1, -1));
-    shopOptions.push_back(Item("Robes", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte, Role::Mage }, itemType::chestPiece, 1, 0, 0, 0));
 
 
     while (1) {
@@ -256,14 +250,15 @@ void Menu::buyMenu(Player& player)
             ss << "Equipable by: ";
             std::vector<Role> roles = shopOptions[selectedMenuPoint].getRoles();
 
-            for (auto roleIndex = 0; roleIndex < roles.size(); roleIndex++) {
-                ss << RoleInfo::getInstance().getRoleNames()[roles[roleIndex]];
-                if (roleIndex >= roles.size() - 1) {
+            for (auto roleName: roles) {
+                ss << roleName;
+                if (roleName == roles[roles.size() - 1]) {
                     break;
                 }
                 ss << ", ";
             }
             ss << std::endl;
+            ss << "Item type: " << shopOptions[selectedMenuPoint].getItemType() << std::endl;
             ss << "Max HP: " << shopOptions[selectedMenuPoint].getHpMax() << std::endl;
             ss << "Max damage: " << shopOptions[selectedMenuPoint].getDamageMax() << std::endl;
             ss << "Defence: " << shopOptions[selectedMenuPoint].getDefence() << std::endl;

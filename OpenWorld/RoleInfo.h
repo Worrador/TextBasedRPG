@@ -4,13 +4,7 @@
 #include <string>
 #include <cmath>
 
-enum class Role {
-    Warrior = 0,
-    Mage,
-    Rouge,
-    Ranger,
-    Acolyte
-};
+using Role = std::string;
 
 class RoleInfo
 {

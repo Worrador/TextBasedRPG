@@ -25,10 +25,13 @@ void Player::addItem(Item item)
 	//Sort items based on name?
 }
 
+//TODO: raneme to useItem
 void Player::equipItem(const int& itemPos)
 {
+	//TODO: temporary consumable
 	if (Inventory[itemPos].getItemType() == itemType::consumable) {
-		
+		this->hp = this->hpMax;
+		return;
 	}
 	// Check if player can equip item. 
 	std::vector<Role> itemRoles = Inventory[itemPos].getRoles();

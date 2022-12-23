@@ -1,6 +1,5 @@
 #include "Item.h"
-#include <cel/celfile.h>
-#include <cel/celdatabase.h>
+#include "libxl.h"
 
 class ResourceParser
 {
@@ -20,15 +19,13 @@ public:
         return instance;
     }
 
-    // Method to access the roleStats map
-    std::map<Role, std::vector<int>>& getItem() { return RoleStats; }
-
-    // Method to access the roleNames map
-    std::map<Role, std::string>& getRoleNames() { return RoleNames; }
+    // Method to access the parsedItems vector
+    std::vector<Item>& getParsedItems() { return parsedItems; }
 
 private:
     // Private constructor to prevent direct instantiation
     ResourceParser();
+    ~ResourceParser();
 
     std::vector<Item> parsedItems;
 };

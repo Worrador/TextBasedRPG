@@ -396,7 +396,7 @@ void Menu::playerSheetMenu(Player& player)
         };
 
         std::vector <std::string> dynamicMenuPoints = {
-            "Equip items",
+            "Equip or use items",
             "Unequip items"
         };
         if (player.getExp() >= player.getExpNext()) {

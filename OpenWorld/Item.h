@@ -14,6 +14,7 @@ enum class itemType {
 	shoes
 };
 
+
 class Item
 {
 public:

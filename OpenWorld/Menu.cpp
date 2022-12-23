@@ -228,11 +228,7 @@ void Menu::buyMenu(Player& player)
 {
 
     int selectedMenuPoint;
-    std::vector<Item> shopOptions;
-    shopOptions.push_back(Item("Sword", { Role::Warrior, Role::Rouge }, itemType::oneHanded, 0, 3, 0, 0));
-    shopOptions.push_back(Item("Bow", { Role::Ranger, Role::Rouge }, itemType::twoHanded, 0, 5, 0, -1));
-    shopOptions.push_back(Item("Staff", { Role::Mage }, itemType::oneHanded, 0, 7, 0, 0));
-    shopOptions.push_back(Item("Great Sword", { Role::Warrior }, itemType::twoHanded, 0, 5, 0, -2));
+    std::vector<Item> shopOptions = ResourceParser::getInstance().getParsedItems();
     shopOptions.push_back(Item("Light armor", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte }, itemType::chestPiece, 1, 0, 1, -1));
     shopOptions.push_back(Item("Robes", { Role::Warrior, Role::Ranger, Role::Rouge, Role::Acolyte, Role::Mage }, itemType::chestPiece, 1, 0, 0, 0));
 

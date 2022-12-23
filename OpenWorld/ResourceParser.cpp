@@ -11,12 +11,10 @@ ResourceParser::ResourceParser()
         libxl::Sheet* sheet = book->getSheet(0);
         if (sheet)
         {
-            // Iterate rows, we don't need the first one
+            // Iterate rows, we don't need the first one as it only contains the names of columns
             for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
             {
-                // Iterate columns
-                // Get roles
-                // Convert the wchar_t array to a std::string
+                // Get name of item and convert it to string
                 std::string nameString;
                 auto name = sheet->readStr(row, 0);
                 size_t size2 = wcstombs(nullptr, name, 0);
@@ -25,6 +23,7 @@ ResourceParser::ResourceParser()
                     wcstombs(&nameString[0], name, size2 + 1);
                 }
 
+                // Get roles of item and convert it to string
                 std::string roleNamesString;
                 auto roleNames = sheet->readStr(row, 1);
                 size_t size = wcstombs(nullptr, roleNames, 0);
@@ -34,14 +33,11 @@ ResourceParser::ResourceParser()
                 }
 
 
-                
+                // Separate roles by ',' and create roles vector
                 std::istringstream iss(roleNamesString);
                 std::string token = ", ";
                 std::vector<Role> roles;
-
                 auto& roleTable = RoleInfo::getInstance().getRoleNames();
-
-
                 std::string str;
                 while (std::getline(iss, str, ',')) {
                     auto findResult = std::find_if(std::begin(roleTable), std::end(roleTable), [&](const std::pair<Role, std::string>& pair)
@@ -52,12 +48,13 @@ ResourceParser::ResourceParser()
                     roles.push_back(findResult->first);
                 }
 
-
+                // Get itemType, a weapon can only be one or two handed
                 itemType parsedType = itemType::twoHanded;
                 if (sheet->readStr(row, 2) == L"oneHanded") {
                     parsedType = itemType::oneHanded;
                 }
-                
+
+                // Create item and add it to list
                 Item item(nameString,
                     roles,
                     parsedType,

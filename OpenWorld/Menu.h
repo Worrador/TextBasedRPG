@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <sstream>
 #include <functional> 
+#include "ResourceParser.h"
 
 enum class menuState {
 	Main = 0,

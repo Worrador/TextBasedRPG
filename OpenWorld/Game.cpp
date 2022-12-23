@@ -48,12 +48,15 @@ void Game::travel(int travelOption)
 			std::vector <std::string> staticLines = {
 				"You have met an enemy " + enemy.getName()
 			};
-			std::vector <std::string> dynamiMenuPoints = {
+			std::vector <std::string> dynamicMenuPoints = {
 				"Attack",
 				"Run",
 				"Wait"
 			};
-			switch (menu.menuGenerator(staticLines, dynamiMenuPoints, false)) {
+			int selectedMenuPoint = 0;
+			menu.menuGenerator(selectedMenuPoint, staticLines, dynamicMenuPoints, false);
+
+			switch (selectedMenuPoint) {
 			case 0:
 				fight(enemy, true);
 				break;
@@ -145,12 +148,13 @@ void Game::wait(Enemy& enemy)
 		std::vector <std::string> staticLines = {
 			"The " + enemy.getName() + " does not look to attack you. You can continue your journey if you wish to."
 		};
-		std::vector <std::string> dynamiMenuPoints = {
+		std::vector <std::string> dynamicMenuPoints = {
 		  "Attack anyway",
 		  "Walk away"
 		};
-
-		switch (menu.menuGenerator(staticLines, dynamiMenuPoints, false)) {
+		int selectedMenuPoint = 0;
+		menu.menuGenerator(selectedMenuPoint, staticLines, dynamicMenuPoints, false);
+		switch (selectedMenuPoint) {
 		case 0:
 			fight(enemy, true);
 			break;
@@ -168,6 +172,9 @@ void Game::wait(Enemy& enemy)
 
 void Game::rest(int restOption)
 {
+	if (restOption == ESCAPE) {
+		return;
+	}
 	int chance = 0;
 	dramaticPause();
 	switch (restOption)
@@ -222,7 +229,9 @@ void Game::gameLoop()
 		menu.playerSheetMenu(player);
 		break;
 	case 4:
-		playing = false;
+		if (menu.quitMenu() == 0) {
+			playing = false;
+		}
 		break;
 	default:
 		break;

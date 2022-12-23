@@ -5,8 +5,6 @@
 
 int main()
 {
-    // Get res instance
-    ResourceParser& res = ResourceParser::getInstance();
     // Get game instance
     Game& game = Game::getInstance();
     // If playing is true, then loop the game

@@ -1,13 +1,5 @@
 #include "Menu.h"
 
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define ESCAPE 27
-#define UNIQUE -1
-#define ENTER '\r'
-
 int Menu::getInputBetween(int lower, int higher)
 {
     int choice;
@@ -25,13 +17,15 @@ int Menu::getInputBetween(int lower, int higher)
 }
 
 // Static Lines -> Static Fn -> Dynamic Points -> Dynamic Fn
-int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const std::vector<std::string>& dynamicMenuPoints, 
-    const bool isEscapeable, const std::function <void(std::stringstream&)>& staticMenuFn, 
+void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>& staticMenuLines, 
+    const std::vector<std::string>& dynamicMenuPoints, const bool isEscapeable, 
+    const std::function <void(std::stringstream&)>& staticMenuFn, 
     const std::function <void(std::stringstream&, const int)>& dynamicMenuFn) {
 
     // Call the pre-menu callback function, if it is provided
     int numberOfMenuPoints = (int)(dynamicMenuPoints.size() - 1);
-    int selectedMenuPoint = std::min(numberOfMenuPoints, 0);
+    // TODO: ezzel kell meghivni majd:    
+    // std::min(numberOfMenuPoints, 0);
 
     while (1)
     {
@@ -64,7 +58,8 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
         std::cout << ss.str();
         if (selectedMenuPoint < 0) {
             _getch();
-            return ESCAPE;
+            selectedMenuPoint = ESCAPE;
+            return;
         }
         switch ((_getch())) {
         case KEY_UP:
@@ -74,17 +69,19 @@ int Menu::menuGenerator(const std::vector<std::string>& staticMenuLines, const s
             selectedMenuPoint = (++selectedMenuPoint > numberOfMenuPoints) ? 0 : selectedMenuPoint;
             break;
         case ENTER:
-            return selectedMenuPoint;
+            return;
         case ESCAPE:
-            if (isEscapeable)
-                return ESCAPE;
+            if (isEscapeable) {
+                selectedMenuPoint = ESCAPE;
+                return;
+            }
             else break;
         default:
             break;
         }
     }
 
-    return 0;
+    return;
 
 }
 
@@ -114,7 +111,8 @@ Player Menu::playerCreationMenu()
             "Female"
         };
 
-        auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, false);
+        int selectedMenuPoint = 0;
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
         switch (selectedMenuPoint) {
         case 0:
             isMale = true;
@@ -136,7 +134,8 @@ Player Menu::playerCreationMenu()
         std::vector <std::string> dynamicMenuPoints = ResourceParser::getInstance().getParsedRoles();
 
         // Move so we dont have to copy
-        auto selectedMenuPoint = menuGenerator(staticMenuLines, std::move(dynamicMenuPoints), false);
+        int selectedMenuPoint = 0;
+        menuGenerator(selectedMenuPoint, staticMenuLines, std::move(dynamicMenuPoints), false);
         return Player(name, isMale, dynamicMenuPoints[selectedMenuPoint]);
     }
     // Do not return with std::move as it prohibits copy elision.
@@ -156,7 +155,8 @@ int Menu::mainMenu()
         "Quit",
     };
 
-    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, false);
+    int selectedMenuPoint = 0;
+    menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
 
     return selectedMenuPoint;
 }
@@ -182,15 +182,15 @@ int Menu::travelMenu(Player& player)
       "Your moms ass",
       "What do you care?"
     };
-
-    auto selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true);
+    int selectedMenuPoint = 0;
+    menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
 
     return selectedMenuPoint;
 }
 
 void Menu::shopMenu(Player& player)
 {
-    int selectedMenuPoint;
+    int selectedMenuPoint = 0;
 
     while (1) {
         // List of menu points
@@ -203,7 +203,10 @@ void Menu::shopMenu(Player& player)
             "Sell"
         };
 
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true);
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -223,9 +226,8 @@ void Menu::shopMenu(Player& player)
 void Menu::buyMenu(Player& player)
 {
 
-    int selectedMenuPoint;
+    int selectedMenuPoint = 0;
     std::vector<Item> shopOptions = ResourceParser::getInstance().getParsedItems();
-
 
     while (1) {
         // List of menu points
@@ -264,8 +266,10 @@ void Menu::buyMenu(Player& player)
             ss << "Defence: " << shopOptions[selectedMenuPoint].getDefence() << std::endl;
             ss << "Max stamina: " << shopOptions[selectedMenuPoint].getStaminaMax() << std::endl;
         };
-
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicItemStats);
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicItemStats);
 
         if (selectedMenuPoint == ESCAPE) {
             return;
@@ -279,6 +283,7 @@ void Menu::buyMenu(Player& player)
 
             // Delete the moved item
             shopOptions.erase(shopOptions.begin() + selectedMenuPoint);
+            selectedMenuPoint = 0;
 
         }
         else {
@@ -294,7 +299,7 @@ void Menu::sellMenu(Player& player)
 
 int Menu::restMenu(Player& player)
 {
-    int selectedMenuPoint;
+    int selectedMenuPoint = 0;
 
     auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
         // Build string stream object
@@ -313,8 +318,10 @@ int Menu::restMenu(Player& player)
             "Sleep in a shared room at an Inn: \t costs 4 gold, restores your hp and stamina to full.",
             "Sleep in a private room at an Inn: \t costs 6 gold, restores your hp and stamina to full. Enchances some stats for the next fight."
         };
-
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -356,7 +363,7 @@ int Menu::restMenu(Player& player)
 
 void Menu::playerSheetMenu(Player& player)
 {
-    int selectedMenuPoint;
+    int selectedMenuPoint = 0;
 
     auto getStaticPlayerInfo = [player](std::stringstream& ss) ->void {
         // Build string stream object
@@ -393,8 +400,10 @@ void Menu::playerSheetMenu(Player& player)
         if (player.getExp() >= player.getExpNext()) {
             dynamicMenuPoints.push_back("Level up");
         }
-
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticPlayerInfo);
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerInfo);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -413,6 +422,26 @@ void Menu::playerSheetMenu(Player& player)
         }
     }
 }
+
+int Menu::quitMenu()
+{
+    int selectedMenuPoint = 0;
+
+    // List of menu points
+    std::vector <std::string> staticMenuLines = {
+        "Are you sure you want to quit?",
+        ""
+    };
+
+    // List the eqipped items
+    std::vector <std::string> dynamicMenuPoints = {
+        "Yes",
+        "No"
+    };
+    menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
+    return selectedMenuPoint;
+}
+
 void Menu::equipItems(Player& player)
 {
     // List already equipped items
@@ -422,7 +451,7 @@ void Menu::equipItems(Player& player)
     // Player can choose between both, when enter is hit then the items equipment status changes
 
 
-    int selectedMenuPoint;
+    int selectedMenuPoint = 0;
 
     while (1) {
         // List of menu points
@@ -476,13 +505,16 @@ void Menu::equipItems(Player& player)
             ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;
             ss << "Max stamina: " << itemList[selectedMenuPoint].getStaminaMax() << std::endl;
         };
-
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, getStaticEquippedItems, getDynamicItemStats);
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticEquippedItems, getDynamicItemStats);
 
         if (selectedMenuPoint == ESCAPE){
             return;
         }
         player.equipItem(selectedMenuPoint);
+        selectedMenuPoint = 0;
         std::cout << std::endl;
     }
 }
@@ -497,7 +529,7 @@ void Menu::unequipItems(Player& player)
     // Player can choose between both, when enter is hit then the items equipment status changes
 
 
-    int selectedMenuPoint;
+    int selectedMenuPoint = 0;
 
     while (1) {
         // List of menu points
@@ -545,13 +577,16 @@ void Menu::unequipItems(Player& player)
             ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;
             ss << "Max stamina: " << itemList[selectedMenuPoint].getStaminaMax() << std::endl;
         };
-
-        selectedMenuPoint = menuGenerator(staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicItemStats);
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicItemStats);
 
         if (selectedMenuPoint == ESCAPE) {
             return;
         }
         player.unequipItem(selectedMenuPoint);
+        selectedMenuPoint = 0;
         std::cout << std::endl;
     }
 }

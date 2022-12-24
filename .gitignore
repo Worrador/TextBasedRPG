@@ -9,10 +9,11 @@
 *.user
 *.userosscache
 *.sln.docstates
-libxl-4.0.4.0/examples/**
-libxl-4.0.4.0/doc/**
-libxl-4.0.4.0/net/**
-libxl-4.0.4.0/php/**
+libxl-4.0.4.0/examples/
+libxl-4.0.4.0/doc/
+libxl-4.0.4.0/net/
+libxl-4.0.4.0/php/
+libxl-4.0.4.0/include_c/
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)

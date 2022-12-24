@@ -34,7 +34,16 @@ void ResourceParser::parseRoles()
                     roleNameString.resize(size);
                     wcstombs(&roleNameString[0], roleName, size + 1);
                 }
-                parsedRoles.push_back(roleNameString);
+                parsedRoles.push_back(
+                    Role(roleNameString, 
+                    (int)(sheet->readNum(row, 1)),
+                    (int)(sheet->readNum(row, 2)),
+                    (int)(sheet->readNum(row, 3)),
+                    (int)(sheet->readNum(row, 4)),
+                    (int)(sheet->readNum(row, 5)),
+                    (int)(sheet->readNum(row, 6)),
+                    (int)(sheet->readNum(row, 7)),
+                    (int)(sheet->readNum(row, 8))));
             }
         }
     }
@@ -80,8 +89,7 @@ void ResourceParser::parseItems()
                     // Separate roles by ',' and create roles vector
                     std::istringstream iss(roleNamesString);
                     std::string token = ", ";
-                    std::vector<Role> roles;
-                    auto& roleTable = RoleInfo::getInstance().getRoleNames();
+                    std::vector<roleName> roles;
                     std::string str;
                     while (std::getline(iss, str, ',')) {
                         roles.push_back(str);

@@ -131,12 +131,17 @@ Player Menu::playerCreationMenu()
             "Now choose a class!"
         };
         // List of menu points
-        std::vector <std::string> dynamicMenuPoints = ResourceParser::getInstance().getParsedRoles();
+        auto& roles = ResourceParser::getInstance().getParsedRoles();
+        std::vector <std::string> dynamicMenuPoints;
+
+        for (auto& role : roles) {
+            dynamicMenuPoints.push_back(role.getRoleName());
+        }
 
         // Move so we dont have to copy
         int selectedMenuPoint = 0;
         menuGenerator(selectedMenuPoint, staticMenuLines, std::move(dynamicMenuPoints), false);
-        return Player(name, isMale, dynamicMenuPoints[selectedMenuPoint]);
+        return Player(name, isMale, roles[selectedMenuPoint]);
     }
     // Do not return with std::move as it prohibits copy elision.
 }
@@ -251,7 +256,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
             ss << std::endl << "------------------------------------" << std::endl;
             ss << std::endl << "Costs: " << shopItems[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<Role> roles = shopItems[selectedMenuPoint].getRoles();
+            std::vector<roleName> roles = shopItems[selectedMenuPoint].getRoles();
 
             for (auto roleName: roles) {
                 ss << roleName;
@@ -370,7 +375,7 @@ void Menu::playerSheetMenu(Player& player)
         // Build string stream object
         ss << std::endl;
         ss << "Name: " << player.getName() << std::endl;
-        ss << "Class: " << RoleInfo::getInstance().getRoleNames()[player.getRole()] << std::endl;
+        ss << "Class: " << player.getRoleName() << std::endl;
         ss << "Level: " << player.getLevel() << std::endl;
         ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
         ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
@@ -491,9 +496,9 @@ void Menu::equipItems(Player& player)
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
+            std::vector<roleName> roles = itemList[selectedMenuPoint].getRoles();
 
-            for (auto roleName : roles) {
+            for (auto& roleName : roles) {
                 ss << roleName;
                 if (roleName == roles[roles.size() - 1]) {
                     break;
@@ -563,10 +568,10 @@ void Menu::unequipItems(Player& player)
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
+            std::vector<roleName> roles = itemList[selectedMenuPoint].getRoles();
 
             for (auto roleIndex = 0; roleIndex < roles.size(); roleIndex++) {
-                ss << RoleInfo::getInstance().getRoleNames()[roles[roleIndex]];
+                ss << roles[roleIndex];
                 if (roleIndex >= roles.size() - 1) {
                     break;
                 }

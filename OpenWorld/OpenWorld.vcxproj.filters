@@ -42,9 +42,6 @@
     <ClCompile Include="ResourceParser.cpp">
       <Filter>Source Files\GameData</Filter>
     </ClCompile>
-    <ClCompile Include="RoleInfo.cpp">
-      <Filter>Source Files\GameData</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
@@ -53,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\GameFlow</Filter>
+    </ClCompile>
+    <ClCompile Include="Role.cpp">
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,13 +71,13 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoleInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ResourceParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Role.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

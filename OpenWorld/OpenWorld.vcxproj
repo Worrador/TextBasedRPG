@@ -155,7 +155,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceParser.cpp" />
-    <ClCompile Include="RoleInfo.cpp" />
+    <ClCompile Include="Role.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
@@ -165,7 +165,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceParser.h" />
-    <ClInclude Include="RoleInfo.h" />
+    <ClInclude Include="Role.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="1.wav" />

@@ -1,14 +1,15 @@
 #pragma once
-#include "RoleInfo.h"
+#include "Role.h"
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
 using itemType = std::string;
 
 class Item
 {
 public:
-	Item(const std::string& name, const std::vector<Role>& roles, const itemType& itemType, int hpMax, int damageMax, int defence, int staminaMax) :
+	Item(const std::string& name, const std::vector<roleName>& roles, const itemType& itemType, int hpMax, int damageMax, int defence, int staminaMax) :
 		name(name), roles(roles), itemType(itemType),level((int)std::floor((hpMax + damageMax + defence + staminaMax) / 2)), hpMax(hpMax),
 		buyGold(hpMax * 2 + damageMax * 2 + defence * 3 + staminaMax), sellGold((int)std::floor(buyGold / 2)), damageMax(damageMax),
 		defence(defence), staminaMax(staminaMax), rarity((int)std::floor(10000 / (buyGold * buyGold))) {};
@@ -19,7 +20,7 @@ public:
 
 	// Accessors
 	inline std::string getName() const { return name; };
-	inline std::vector<Role> getRoles() const { return roles; };
+	inline std::vector<roleName> getRoles() const { return roles; };
 	inline int getLevel() const { return level; };
 	inline int getBuyGold() const { return buyGold; };
 	inline int getSellGold() const { return sellGold; };
@@ -36,7 +37,7 @@ private:
 	// const, the compiler will implicitly delete the copy assignment operator, 
 	// as it is not possible to change the value of a const data member.
 	std::string name;
-	std::vector<Role> roles;	// multiple classes could use it
+	std::vector<roleName> roles;	// multiple classes could use it
 	itemType itemType;
 	int level;
 	int buyGold;

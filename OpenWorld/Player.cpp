@@ -8,12 +8,11 @@ void Player::levelUp()
 	expNext = (int)std::floor(expNext * 1.2 - std::pow(level, 2));
 
 	// Role specific increments:
-	auto& attrVector = RoleInfo::getInstance().getRoleStats()[role];
-	setHpMax(hpMax + attrVector[4]);
+	setHpMax(hpMax + role.getHpIncr());
 	setHp(hpMax);
-	setDamage(damageMax + attrVector[5]);
-	setDefence(defence + attrVector[6]);
-	setStaminaMax(staminaMax + attrVector[7]);
+	setDamage(damageMax + role.getDmgIncr());
+	setDefence(defence + role.getDefIncr());
+	setStaminaMax(staminaMax + role.getStaminaIncr());
 	setStamina(staminaMax);
 }
 
@@ -34,10 +33,10 @@ void Player::equipItem(const int& itemPos)
 		return;
 	}
 	// Check if player can equip item. 
-	std::vector<Role> itemRoles = Inventory[itemPos].getRoles();
+	std::vector<roleName> itemRoles = Inventory[itemPos].getRoles();
 
 	// If role fits
-	if (std::find(itemRoles.begin(), itemRoles.end(), role) != itemRoles.end()) {
+	if (std::find(itemRoles.begin(), itemRoles.end(), role.getRoleName()) != itemRoles.end()) {
 
 		// If similar piece is not already worn, maybe switch it automatically later
 		if ([&]() {for (auto checkPos = 0; checkPos < Equipment.size(); checkPos++) { if(Equipment[checkPos].getItemType() == Inventory[itemPos].getItemType()) return false; } return true; }()) {

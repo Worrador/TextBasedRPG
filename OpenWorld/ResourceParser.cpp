@@ -44,7 +44,7 @@ void ResourceParser::parseRoles()
 void ResourceParser::parseItems()
 {
     libxl::Book* book = xlCreateXMLBook();
-    if (book->load(L"Resources\\Items2.xlsx"))
+    if (book->load(L"Resources\\Items.xlsx"))
     {
         // Iterate sheets
         for (int sheetIndex = 0; sheetIndex < 2; sheetIndex++) {
@@ -105,8 +105,8 @@ void ResourceParser::parseItems()
                         (int)(sheet->readNum(row, 5)),
                         (int)(sheet->readNum(row, 6)));
 
+                    parsedItemRaritySum += item.getRarity();
                     parsedItems.push_back(std::move(item));
-
                     row++;
                 }
             }

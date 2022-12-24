@@ -188,7 +188,7 @@ int Menu::travelMenu(Player& player)
     return selectedMenuPoint;
 }
 
-void Menu::shopMenu(Player& player)
+void Menu::shopMenu(Player& player, std::vector<Item>& shopItems)
 {
     int selectedMenuPoint = 0;
 
@@ -210,7 +210,7 @@ void Menu::shopMenu(Player& player)
 
         switch (selectedMenuPoint) {
         case 0:
-            buyMenu(player);
+            buyMenu(player, shopItems);
             break;
         case 1:
             sellMenu(player);
@@ -223,11 +223,12 @@ void Menu::shopMenu(Player& player)
     }
 }
 
-void Menu::buyMenu(Player& player)
+void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 {
 
     int selectedMenuPoint = 0;
-    std::vector<Item> shopOptions = ResourceParser::getInstance().getParsedItems();
+    // Generate items this should be in the location constructor
+    
 
     while (1) {
         // List of menu points
@@ -236,7 +237,7 @@ void Menu::buyMenu(Player& player)
         };
         std::vector <std::string> dynamicMenuPoints;
 
-        for (auto& option : shopOptions) {
+        for (auto& option : shopItems) {
             dynamicMenuPoints.push_back(option.getName());
         }
 
@@ -245,12 +246,12 @@ void Menu::buyMenu(Player& player)
             ss << std::endl << "Gold: " << player.getGold() << std::endl;
         };
 
-        auto getDynamicItemStats = [shopOptions](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicItemStats = [shopItems](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             ss << std::endl << "------------------------------------" << std::endl;
-            ss << std::endl << "Costs: " << shopOptions[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
+            ss << std::endl << "Costs: " << shopItems[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<Role> roles = shopOptions[selectedMenuPoint].getRoles();
+            std::vector<Role> roles = shopItems[selectedMenuPoint].getRoles();
 
             for (auto roleName: roles) {
                 ss << roleName;
@@ -260,11 +261,11 @@ void Menu::buyMenu(Player& player)
                 ss << ", ";
             }
             ss << std::endl;
-            ss << "Item type: " << shopOptions[selectedMenuPoint].getItemType() << std::endl;
-            ss << "Max HP: " << shopOptions[selectedMenuPoint].getHpMax() << std::endl;
-            ss << "Max damage: " << shopOptions[selectedMenuPoint].getDamageMax() << std::endl;
-            ss << "Defence: " << shopOptions[selectedMenuPoint].getDefence() << std::endl;
-            ss << "Max stamina: " << shopOptions[selectedMenuPoint].getStaminaMax() << std::endl;
+            ss << "Item type: " << shopItems[selectedMenuPoint].getItemType() << std::endl;
+            ss << "Max HP: " << shopItems[selectedMenuPoint].getHpMax() << std::endl;
+            ss << "Max damage: " << shopItems[selectedMenuPoint].getDamageMax() << std::endl;
+            ss << "Defence: " << shopItems[selectedMenuPoint].getDefence() << std::endl;
+            ss << "Max stamina: " << shopItems[selectedMenuPoint].getStaminaMax() << std::endl;
         };
         if ((int)dynamicMenuPoints.size() == 0) {
             selectedMenuPoint = -1; // indicating error for menugenerator
@@ -275,14 +276,14 @@ void Menu::buyMenu(Player& player)
             return;
         }
 
-        if (player.getGold() >= shopOptions[selectedMenuPoint].getBuyGold()) {
-            player.setGold(player.getGold() - shopOptions[selectedMenuPoint].getBuyGold());
+        if (player.getGold() >= shopItems[selectedMenuPoint].getBuyGold()) {
+            player.setGold(player.getGold() - shopItems[selectedMenuPoint].getBuyGold());
             // Moving a const object invoks its copy constructor, since const objects cannot be modified
             // We can move item since local variables are not needed anymore
-            player.addItem(std::move(shopOptions[selectedMenuPoint]));
+            player.addItem(std::move(shopItems[selectedMenuPoint]));
 
             // Delete the moved item
-            shopOptions.erase(shopOptions.begin() + selectedMenuPoint);
+            shopItems.erase(shopItems.begin() + selectedMenuPoint);
             selectedMenuPoint = 0;
 
         }
@@ -492,9 +493,9 @@ void Menu::equipItems(Player& player)
             ss << "Equipable by: ";
             std::vector<Role> roles = itemList[selectedMenuPoint].getRoles();
 
-            for (auto roleIndex = 0; roleIndex < roles.size(); roleIndex++) {
-                ss << RoleInfo::getInstance().getRoleNames()[roles[roleIndex]];
-                if (roleIndex >= roles.size() - 1) {
+            for (auto roleName : roles) {
+                ss << roleName;
+                if (roleName == roles[roles.size() - 1]) {
                     break;
                 }
                 ss << ", ";

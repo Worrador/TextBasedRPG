@@ -20,8 +20,9 @@ public:
     }
 
     // Method to access the parsedItems vector
-    std::vector<Item>& getParsedItems() { return parsedItems; }
-    std::vector<Role>& getParsedRoles() { return parsedRoles; }
+    inline std::vector<Item>& getParsedItems() { return parsedItems; }
+    inline std::vector<Role>& getParsedRoles() { return parsedRoles; }
+    inline const int& getRaritySum() { return parsedItemRaritySum; }
 
 private:
     // Private constructor to prevent direct instantiation
@@ -32,4 +33,5 @@ private:
     void parseItems();
     std::vector<Role> parsedRoles;
     std::vector<Item> parsedItems;
+    int parsedItemRaritySum = 0;
 };

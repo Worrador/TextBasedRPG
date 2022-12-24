@@ -14,6 +14,20 @@ int Game::rollBetween(int lower, int higher)
 	return roll_dist(rng);
 }
 
+Item Game::getRandomItem()
+{
+	// Generate items this should be in the location constructor
+	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getRaritySum());
+	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedItems();
+
+	int itemIndex = 0;
+	while (randomItemNum > 0) {
+		randomItemNum -= parsedItems[itemIndex].getRarity();
+		itemIndex++;
+	}
+	return parsedItems[itemIndex];
+}
+
 void dramaticPause()
 {
 	std::cout << "\033c";
@@ -223,7 +237,7 @@ void Game::gameLoop()
 		rest(menu.restMenu(player)); 
 		break;
 	case 2:
-		menu.shopMenu(player);
+		menu.shopMenu(player, shopItems);
 		break;
 	case 3:
 		menu.playerSheetMenu(player);

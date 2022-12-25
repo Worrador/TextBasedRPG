@@ -15,11 +15,26 @@ int Game::rollBetween(int lower, int higher)
 	return roll_dist(rng);
 }
 
-Item Game::getRandomItem()
+
+Item Game::getRandomArmor()
 {
 	// Generate items this should be in the location constructor
-	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getRaritySum());
-	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedItems();
+	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getArmorsRaritySum());
+	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedArmors();
+
+	int itemIndex = 0;
+	while (randomItemNum > 0) {
+		randomItemNum -= parsedItems[itemIndex].getRarity();
+		itemIndex++;
+	}
+	return parsedItems[itemIndex];
+}
+
+Item Game::getRandomWeapon()
+{
+	// Generate items this should be in the location constructor
+	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getWeaponsRaritySum());
+	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedWeapons();
 
 	int itemIndex = 0;
 	while (randomItemNum > 0) {

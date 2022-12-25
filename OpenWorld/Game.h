@@ -18,10 +18,11 @@ public:
 		DWORD leftVolume = 500;
 		DWORD rightVolume = 500;
 		waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
-		shopItems.push_back(getRandomItem());
-		shopItems.push_back(getRandomItem());
-		shopItems.push_back(getRandomItem());
-		shopItems.push_back(getRandomItem());
+		shopItems.push_back(getRandomWeapon());
+		shopItems.push_back(getRandomWeapon());
+		shopItems.push_back(getRandomWeapon());
+		shopItems.push_back(getRandomArmor());
+		shopItems.push_back(getRandomArmor());
 	};
 
 	// Delete copy and move constructor to prevent copying or moving
@@ -33,7 +34,8 @@ public:
 	Game& operator=(Game&&) = delete;
 
 	// Functions
-	Item getRandomItem();
+	Item getRandomWeapon();
+	Item getRandomArmor();
 
 	// Static method to return a reference to the single instance
 	static Game& getInstance()

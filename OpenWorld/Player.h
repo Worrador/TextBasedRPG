@@ -15,6 +15,7 @@ public:
 		Character(name, role.getStartingHpMax(), role.getStartingDmgMax(), (int)std::floor(role.getStartingDmgMax() / 2), role.getStartingDef(), role.getStartingStaminaMax()) {};
 
 	// Operators
+	Player& operator+=(const Item& item);
 
 	// Functions
 	void levelUp();

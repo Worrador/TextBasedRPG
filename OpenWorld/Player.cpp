@@ -1,5 +1,18 @@
 #include "Player.h"
 
+Player& Player::operator+=(const Item& item)
+{
+	this->setHpMax(this->getHpMax() + item.getHpMax());
+	this->setHp(std::min(this->getHp(), this->getHpMax()));
+	this->setDamage(this->getDamageMax() + item.getDamageMax());
+	this->setDefence( this->getDefence() + item.getDefence());
+
+	this->setStaminaMax(this->getStaminaMax() + item.getStaminaMax());
+	this->setStamina(std::min(this->getStamina(), this->getStaminaMax()));
+
+	return *this;
+}
+
 void Player::levelUp()
 {
 	// The player levels himself up in game as well,is okay to be here
@@ -40,8 +53,12 @@ void Player::equipItem(const int& itemPos)
 
 		// If similar piece is not already worn, maybe switch it automatically later
 		if ([&]() {for (auto checkPos = 0; checkPos < Equipment.size(); checkPos++) { if(Equipment[checkPos].getItemType() == Inventory[itemPos].getItemType()) return false; } return true; }()) {
-			Equipment.push_back(std::move(Inventory[itemPos]));
+			// Modify player stats
+			*this += Inventory[itemPos];
+
+			Equipment.emplace_back(std::move(Inventory[itemPos]));
 			Inventory.erase(Inventory.begin() + itemPos);
+
 			return;
 		}
 	}

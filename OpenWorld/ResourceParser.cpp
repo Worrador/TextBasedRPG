@@ -98,7 +98,8 @@ void ResourceParser::parseItems()
             const auto item_type_string = to_string(sheet->readStr(row, 2));
 
             // Create item and add it to list
-            Item item(name_string,
+            Item item(
+                name_string,
                 roles,
                 item_type_string,
                 static_cast<int>(sheet->readNum(row, 3)),

@@ -1,9 +1,6 @@
 #include "ResourceParser.h"
 
 
-using BookPtr = std::unique_ptr<libxl::Book, BookDeleter>;
-using SheetPtr = std::unique_ptr<libxl::Sheet>;
-
 ResourceParser::ResourceParser()
 {
     this->parseRoles();
@@ -19,13 +16,15 @@ ResourceParser::~ResourceParser()
 
 void ResourceParser::parseRoles()
 {
-    std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { if (!book) return;  
-    book->release(); } };
+    // Somehow it cannot be handled with unique ptr: 
+    //std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    libxl::Book* book = xlCreateXMLBook();
     if (!book->load(L"Resources\\Roles.xlsx")) {
+        book->release();
         return;
     }
     // Get the roles
-    SheetPtr sheet{ book->getSheet(0) };
+    libxl::Sheet* sheet = book->getSheet(0);
     if (sheet)
     {
         // Iterate rows, we don't need the first one as it only contains the names of columns
@@ -47,18 +46,22 @@ void ResourceParser::parseRoles()
                     static_cast<int>(sheet->readNum(row, 8))));
         }
     }
+    book->release();
 }
 
 void ResourceParser::parseItems()
 {
-    std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    // Somehow it cannot be handled with unique ptr: 
+    // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    libxl::Book* book = xlCreateXMLBook();
     if (!book->load(L"Resources\\Items.xlsx")) {
+        book->release();
         return;
     }
 
     for (int sheet_index = 0; sheet_index < 2; ++sheet_index)
     {
-        SheetPtr sheet{ book->getSheet(0) };
+        libxl::Sheet* sheet = book->getSheet(0);
         if (!sheet) {
             continue;
         }
@@ -108,4 +111,5 @@ void ResourceParser::parseItems()
             }
         }
     }
+    book->release();
 }

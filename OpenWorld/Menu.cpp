@@ -398,6 +398,7 @@ void Menu::playerSheetMenu(Player& player)
     int selectedMenuPoint = 0;
 
     while (1) {
+
         auto getStaticPlayerInfo = [player](std::stringstream& ss) ->void {
             // Build string stream object
             ss << std::endl;
@@ -410,7 +411,14 @@ void Menu::playerSheetMenu(Player& player)
             ss << "Defence: " << player.getDefence() << std::endl;
             ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
 
-            ss << "------------------------------------" << std::endl;
+            ss << "------------------------------------" << std::endl << std::endl;
+
+            ss << "INVENTORY" << std::endl << std::endl;
+            ss << player.getGold() << " gold" << std::endl;
+            for (auto& item : player.getInventory()) {
+                ss << item.getName() << std::endl;
+            }
+            ss << std::endl;
         };
 
         // List of menu points

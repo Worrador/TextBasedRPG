@@ -160,10 +160,8 @@ void Game::makeAttack(Character& attacker, Character& defender)
 		std::cout << attacker.getName() << " rests for one round and regains some stamina." << std::endl;
 		attacker.setStamina(min(3, attacker.getStaminaMax()));
 	}
-	// or wait 750 ms?
-	FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(750)); //or continue on button press?
 	_getch();
-
 }
 
 void Game::fight(Enemy& enemy, bool playerInitialize)

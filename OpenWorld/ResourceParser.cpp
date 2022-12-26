@@ -1,8 +1,8 @@
 #include "ResourceParser.h"
-#include <sstream>
-#include <cwchar>
-#include <codecvt>
-#include <locale>
+
+
+using BookPtr = std::unique_ptr<libxl::Book, BookDeleter>;
+using SheetPtr = std::unique_ptr<libxl::Sheet>;
 
 ResourceParser::ResourceParser()
 {
@@ -10,6 +10,7 @@ ResourceParser::ResourceParser()
     this->parseItems();
 }
 
+// Maybe first look for source files then start the game..?
 
 ResourceParser::~ResourceParser() 
 {
@@ -18,56 +19,46 @@ ResourceParser::~ResourceParser()
 
 void ResourceParser::parseRoles()
 {
-    libxl::Book* book = xlCreateXMLBook();
-    if (book->load(L"Resources\\Roles.xlsx"))
+    std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { if (!book) return;  
+    book->release(); } };
+    if (!book->load(L"Resources\\Roles.xlsx")) {
+        return;
+    }
+    // Get the roles
+    SheetPtr sheet{ book->getSheet(0) };
+    if (sheet)
     {
-        // Get the roles
-        libxl::Sheet* sheet = book->getSheet(0);
-        if (sheet)
+        // Iterate rows, we don't need the first one as it only contains the names of columns
+        for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
         {
-            // Iterate rows, we don't need the first one as it only contains the names of columns
-            for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
-            {
-                // Get name of item and convert it to string
-                std::string roleNameString;
-                auto roleName = sheet->readStr(row, 0);
-                size_t size = wcstombs(nullptr, roleName, 0);
-                if (size != static_cast<size_t>(-1)) {
-                    roleNameString.resize(size);
-                    wcstombs(&roleNameString[0], roleName, size + 1);
-                }
-                parsedRoles.push_back(
-                    Role(roleNameString, 
-                    (int)(sheet->readNum(row, 1)),
-                    (int)(sheet->readNum(row, 2)),
-                    (int)(sheet->readNum(row, 3)),
-                    (int)(sheet->readNum(row, 4)),
-                    (int)(sheet->readNum(row, 5)),
-                    (int)(sheet->readNum(row, 6)),
-                    (int)(sheet->readNum(row, 7)),
-                    (int)(sheet->readNum(row, 8))));
-            }
+            // Get name of item and convert it to string
+
+            const auto& roleName = converter.to_bytes((sheet->readStr(row, 0)));
+
+            parsedRoles.emplace_back(
+                Role(roleName,
+                    static_cast<int>(sheet->readNum(row, 1)),
+                    static_cast<int>(sheet->readNum(row, 2)),
+                    static_cast<int>(sheet->readNum(row, 3)),
+                    static_cast<int>(sheet->readNum(row, 4)),
+                    static_cast<int>(sheet->readNum(row, 5)),
+                    static_cast<int>(sheet->readNum(row, 6)),
+                    static_cast<int>(sheet->readNum(row, 7)),
+                    static_cast<int>(sheet->readNum(row, 8))));
         }
     }
-    book->release();
 }
 
 void ResourceParser::parseItems()
 {
-    libxl::Book* book = xlCreateXMLBook();
+    std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
     if (!book->load(L"Resources\\Items.xlsx")) {
-        book->release();
         return;
     }
 
-    auto to_string = [](const wchar_t* wstr) -> std::string {
-        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-        return converter.to_bytes(wstr);
-    };
-
     for (int sheet_index = 0; sheet_index < 2; ++sheet_index)
     {
-        libxl::Sheet* sheet = book->getSheet(sheet_index);
+        SheetPtr sheet{ book->getSheet(0) };
         if (!sheet) {
             continue;
         }
@@ -80,10 +71,10 @@ void ResourceParser::parseItems()
             if (name == nullptr) {
                 break;
             }
-            const auto name_string = to_string(name);
+            const auto& name_string = converter.to_bytes(name);
 
             // Get roles of item and convert it to string
-            const auto role_names_string = to_string(sheet->readStr(row, 1));
+            const auto role_names_string = converter.to_bytes(sheet->readStr(row, 1));
 
             // Separate roles by ',' and create roles vector
             std::istringstream iss(role_names_string);
@@ -91,11 +82,11 @@ void ResourceParser::parseItems()
             std::vector<roleName> roles;
             std::string str;
             while (std::getline(iss, str, ',')) {
-                roles.push_back(str);
+                roles.emplace_back(str);
             }
 
             // Get type of item and convert it to string
-            const auto item_type_string = to_string(sheet->readStr(row, 2));
+            const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
 
             // Create item and add it to list
             Item item(
@@ -117,5 +108,4 @@ void ResourceParser::parseItems()
             }
         }
     }
-    book->release();
 }

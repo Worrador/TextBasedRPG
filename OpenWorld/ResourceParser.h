@@ -1,5 +1,8 @@
 #include "Item.h"
 #include "libxl.h"
+#include <sstream>
+#include <codecvt>
+#include <functional>
 
 class ResourceParser
 {
@@ -33,6 +36,9 @@ private:
     ResourceParser();
     ~ResourceParser();
 
+    // String converter object
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+
     void parseRoles();
     void parseItems();
     std::vector<Role> parsedRoles;
@@ -42,4 +48,12 @@ private:
     int parsedArmorsRaritySum = 0;
     std::vector<Item> parsedConsumables;
     int parsedConsumablesRaritySum = 0;
+};
+
+class BookDeleter {
+public:
+    BookDeleter() = default;
+    void operator()(libxl::Book* book) const {
+        book->release();
+    }
 };

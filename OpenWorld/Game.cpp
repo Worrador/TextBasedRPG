@@ -3,7 +3,8 @@
 Enemy Game::spawnEnemy(int difficulty, int terrain)
 {
 	// too big defense means negative damage.. :O
-	return Enemy("Golem", player.getLevel() * difficulty, difficulty, 1, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty);
+	//return Enemy("Golem", player.getLevel() * difficulty, difficulty, 1, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty);
+	auto& enemies = ResourceParser::getInstance().getParsedEnemies();
 }
 
 int Game::rollBetween(int lower, int higher)

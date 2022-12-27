@@ -1,4 +1,5 @@
 #include "Item.h"
+#include "Enemy.h"
 #include "libxl.h"
 #include <sstream>
 #include <codecvt>
@@ -27,6 +28,8 @@ public:
     inline std::vector<Item>& getParsedArmors() { return parsedArmors; }
     inline std::vector<Item>& getParsedConsumables() { return parsedConsumables; }
     inline std::vector<Role>& getParsedRoles() { return parsedRoles; }
+    inline std::vector<Role>& getParsedPlaces() { return parsedPlaces; }
+    inline std::vector<Enemy>& getParsedEnemies() { return parsedEnemies; }
     inline const int& getWeaponsRaritySum() { return parsedWeaponsRaritySum; }
     inline const int& getArmorsRaritySum() { return parsedArmorsRaritySum; }
     inline const int& getConsumablesRaritySum() { return parsedConsumablesRaritySum; }
@@ -41,13 +44,22 @@ private:
 
     void parseRoles();
     void parseItems();
+    void parsePlaces();
+    void parseEnemies();
+
     std::vector<Role> parsedRoles;
+
     std::vector<Item> parsedWeapons;
     int parsedWeaponsRaritySum = 0;
     std::vector<Item> parsedArmors;
     int parsedArmorsRaritySum = 0;
     std::vector<Item> parsedConsumables;
     int parsedConsumablesRaritySum = 0;
+
+    std::vector<Role> parsedPlaces;
+
+    std::vector<Enemy> parsedEnemies;
+    int parsedEnemiesRaritySum = 0;
 };
 
 class BookDeleter {

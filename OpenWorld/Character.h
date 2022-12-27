@@ -16,19 +16,25 @@ public:
 	// Functions
 
 	// Accessors
-	virtual inline std::string getName() const { return name; };
-	virtual inline int getHp() const { return hp; };
-	virtual inline int getHpMax() const { return hpMax; };
-	virtual inline int getDamageMin() const { return damageMin; };
-	virtual inline int getDamageMax() const { return damageMax; };
-	virtual inline int getDefence() const { return defence; };
-	virtual inline int getGold() const { return gold; };
-	virtual inline int getStamina() const { return stamina; };
-	virtual inline int getStaminaMax() const { return staminaMax; };
+	inline std::string getName() const { return name; };
+	inline int getHp() const { return hp; };
+	inline int getHpMax() const { return hpMax; };
+	inline int getDamageMin() const { return damageMin; };
+	inline int getDamageMax() const { return damageMax; };
+	inline int getDefence() const { return defence; };
+	inline int getGold() const { return gold; };
+	inline int getStamina() const { return stamina; };
+	inline int getStaminaMax() const { return staminaMax; };
 
 	// Modifiers
 	inline void setHp(int hp) { this->hp = hp; };
 	inline void setStamina(int stamina) { this->stamina = stamina; };
+
+	inline void setGold(int gold) { this->gold = std::max(gold, 0); };
+	inline void setHpMax(int hpMax) { this->hpMax = std::max(hpMax, 1); };
+	inline void setStaminaMax(int staminaMax) { this->staminaMax = std::max(staminaMax, 1); };
+	inline void setDamage(int damage) { this->damageMax = std::max(damageMax, 1); this->damageMin = std::max((int)std::floor(damage / 2), 0); };
+	inline void setDefence(int defence) { this->defence = std::max(defence, 0); };
 
 protected:
 	const std::string name;

@@ -5,6 +5,8 @@ ResourceParser::ResourceParser()
 {
     this->parseRoles();
     this->parseItems();
+    this->parsePlaces();
+    this->parseEnemies();
 }
 
 // Maybe first look for source files then start the game..?
@@ -136,14 +138,15 @@ void ResourceParser::parseEnemies()
         {
             // Get name of enemy and convert it to string
             const auto& enemyName = converter.to_bytes((sheet->readStr(row, 0)));
+            Enemy enemy = Enemy(enemyName,
+                static_cast<int>(sheet->readNum(row, 1)),
+                static_cast<int>(sheet->readNum(row, 2)),
+                static_cast<int>(sheet->readNum(row, 3)),
+                static_cast<int>(sheet->readNum(row, 4)),
+                static_cast<int>(sheet->readNum(row, 5)));
 
-            parsedEnemies.emplace_back(
-                Enemy(enemyName,
-                    static_cast<int>(sheet->readNum(row, 1)),
-                    static_cast<int>(sheet->readNum(row, 2)),
-                    static_cast<int>(sheet->readNum(row, 3)),
-                    static_cast<int>(sheet->readNum(row, 4)),
-                    static_cast<int>(sheet->readNum(row, 5))));
+            parsedEnemiesRaritySum += enemy.getRarity();
+            parsedEnemies.emplace_back(std::move(enemy));
         }
     }
     book->release();

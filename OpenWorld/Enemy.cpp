@@ -2,7 +2,7 @@
 
 Enemy& Enemy::operator*=(const int& scaleToLevel)
 {
-	auto scaler = scaleToLevel * 0.5;
+	int scaler = std::max((int)(scaleToLevel * 0.5), 1);
 	this->setHpMax(this->getHpMax() * scaler);
 	this->setHp(std::min(this->getHp(), this->getHpMax()));
 	this->setDamage(this->getDamageMax() * scaler);

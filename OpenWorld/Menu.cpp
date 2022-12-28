@@ -371,29 +371,30 @@ void Menu::playerSheetMenu(Player& player)
 {
     int selectedMenuPoint = 0;
 
-    auto getStaticPlayerInfo = [player](std::stringstream& ss) ->void {
-        // Build string stream object
-        ss << std::endl;
-        ss << "Name: " << player.getName() << std::endl;
-        ss << "Class: " << player.getRoleName() << std::endl;
-        ss << "Level: " << player.getLevel() << std::endl;
-        ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
-        ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
-        ss << "Attack:  " << player.getDamageMax() << std::endl;
-        ss << "Defence: " << player.getDefence() << std::endl;
-        ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
-
-        ss << "------------------------------------" << std::endl << std::endl;
-
-        ss << "INVENTORY" << std::endl << std::endl;
-        ss << player.getGold() << " gold" << std::endl;
-        for (auto& item: player.getInventory()) {
-            ss << item.getName() << std::endl;
-        }
-        ss << std::endl;
-    };
-
     while (1) {
+        auto getStaticPlayerInfo = [player](std::stringstream& ss) ->void {
+            // Build string stream object
+            ss << std::endl;
+            ss << "Name: " << player.getName() << std::endl;
+            ss << "Class: " << player.getRoleName() << std::endl;
+            ss << "Level: " << player.getLevel() << std::endl;
+            ss << "Exp: " << player.getExp() << "/" << player.getExpNext() << std::endl;
+            ss << "HP: " << player.getHp() << "/" << player.getHpMax() << std::endl;
+            ss << "Attack:  " << player.getDamageMax() << std::endl;
+            ss << "Defence: " << player.getDefence() << std::endl;
+            ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
+
+            ss << "------------------------------------" << std::endl << std::endl;
+
+            ss << "INVENTORY" << std::endl << std::endl;
+            ss << player.getGold() << " gold" << std::endl;
+            for (auto& item : player.getInventory()) {
+                ss << item.getName() << std::endl;
+            }
+            ss << std::endl;
+
+        };
+
         // List of menu points
         std::vector <std::string> staticMenuLines = {
             "PLAYER SHEET"
@@ -484,7 +485,7 @@ void Menu::equipItems(Player& player)
         std::vector <std::string> dynamicMenuPoints = {};
         std::vector <Item> itemList = player.getInventory();
         for (auto& item : itemList) {
-            dynamicMenuPoints.push_back(item.getName());
+            dynamicMenuPoints.emplace_back(item.getName());
         }
 
         auto getDynamicItemStats = [itemList](std::stringstream& ss, const int selectedMenuPoint) ->void {

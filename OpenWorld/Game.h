@@ -15,8 +15,8 @@ public:
 	{
 		// Start palying music
 		PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-		DWORD leftVolume = 500;
-		DWORD rightVolume = 500;
+		DWORD leftVolume = 2000;
+		DWORD rightVolume = 2000;
 		waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
 		shopItems.push_back(getRandomWeapon());
 		shopItems.push_back(getRandomWeapon());
@@ -44,7 +44,7 @@ public:
 		return instance;
 	}
 
-	Enemy spawnEnemy(int difficulty, int terrain);
+	Enemy spawnEnemy();
 	void gameLoop();
 
 	void rest( int restOption );

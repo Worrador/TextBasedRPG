@@ -33,6 +33,7 @@ public:
     inline const int& getWeaponsRaritySum() { return parsedWeaponsRaritySum; }
     inline const int& getArmorsRaritySum() { return parsedArmorsRaritySum; }
     inline const int& getConsumablesRaritySum() { return parsedConsumablesRaritySum; }
+    inline const int& getParsedEnemiesRaritySum() { return parsedEnemiesRaritySum; }
 
 private:
     // Private constructor to prevent direct instantiation

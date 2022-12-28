@@ -1,10 +1,21 @@
 #include "Game.h"
 
-Enemy Game::spawnEnemy(int difficulty, int terrain)
+Enemy Game::spawnEnemy()
 {
 	// too big defense means negative damage.. :O
 	//return Enemy("Golem", player.getLevel() * difficulty, difficulty, 1, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty);
+
+
+	// Generate items this should be in the location constructor
+	int randomEnemyNum = rollBetween(0, ResourceParser::getInstance().getParsedEnemiesRaritySum());
 	auto& enemies = ResourceParser::getInstance().getParsedEnemies();
+
+	int enemyIndex = -1;
+	while (randomEnemyNum > 0) {
+		enemyIndex++;
+		randomEnemyNum -= enemies[enemyIndex].getRarity();
+	}
+	return enemies[enemyIndex]; // Maybe sclale here or after return, need to be careful because of references
 }
 
 int Game::rollBetween(int lower, int higher)
@@ -23,10 +34,10 @@ Item Game::getRandomArmor()
 	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getArmorsRaritySum());
 	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedArmors();
 
-	int itemIndex = 0;
+	int itemIndex = -1;
 	while (randomItemNum > 0) {
-		randomItemNum -= parsedItems[itemIndex].getRarity();
 		itemIndex++;
+		randomItemNum -= parsedItems[itemIndex].getRarity();
 	}
 	return parsedItems[itemIndex];
 }
@@ -35,12 +46,12 @@ Item Game::getRandomWeapon()
 {
 	// Generate items this should be in the location constructor
 	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getWeaponsRaritySum());
-	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedWeapons();
+	auto& parsedItems = ResourceParser::getInstance().getParsedWeapons();
 
-	int itemIndex = 0;
+	int itemIndex = -1;
 	while (randomItemNum > 0) {
-		randomItemNum -= parsedItems[itemIndex].getRarity();
 		itemIndex++;
+		randomItemNum -= parsedItems[itemIndex].getRarity();
 	}
 	return parsedItems[itemIndex];
 }
@@ -74,7 +85,7 @@ void Game::travel(int travelOption)
 		chance = rollBetween(0, 4);
 		dramaticPause();
 		if (chance > 0) {
-			Enemy enemy = spawnEnemy(rollBetween(1, 10), 0);
+			Enemy enemy = spawnEnemy() *= player.getLevel();
 
 			std::vector <std::string> staticLines = {
 				"You have met an enemy " + enemy.getName()
@@ -127,11 +138,14 @@ void Game::makeAttack(Character& attacker, Character& defender)
 		std::cout << attacker.getName() << " rests for one round and regains some stamina." << std::endl;
 		attacker.setStamina(min(3, attacker.getStaminaMax()));
 	}
+	// or wait 750 ms?
+	_getch();
 
 }
 
 void Game::fight(Enemy& enemy, bool playerInitialize)
 {
+	std::cout << "\033c";
 	if (playerInitialize) {
 		makeAttack(player, enemy);
 	}
@@ -215,7 +229,7 @@ void Game::rest(int restOption)
 		chance = rollBetween(0, 4);
 		if (chance > 0) {
 
-			Enemy enemy = spawnEnemy(rollBetween(1, 5), 0);
+			Enemy enemy = spawnEnemy() *= player.getLevel();
 			std::cout << "You wake up to a noise of a(n) " + enemy.getName() << std::endl;
 
 			fight(enemy, false);

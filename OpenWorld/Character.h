@@ -33,7 +33,10 @@ public:
 	inline void setGold(int gold) { this->gold = std::max(gold, 0); };
 	inline void setHpMax(int hpMax) { this->hpMax = std::max(hpMax, 1); };
 	inline void setStaminaMax(int staminaMax) { this->staminaMax = std::max(staminaMax, 1); };
-	inline void setDamage(int damage) { this->damageMax = std::max(damageMax, 1); this->damageMin = std::max((int)std::floor(damage / 2), 0); };
+	inline void setDamage(int damageMax) { 
+		this->damageMax = std::max(damageMax, 1);
+		this->damageMin = std::max((int)std::floor(damageMax / 2), 0);
+	};
 	inline void setDefence(int defence) { this->defence = std::max(defence, 0); };
 
 protected:

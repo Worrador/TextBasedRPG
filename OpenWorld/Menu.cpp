@@ -312,6 +312,42 @@ int Menu::restMenu(Player& player)
         ss << std::endl << "Gold: " << player.getGold() << std::endl;
     };
 
+    auto getDynamicDescription = [](std::stringstream& ss, const int& selectedMenuPoint) ->void {
+        // Build string stream object
+        ss << std::endl << "------------------------------------" << std::endl;
+        ss << std::endl << "Costs: ";
+        switch (selectedMenuPoint) {
+        case 0:
+            ss << "0";
+            break;
+        case 1:
+            ss << "0";
+            break;
+        case 2:
+            ss << "4";
+            break;
+        case 3:
+            ss << "6";
+            break;
+        }
+        ss << " gold." << std::endl;
+
+        switch (selectedMenuPoint) {
+        case 0:
+            ss << "Restores half of your missing hp and stamina. Chance to get attacked by animals.";
+            break;
+        case 1:
+            ss << "Restores half of your missing hp and stamina. Chance to get mugged.";
+            break;
+        case 2:
+            ss << "Restores your hp and stamina to full.";
+            break;
+        case 3:
+            ss << "Restores your hp and stamina to full. Enchances some stats for the next fight.";
+            break;
+        }
+    };
+
     while (1) {
         // List of menu points
         std::vector <std::string> staticMenuLines = {
@@ -319,15 +355,15 @@ int Menu::restMenu(Player& player)
         };
 
         std::vector <std::string> dynamicMenuPoints = {
-            "Sleep in the bushes: \t does not cost any gold, restores half of your missing hp and stamina. Chance to get attacked by animals.",
-            "Sleep on the street: \t does not cost any gold, restores half of your missing hp and stamina. Chance to get mugged.",
-            "Sleep in a shared room at an Inn: \t costs 4 gold, restores your hp and stamina to full.",
-            "Sleep in a private room at an Inn: \t costs 6 gold, restores your hp and stamina to full. Enchances some stats for the next fight."
+            "Sleep in the bushes.",
+            "Sleep on the street.",
+            "Sleep in a shared room at an Inn.",
+            "Sleep in a private room at an Inn."
         };
         if ((int)dynamicMenuPoints.size() == 0) {
             selectedMenuPoint = -1; // indicating error for menugenerator
         }
-        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold);
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicDescription);
 
         switch (selectedMenuPoint) {
         case 0:
@@ -384,15 +420,7 @@ void Menu::playerSheetMenu(Player& player)
             ss << "Defence: " << player.getDefence() << std::endl;
             ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
 
-            ss << "------------------------------------" << std::endl << std::endl;
-
-            ss << "INVENTORY" << std::endl << std::endl;
-            ss << player.getGold() << " gold" << std::endl;
-            for (auto& item : player.getInventory()) {
-                ss << item.getName() << std::endl;
-            }
-            ss << std::endl;
-
+            ss << "------------------------------------" << std::endl;
         };
 
         // List of menu points

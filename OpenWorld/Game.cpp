@@ -259,27 +259,49 @@ void Game::rest(int restOption)
 // Controls the playthrough stages
 void Game::gameLoop()
 {
-	switch (menu.mainMenu())
-	{
-	case 0:
-		travel(menu.travelMenu(player));
-		break;
-	case 1:
-		rest(menu.restMenu(player)); 
-		break;
-	case 2:
-		menu.shopMenu(player, shopItems);
-		break;
-	case 3:
-		menu.playerSheetMenu(player);
-		break;
-	case 4:
-		if (menu.quitMenu() == 0) {
-			playing = false;
+	int selectedMenuPoint = 0;
+	while (1) {
+		std::vector <std::string> staticMenuLines = {
+		"MAIN MENU"
+		};
+		// List of menu points
+		std::vector <std::string> dynamicMenuPoints = {
+			"Travel",
+			"Rest",
+			"Shop",
+			"Player sheet",
+			"Quit",
+		};
+
+		menu.menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
+		switch (selectedMenuPoint)
+		{
+		case 0:
+			travel(menu.travelMenu(player));
+			break;
+		case 1:
+			rest(menu.restMenu(player));
+			break;
+		case 2:
+			menu.shopMenu(player, shopItems);
+			break;
+		case 3:
+			menu.playerSheetMenu(player);
+			break;
+		case 4:
+			if (menu.quitMenu() == 0) {
+				return;
+			}
+			break;
+		case ESCAPE:
+			selectedMenuPoint = 4;
+			break;
+		default:
+			break;
 		}
-		break;
-	default:
-		break;
+		if (playing != true) {
+			return;
+		}
 	}
 }
 

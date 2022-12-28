@@ -60,7 +60,6 @@ public:
 	void wait( Enemy& enemy );
 
 	// Accessors
-	inline bool getPlaying() const { return playing; };
 
 	// Modifiers
 

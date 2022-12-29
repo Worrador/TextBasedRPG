@@ -70,6 +70,9 @@ void dramaticPause()
 
 void Game::travel(int travelOption)
 {
+	if (travelOption == ESCAPE) {
+		return;
+	}
 	int chance = 0;
 
 	// Chance for an encounter

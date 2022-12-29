@@ -270,7 +270,7 @@ void ResourceParser::parseSettlements()
             // Add random number of settlements
             // Init numberOfDest with a random number between 0 and the size of the max settlements minus the already parsed size 
             // (the later it is the less number of settlements added this way)
-            for (auto numberOfDest = randomBetween(0, (int)(settlementNames.size() - parsedSettlements.size())); numberOfDest > 0; numberOfDest--) {
+            for (auto numberOfDest = randomBetween(0, (int)(settlementNames.size() - parsedSettlements.size() - 1)); numberOfDest > 0; numberOfDest--) {
                 // Random index
                 auto randomDest = randomBetween(0, (int)tempNames.size() - 1);
                 possibleDestionations.emplace_back(std::move(tempNames[randomDest]));

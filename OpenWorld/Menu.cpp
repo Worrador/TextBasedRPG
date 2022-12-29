@@ -479,13 +479,6 @@ int Menu::quitMenu()
 
 void Menu::equipItems(Player& player)
 {
-    // List already equipped items
-
-    // List inventory.
-
-    // Player can choose between both, when enter is hit then the items equipment status changes
-
-
     int selectedMenuPoint = 0;
 
     while (1) {
@@ -557,13 +550,6 @@ void Menu::equipItems(Player& player)
 
 void Menu::unequipItems(Player& player)
 {
-    // List already equipped items
-
-    // List inventory.
-
-    // Player can choose between both, when enter is hit then the items equipment status changes
-
-
     int selectedMenuPoint = 0;
 
     while (1) {

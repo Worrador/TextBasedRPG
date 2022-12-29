@@ -19,7 +19,7 @@ ResourceParser::~ResourceParser()
 void ResourceParser::parseRoles()
 {
     // Somehow it cannot be handled with unique ptr: 
-    //std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
     libxl::Book* book = xlCreateXMLBook();
     if (!book->load(L"Resources\\Roles.xlsx")) {
         book->release();
@@ -118,12 +118,40 @@ void ResourceParser::parseItems()
 
 void ResourceParser::parsePlaces()
 {
+    // Somehow it cannot be handled with unique ptr: 
+    // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    libxl::Book* book = xlCreateXMLBook();
+    if (!book->load(L"Resources\\Places.xlsx")) {
+        book->release();
+        return;
+    }
+    // Get the enemies
+    libxl::Sheet* sheet = book->getSheet(0);
+    if (sheet)
+    {
+        // Iterate rows, we don't need the first one as it only contains the names of columns
+        for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
+        {
+            // Get name of enemy and convert it to string
+            const auto& enemyName = converter.to_bytes((sheet->readStr(row, 0)));
+            Enemy enemy = Enemy(enemyName,
+                static_cast<int>(sheet->readNum(row, 1)),
+                static_cast<int>(sheet->readNum(row, 2)),
+                static_cast<int>(sheet->readNum(row, 3)),
+                static_cast<int>(sheet->readNum(row, 4)),
+                static_cast<int>(sheet->readNum(row, 5)));
+
+            parsedEnemiesRaritySum += enemy.getRarity();
+            parsedEnemies.emplace_back(std::move(enemy));
+        }
+    }
+    book->release();
 }
 
 void ResourceParser::parseEnemies()
 {
     // Somehow it cannot be handled with unique ptr: 
-    //std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
     libxl::Book* book = xlCreateXMLBook();
     if (!book->load(L"Resources\\Enemies.xlsx")) {
         book->release();

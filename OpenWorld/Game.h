@@ -18,11 +18,11 @@ public:
 		DWORD leftVolume = 2000;
 		DWORD rightVolume = 2000;
 		waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
-		shopItems.push_back(getRandomWeapon());
-		shopItems.push_back(getRandomWeapon());
-		shopItems.push_back(getRandomWeapon());
-		shopItems.push_back(getRandomArmor());
-		shopItems.push_back(getRandomArmor());
+		shopItems.emplace_back(getRandomWeapon());
+		shopItems.emplace_back(getRandomWeapon());
+		shopItems.emplace_back(getRandomWeapon());
+		shopItems.emplace_back(getRandomArmor());
+		shopItems.emplace_back(getRandomArmor());
 	};
 
 	// Delete copy and move constructor to prevent copying or moving

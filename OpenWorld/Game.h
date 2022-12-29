@@ -11,7 +11,7 @@ class Game
 public:
 
 	// Constructors
-	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()) 
+	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), currentSettlement(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size())])
 	{
 		// TODO: replace to cpp
 		// Start palying music
@@ -24,9 +24,6 @@ public:
 		shopItems.emplace_back(getRandomWeapon());
 		shopItems.emplace_back(getRandomArmor());
 		shopItems.emplace_back(getRandomArmor());
-		auto& locations = ResourceParser::getInstance().getParsedLocations();
-		int randomLocationNum = rollBetween(0, (int)locations.size());
-		currentLocation = locations[randomLocationNum];
 	};
 
 	// Delete copy and move constructor to prevent copying or moving
@@ -72,6 +69,6 @@ private:
 	Menu menu;
 	Player player;
 	std::vector<Item> shopItems;
-	Location currentLocation;
+	Settlement& currentSettlement;
 };
 

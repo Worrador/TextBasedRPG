@@ -151,23 +151,25 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Item.cpp" />
-    <ClCompile Include="Location.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceParser.cpp" />
     <ClCompile Include="Role.cpp" />
+    <ClCompile Include="Settlement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Item.h" />
-    <ClInclude Include="Location.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceParser.h" />
     <ClInclude Include="Role.h" />
+    <ClInclude Include="Settlement.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="1.wav" />

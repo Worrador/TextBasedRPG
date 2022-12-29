@@ -45,7 +45,7 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\GameFlow</Filter>
     </ClCompile>
-    <ClCompile Include="Location.cpp">
+    <ClCompile Include="Terrain.cpp">
       <Filter>Source Files\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Role.cpp">
@@ -53,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Source Files\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Settlement.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,7 +83,10 @@
     <ClInclude Include="Role.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Location.h">
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settlement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

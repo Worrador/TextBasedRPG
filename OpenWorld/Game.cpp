@@ -72,54 +72,48 @@ void Game::travel(int travelOption)
 {
 	int chance = 0;
 
-	switch (travelOption)
-	{
-	case 0:
-		dramaticPause();
-		break;
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		// Chance for an encounter
-		chance = rollBetween(0, 4);
-		dramaticPause();
-		if (chance > 0) {
-			Enemy enemy = spawnEnemy() *= player.getLevel();
+	// Chance for an encounter
+	chance = rollBetween(0, 4);
+	dramaticPause();
+	if (chance > 0) {
+		Enemy enemy = spawnEnemy() *= player.getLevel();
 
-			std::vector <std::string> staticLines = {
-				"You have met an enemy " + enemy.getName()
-			};
-			std::vector <std::string> dynamicMenuPoints = {
-				"Attack",
-				"Run",
-				"Wait"
-			};
-			int selectedMenuPoint = 0;
-			menu.menuGenerator(selectedMenuPoint, staticLines, dynamicMenuPoints, false);
+		std::vector <std::string> staticLines = {
+			"You have met an enemy " + enemy.getName()
+		};
+		std::vector <std::string> dynamicMenuPoints = {
+			"Attack",
+			"Run",
+			"Wait"
+		};
+		int selectedMenuPoint = 0;
+		menu.menuGenerator(selectedMenuPoint, staticLines, dynamicMenuPoints, false);
 
-			switch (selectedMenuPoint) {
-			case 0:
-				fight(enemy, true);
-				break;
-			case 1:
-				run(enemy);
-				break;
-			case 2:
-				wait(enemy);
-				break;
-			default:
-				break;
-			}
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-			std::cout << std::endl;
+		switch (selectedMenuPoint) {
+		case 0:
+			fight(enemy, true);
+			break;
+		case 1:
+			run(enemy);
+			break;
+		case 2:
+			wait(enemy);
+			break;
+		default:
+			break;
 		}
-		break;
-	default:
-		return;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::cout << std::endl;
 	}
+
 	if (playing) {
 		std::cout << "You have arrived to your destination." << std::endl;
+		auto parsedSettlements = ResourceParser::getInstance().getParsedSettlements();
+		auto it = std::find_if(parsedSettlements.begin(), parsedSettlements.end(), [&](const Settlement& current) {return (current.getName() == currentSettlement.getPossibleDestionations()[travelOption]); });
+		if (it != parsedSettlements.end()) {
+			// Enemy found
+			currentSettlement = *it;
+		}
 		_getch();
 	}
 }
@@ -277,7 +271,7 @@ void Game::gameLoop()
 		switch (selectedMenuPoint)
 		{
 		case 0:
-			travel(menu.travelMenu(player));
+			travel(menu.travelMenu(player, currentSettlement));
 			break;
 		case 1:
 			rest(menu.restMenu(player));

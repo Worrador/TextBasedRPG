@@ -119,7 +119,7 @@ Player Menu::playerCreationMenu()
         std::vector <std::string> dynamicMenuPoints;
 
         for (auto& role : roles) {
-            dynamicMenuPoints.push_back(role.getRoleName());
+            dynamicMenuPoints.emplace_back(role.getRoleName());
         }
 
         // Move so we dont have to copy
@@ -150,7 +150,7 @@ int Menu::mainMenu()
     return selectedMenuPoint;
 }
 
-int Menu::travelMenu(Player& player)
+int Menu::travelMenu(Player& player, Settlement& currentSettlement)
 {
     if (player.getStamina() < 1) {
         std::cout << std::endl << "You don't have enough stamina to travel." << std::endl;
@@ -161,16 +161,17 @@ int Menu::travelMenu(Player& player)
     std::vector <std::string> staticMenuLines = {
     "TRAVEL",
     "",
-    "Where do you wish to travel?"
+    "You are in: "
     };
+    staticMenuLines.emplace_back(currentSettlement.getName());
+    staticMenuLines.emplace_back("");
+    staticMenuLines.emplace_back("Where do you wish to travel?");
     // List of menu points
-    std::vector <std::string> dynamicMenuPoints = {
-      "Nearby town, down the road",
-      "To the forest",
-      "To the Lake",
-      "Your moms ass",
-      "What do you care?"
-    };
+    std::vector <std::string> dynamicMenuPoints = {};
+    for (auto dest : currentSettlement.getPossibleDestionations()) {
+        dynamicMenuPoints.push_back(dest);
+    }
+
     int selectedMenuPoint = 0;
     menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
 

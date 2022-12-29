@@ -41,7 +41,7 @@ public:
 
 	Player playerCreationMenu();
 	int mainMenu();
-	int travelMenu(Player& player);
+	int travelMenu(Player& player, Settlement& currentSettlement);
 	void shopMenu(Player& player, std::vector<Item>& shopItems);
 	void buyMenu(Player& player, std::vector<Item>& shopItems);
 	void sellMenu(Player& player);

@@ -5,14 +5,13 @@
 
 using timeType = std::string;
 
-class Location
+class Terrain
 {
 public:
-	Location() = default;
-	Location(const std::string& name, std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum) :
+	Terrain() = default;
+	Terrain(const std::string& name, std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum) :
 		name(name), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum), enemiesNightRaritySum(nightSum) {};
 
-	std::string name;
 	// Operators
 
 	// Functions
@@ -27,6 +26,8 @@ public:
 	// Modifiers
 
 private:
+
+	std::string name;
 	std::vector<std::string> enemiesDay;
 	std::vector<std::string> enemiesNight;
 

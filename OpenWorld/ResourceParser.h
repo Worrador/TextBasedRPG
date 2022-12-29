@@ -1,10 +1,11 @@
 #pragma once
-#include "Item.h"
-#include "Location.h"
 #include "libxl.h"
 #include <sstream>
+#include <vector>
 #include <codecvt>
 #include <functional>
+#include "Terrain.h"
+#include "Settlement.h"
 
 class ResourceParser
 {
@@ -25,11 +26,13 @@ public:
     }
 
     // Method to access the parsedItems vector
+    inline const int& getResourceError() { return resourceError; }
     inline std::vector<Item>& getParsedWeapons() { return parsedWeapons; }
     inline std::vector<Item>& getParsedArmors() { return parsedArmors; }
     inline std::vector<Item>& getParsedConsumables() { return parsedConsumables; }
     inline std::vector<Role>& getParsedRoles() { return parsedRoles; }
-    inline std::vector<Location>& getParsedLocations() { return parsedLocations; }
+    inline std::vector<Terrain>& getParsedTerrains() { return parsedTerrains; }
+    inline std::vector<Settlement>& getParsedSettlements() { return parsedSettlements; }
     inline std::vector<Enemy>& getParsedEnemies() { return parsedEnemies; }
     inline const int& getWeaponsRaritySum() { return parsedWeaponsRaritySum; }
     inline const int& getArmorsRaritySum() { return parsedArmorsRaritySum; }
@@ -40,13 +43,16 @@ private:
     ResourceParser();
     ~ResourceParser();
 
+    int resourceError = 0;
+
     // String converter object
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 
     void parseRoles();
     void parseItems();
-    void parseLocations();
+    void parseTerrains();
     void parseEnemies();
+    void parseSettlements();
 
     std::vector<Role> parsedRoles;
 
@@ -57,7 +63,8 @@ private:
     std::vector<Item> parsedConsumables;
     int parsedConsumablesRaritySum = 0;
 
-    std::vector<Location> parsedLocations;
+    std::vector<Terrain> parsedTerrains;
+    std::vector<Settlement> parsedSettlements;
 
     std::vector<Enemy> parsedEnemies;
 };

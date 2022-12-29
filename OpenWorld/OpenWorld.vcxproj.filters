@@ -16,9 +16,6 @@
     <Filter Include="Source Files\Actors">
       <UniqueIdentifier>{94397b79-4e4b-402f-a2d3-2e643979c2e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Items">
-      <UniqueIdentifier>{16718522-92cd-4a5b-9917-c50389967ec9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\GameFlow">
       <UniqueIdentifier>{596d23cd-42c3-4ae6-8112-18371ed317b4}</UniqueIdentifier>
     </Filter>
@@ -42,17 +39,20 @@
     <ClCompile Include="ResourceParser.cpp">
       <Filter>Source Files\GameData</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Source Files\Items</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files\GameFlow</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\GameFlow</Filter>
     </ClCompile>
+    <ClCompile Include="Location.cpp">
+      <Filter>Source Files\GameData</Filter>
+    </ClCompile>
     <ClCompile Include="Role.cpp">
-      <Filter>Source Files\Actors</Filter>
+      <Filter>Source Files\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files\GameData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Role.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Location.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

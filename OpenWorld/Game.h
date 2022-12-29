@@ -1,5 +1,5 @@
 #pragma once
-#include "Enemy.h"
+#include "ResourceParser.h"
 #include <random>
 #include "Menu.h"
 #include <windows.h>
@@ -13,6 +13,7 @@ public:
 	// Constructors
 	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()) 
 	{
+		// TODO: replace to cpp
 		// Start palying music
 		PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		DWORD leftVolume = 2000;
@@ -23,6 +24,9 @@ public:
 		shopItems.emplace_back(getRandomWeapon());
 		shopItems.emplace_back(getRandomArmor());
 		shopItems.emplace_back(getRandomArmor());
+		auto& locations = ResourceParser::getInstance().getParsedLocations();
+		int randomLocationNum = rollBetween(0, (int)locations.size());
+		currentLocation = locations[randomLocationNum];
 	};
 
 	// Delete copy and move constructor to prevent copying or moving
@@ -48,7 +52,6 @@ public:
 	void gameLoop();
 
 	void rest( int restOption );
-	void buy();
 
 	int rollBetween(int lower, int higher);
 
@@ -69,5 +72,6 @@ private:
 	Menu menu;
 	Player player;
 	std::vector<Item> shopItems;
+	Location currentLocation;
 };
 

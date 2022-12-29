@@ -7,7 +7,7 @@ Enemy Game::spawnEnemy()
 
 
 	// Generate items this should be in the location constructor
-	int randomEnemyNum = rollBetween(0, ResourceParser::getInstance().getParsedEnemiesRaritySum());
+	int randomEnemyNum = 10;
 	auto& enemies = ResourceParser::getInstance().getParsedEnemies();
 
 	int enemyIndex = -1;

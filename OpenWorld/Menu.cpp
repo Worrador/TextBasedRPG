@@ -1,21 +1,5 @@
 #include "Menu.h"
 
-int Menu::getInputBetween(int lower, int higher)
-{
-    int choice;
-    std::cin >> choice;
-
-    // Validate the player's input
-    while (choice < lower || choice > higher || !std::cin) {
-        std::cin.clear(); // reset failbit
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //skip bad input
-
-        std::cout << "Invalid input. Please enter a number between " << lower << " and " << higher << "." << std::endl;
-        std::cin >> choice;
-    }
-    return choice;
-}
-
 // Static Lines -> Static Fn -> Dynamic Points -> Dynamic Fn
 void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>& staticMenuLines, 
     const std::vector<std::string>& dynamicMenuPoints, const bool isEscapeable, 

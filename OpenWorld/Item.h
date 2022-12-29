@@ -1,7 +1,6 @@
 #pragma once
 #include "Role.h"
 #include <algorithm>
-#include <iostream>
 #include <vector>
 
 using itemType = std::string;

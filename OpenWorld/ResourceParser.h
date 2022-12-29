@@ -1,5 +1,6 @@
+#pragma once
 #include "Item.h"
-#include "Enemy.h"
+#include "Location.h"
 #include "libxl.h"
 #include <sstream>
 #include <codecvt>
@@ -28,12 +29,11 @@ public:
     inline std::vector<Item>& getParsedArmors() { return parsedArmors; }
     inline std::vector<Item>& getParsedConsumables() { return parsedConsumables; }
     inline std::vector<Role>& getParsedRoles() { return parsedRoles; }
-    inline std::vector<Role>& getParsedPlaces() { return parsedPlaces; }
+    inline std::vector<Location>& getParsedLocations() { return parsedLocations; }
     inline std::vector<Enemy>& getParsedEnemies() { return parsedEnemies; }
     inline const int& getWeaponsRaritySum() { return parsedWeaponsRaritySum; }
     inline const int& getArmorsRaritySum() { return parsedArmorsRaritySum; }
     inline const int& getConsumablesRaritySum() { return parsedConsumablesRaritySum; }
-    inline const int& getParsedEnemiesRaritySum() { return parsedEnemiesRaritySum; }
 
 private:
     // Private constructor to prevent direct instantiation
@@ -45,7 +45,7 @@ private:
 
     void parseRoles();
     void parseItems();
-    void parsePlaces();
+    void parseLocations();
     void parseEnemies();
 
     std::vector<Role> parsedRoles;
@@ -57,16 +57,7 @@ private:
     std::vector<Item> parsedConsumables;
     int parsedConsumablesRaritySum = 0;
 
-    std::vector<Role> parsedPlaces;
+    std::vector<Location> parsedLocations;
 
     std::vector<Enemy> parsedEnemies;
-    int parsedEnemiesRaritySum = 0;
-};
-
-class BookDeleter {
-public:
-    BookDeleter() = default;
-    void operator()(libxl::Book* book) const {
-        book->release();
-    }
 };

@@ -53,7 +53,6 @@ public:
 	void equipItems(Player& player);
 	void unequipItems(Player& player);
 	void levelUp(Player& player);
-	int getInputBetween(int lower, int higher);
 
 	// Accessors
 

@@ -251,13 +251,15 @@ void ResourceParser::parseSettlements()
     if (sheet)
     {
         std::vector<std::string> settlementNames;
+        std::vector <settlementSize> settlementSizes;
         // Iterate rows, we don't need the first one as it only contains the names of columns, get all the settlement names
         for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
         {
             settlementNames.emplace_back(converter.to_bytes((sheet->readStr(row, 0))));
+            settlementSizes.emplace_back(converter.to_bytes((sheet->readStr(row, 1))));
         }
 
-        for (auto& name : settlementNames) {
+        for (auto settlementIndex = 0; settlementIndex < settlementNames.size(); settlementIndex++) {
             // Vector to store the possible Destinations
             std::vector<std::string> possibleDestionations;
 
@@ -265,7 +267,7 @@ void ResourceParser::parseSettlements()
             auto tempNames = settlementNames;
 
             // Erase the given settlement so that it wont be added to itself
-            tempNames.erase(std::remove(tempNames.begin(), tempNames.end(), name), tempNames.end());
+            tempNames.erase(std::remove(tempNames.begin(), tempNames.end(), settlementNames[settlementIndex]), tempNames.end());
 
             // Add random number of settlements
             // Init numberOfDest with a random number between 0 and the size of the max settlements minus the already parsed size 
@@ -288,12 +290,12 @@ void ResourceParser::parseSettlements()
                 }
 
                 auto addedDest = settlement.getPossibleDestionations();
-                if (std::find(addedDest.begin(), addedDest.end(), name) != addedDest.end()) {
+                if (std::find(addedDest.begin(), addedDest.end(), settlementNames[settlementIndex]) != addedDest.end()) {
                     possibleDestionations.emplace_back(settlement.getName());
                 }
             }
 
-            Settlement settlement = Settlement(name, possibleDestionations);
+            Settlement settlement = Settlement(settlementNames[settlementIndex], settlementSizes[settlementIndex], possibleDestionations);
             parsedSettlements.emplace_back(std::move(settlement));
         }
 

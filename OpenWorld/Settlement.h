@@ -2,11 +2,13 @@
 #include <string>
 #include <vector>
 
+using settlementSize = std::string;
+
 class Settlement
 {
 public:
-	Settlement(const std::string& name, const std::vector<std::string>& possibleDestionations) :
-		name(name), possibleDestionations(possibleDestionations) {};
+	Settlement(const std::string& name, const settlementSize& settlementSize, const std::vector<std::string>& possibleDestionations) :
+		name(name), settlementSize(settlementSize), possibleDestionations(possibleDestionations) {};
 
 	// Operators
 
@@ -21,7 +23,7 @@ private:
 
 	std::string name;
 	std::vector<std::string> possibleDestionations;
-
+	settlementSize settlementSize;
 
 };
 

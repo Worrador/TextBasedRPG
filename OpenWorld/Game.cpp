@@ -117,6 +117,7 @@ void Game::travel(int travelOption)
 			// Enemy found
 			currentSettlement = *it;
 		}
+		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
 	}
 }
@@ -124,7 +125,10 @@ void Game::travel(int travelOption)
 void Game::makeAttack(Character& attacker, Character& defender)
 {
 	if (attacker.getStamina() > 0) {
-		int dmgAttacker = max(0, rollBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence());
+		int dmgAttacker = rollBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence();
+		if (dmgAttacker < 0) {
+			dmgAttacker = 0;
+		}
 		std::cout << attacker.getName() << " deals " << dmgAttacker << " damage to " << defender.getName() << "." << std::endl;
 		defender.setHp(defender.getHp() - dmgAttacker);
 
@@ -136,6 +140,7 @@ void Game::makeAttack(Character& attacker, Character& defender)
 		attacker.setStamina(min(3, attacker.getStaminaMax()));
 	}
 	// or wait 750 ms?
+	FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 	_getch();
 
 }
@@ -166,6 +171,7 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 
 void Game::run(Enemy& enemy)
 {
+	std::cout << "\033c";
 	// Running costs stamina, maybe the more items you have, the more it costs
 	if (player.getStamina() >= 2) {
 		player.setStamina(player.getStamina() - 2);
@@ -208,6 +214,8 @@ void Game::wait(Enemy& enemy)
 	}
 	else {
 		std::cout << "The " << enemy.getName() << " looks agressive and attacks you." << std::endl;
+		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+		_getch();
 		fight(enemy, false);
 	}
 }
@@ -249,6 +257,7 @@ void Game::rest(int restOption)
 		std::cout << "You wake fully rested." << std::endl;
 		break;
 	}
+	FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 	_getch();
 }
 

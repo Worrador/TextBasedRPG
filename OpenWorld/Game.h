@@ -1,8 +1,7 @@
 #pragma once
 #include "ResourceParser.h"
-#include <random>
 #include "Menu.h"
-#include <windows.h>
+#include <random>
 #include <mmsystem.h>
 
 // Player is manipulated manipulated through this object
@@ -11,7 +10,7 @@ class Game
 public:
 
 	// Constructors
-	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), currentSettlement(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size())])
+	Game() :mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), currentSettlement(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size() - 1)])
 	{
 		// TODO: replace to cpp
 		// Start palying music

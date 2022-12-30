@@ -4,6 +4,7 @@
 #include <sstream>
 #include <functional> 
 #include "ResourceParser.h"
+#include <windows.h>
 
 #define KEY_UP 72
 #define KEY_DOWN 80

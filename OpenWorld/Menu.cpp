@@ -41,10 +41,13 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
 
         std::cout << ss.str();
         if (selectedMenuPoint < 0) {
+            FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
             _getch();
             selectedMenuPoint = ESCAPE;
             return;
         }
+
+        FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
         switch ((_getch())) {
         case KEY_UP:
             selectedMenuPoint = (--selectedMenuPoint < 0) ? numberOfMenuPoints : selectedMenuPoint;
@@ -79,6 +82,8 @@ Player Menu::playerCreationMenu()
 
     std::string name;
     std::cout << "Please enter your name!" << std::endl;
+    // Clear the buffer to prevent interference from previously entered data
+    FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
     std::cin >> name;
 
 

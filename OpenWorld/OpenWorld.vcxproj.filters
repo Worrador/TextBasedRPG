@@ -55,7 +55,10 @@
       <Filter>Source Files\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Settlement.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Place.cpp">
+      <Filter>Source Files\GameData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Settlement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Place.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

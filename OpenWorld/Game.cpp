@@ -42,6 +42,27 @@ Item Game::getRandomArmor()
 	return parsedItems[itemIndex];
 }
 
+void generateWorldMap(Place& startingSettlement) {
+
+}
+
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), 
+currentSettlement(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size() - 1)])
+{
+	// TODO: replace to cpp
+	// Start palying music
+	PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	DWORD leftVolume = 2000;
+	DWORD rightVolume = 2000;
+	waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
+	shopItems.emplace_back(getRandomWeapon());
+	shopItems.emplace_back(getRandomWeapon());
+	shopItems.emplace_back(getRandomWeapon());
+	shopItems.emplace_back(getRandomArmor());
+	shopItems.emplace_back(getRandomArmor());
+	generateWorldMap(*WorldMap);
+};
+
 Item Game::getRandomWeapon()
 {
 	// Generate items this should be in the location constructor

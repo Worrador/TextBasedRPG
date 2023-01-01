@@ -47,18 +47,15 @@ void Game::generateWorldMap() {
 	auto& terrains = ResourceParser::getInstance().getParsedTerrains();
 
 	// Add random nodes to the map
-	while(settlements.empty()) {
+	while(!settlements.empty()) {
 		// Choose a random settlement or terrain to add to the map
 		if (rollBetween(0, 6)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
-			auto& new_selected_terrain = terrains[selected_terrain_index];
-
-			map_graph.emplace(&new_selected_terrain, std::vector<Place*>{});
+			map_graph.emplace(terrains[selected_terrain_index], std::vector<Place*>{});
 		}
 		else {
 			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
-			auto& selected_settlement = settlements[selected_settlement_index];
-			map_graph.emplace(std::move(settlements.at(selected_settlement_index)), std::vector<Place*>{});
+			map_graph.emplace(std::move(settlements[selected_settlement_index]), std::vector<Place*>{});
 			settlements.erase(settlements.begin() + selected_settlement_index);
 		}
 	}
@@ -168,10 +165,9 @@ void Game::travel(int travelOption)
 	if (playing) {
 		std::cout << "You have arrived to your destination." << std::endl; 
 
-		auto it = map_graph.find(&currentPlace);
+		auto it = map_graph.find(currentPlace);
 		if (it != map_graph.end()) {
-			// The node was found in the map
-			*it->first = std::move(currentPlace);
+			// Get next Place
 			currentPlace = *it->second[travelOption];
 		}
 		else {
@@ -342,7 +338,7 @@ void Game::gameLoop()
 		switch (selectedMenuPoint)
 		{
 		case 0:
-			travel(menu.travelMenu(player, map_graph.find(&currentPlace)->second));
+			travel(menu.travelMenu(player, map_graph.find(currentPlace)->second));
 			break;
 		case 1:
 			rest(menu.restMenu(player));

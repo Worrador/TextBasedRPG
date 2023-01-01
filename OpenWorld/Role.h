@@ -11,8 +11,14 @@ public:
 		roleName(roleName), startingHpMax(startingHpMax), startingDmgMax(startingDmgMax), startingDef(startingDef), 
 		startingStaminaMax(startingStaminaMax), hpIncr(hpIncr), dmgIncr(dmgIncr), defIncr(defIncr), staminaIncr(staminaIncr) {};
 
+	/*
+	// Delete copy and move constructor to prevent copying or moving
+	Role(const Role&) = delete;
+	Role(Role&&) = delete;
 
-	// Operators
+	// Operators, delete assignment and move operator to prevent copying or moving
+	Role& operator=(const Role&) = delete;
+	Role& operator=(Role&&) = delete;*/
 
 	// Functions
 

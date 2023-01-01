@@ -42,12 +42,47 @@ Item Game::getRandomArmor()
 	return parsedItems[itemIndex];
 }
 
-void generateWorldMap(Place& startingSettlement) {
+void Game::generateWorldMap() {
+	auto& settlements = ResourceParser::getInstance().getParsedSettlements();
+	auto& terrains = ResourceParser::getInstance().getParsedTerrains();
 
+	// Add random nodes to the map
+	while(settlements.empty()) {
+		// Choose a random settlement or terrain to add to the map
+		if (rollBetween(0, 6)) {
+			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
+			auto& new_selected_terrain = terrains[selected_terrain_index];
+
+			map_graph.emplace(&new_selected_terrain, std::vector<Place*>{});
+		}
+		else {
+			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
+			auto& selected_settlement = settlements[selected_settlement_index];
+			map_graph.emplace(std::move(settlements.at(selected_settlement_index)), std::vector<Place*>{});
+			settlements.erase(settlements.begin() + selected_settlement_index);
+		}
+	}
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Connect the nodes on the map
+	for (auto& [node, connections] : map_graph) {
+		// Generate a random number of connections for this node
+		int num_connections = rollBetween(0, 3);
+		// Choose the nodes to connect to randomly from the list of all other nodes
+		std::vector<Place*> nodes(map_graph.size());
+		std::iota(nodes.begin(), nodes.end(), static_cast<Place*>(0));
+		std::shuffle(nodes.begin(), nodes.end(), gen);
+		nodes.resize(num_connections);
+		// Add the connections to the graph
+		connections = nodes;
+	}
 }
 
+
 Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), 
-currentSettlement(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size() - 1)])
+currentPlace(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size() - 1)])
 {
 	// TODO: replace to cpp
 	// Start palying music
@@ -60,7 +95,7 @@ currentSettlement(ResourceParser::getInstance().getParsedSettlements()[rollBetwe
 	shopItems.emplace_back(getRandomWeapon());
 	shopItems.emplace_back(getRandomArmor());
 	shopItems.emplace_back(getRandomArmor());
-	generateWorldMap(*WorldMap);
+	generateWorldMap();
 };
 
 Item Game::getRandomWeapon()
@@ -131,12 +166,17 @@ void Game::travel(int travelOption)
 	}
 
 	if (playing) {
-		std::cout << "You have arrived to your destination." << std::endl;
-		auto parsedSettlements = ResourceParser::getInstance().getParsedSettlements();
-		auto it = std::find_if(parsedSettlements.begin(), parsedSettlements.end(), [&](const Settlement& current) {return (current.getName() == currentSettlement.getPossibleDestionations()[travelOption]); });
-		if (it != parsedSettlements.end()) {
-			// Enemy found
-			currentSettlement = *it;
+		std::cout << "You have arrived to your destination." << std::endl; 
+
+		auto it = map_graph.find(&currentPlace);
+		if (it != map_graph.end()) {
+			// The node was found in the map
+			*it->first = std::move(currentPlace);
+			currentPlace = *it->second[travelOption];
+		}
+		else {
+			// The node was not found in the map
+			std::cout << "The node was not found in the map" << std::endl;
 		}
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
@@ -302,7 +342,7 @@ void Game::gameLoop()
 		switch (selectedMenuPoint)
 		{
 		case 0:
-			travel(menu.travelMenu(player, currentSettlement));
+			travel(menu.travelMenu(player, map_graph.find(&currentPlace)->second));
 			break;
 		case 1:
 			rest(menu.restMenu(player));

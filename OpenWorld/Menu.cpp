@@ -155,7 +155,7 @@ int Menu::mainMenu()
     return selectedMenuPoint;
 }
 
-int Menu::travelMenu(Player& player, Settlement& currentSettlement)
+int Menu::travelMenu(Player& player, std::vector<Place*>& possibleDestinations)
 {
     if (player.getStamina() < 1) {
         std::cout << std::endl << "You don't have enough stamina to travel." << std::endl;
@@ -166,15 +166,13 @@ int Menu::travelMenu(Player& player, Settlement& currentSettlement)
     std::vector <std::string> staticMenuLines = {
     "TRAVEL",
     "",
-    "You are in: "
     };
-    staticMenuLines.emplace_back(currentSettlement.getName());
-    staticMenuLines.emplace_back("");
+
     staticMenuLines.emplace_back("Where do you wish to travel?");
     // List of menu points
     std::vector <std::string> dynamicMenuPoints = {};
-    for (auto dest : currentSettlement.getPossibleDestionations()) {
-        dynamicMenuPoints.push_back(dest);
+    for (auto dest : possibleDestinations) {
+        dynamicMenuPoints.push_back(dest->getName());
     }
 
     int selectedMenuPoint = 0;

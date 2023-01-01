@@ -10,7 +10,6 @@ public:
 		Place(name), settlementSize(settlementSize) {};
 
 	// Operators
-	bool operator==(const Settlement& settlement1, const Settlement& settlement2);
 
 	// Functions
 

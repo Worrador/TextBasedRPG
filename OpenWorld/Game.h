@@ -2,7 +2,10 @@
 #include "ResourceParser.h"
 #include "Menu.h"
 #include <random>
+#include <iostream>
 #include <mmsystem.h>
+#include <unordered_map>
+#include <numeric>
 
 // Player is manipulated manipulated through this object
 class Game
@@ -23,6 +26,7 @@ public:
 	// Functions
 	Item getRandomWeapon();
 	Item getRandomArmor();
+	void generateWorldMap();
 
 	// Static method to return a reference to the single instance
 	static Game& getInstance()
@@ -55,7 +59,7 @@ private:
 	Menu menu;
 	Player player;
 	std::vector<Item> shopItems;
-	Settlement& currentSettlement;
-	Place* WorldMap;
+	Place currentPlace;
+	std::unordered_map<Place*, std::vector<Place*>> map_graph;
 };
 

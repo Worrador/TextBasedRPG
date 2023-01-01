@@ -39,11 +39,11 @@ private:
 	std::vector<roleName> roles;	// multiple classes could use it
 	itemType itemType;
 	int level;
-	int buyGold;
 	int sellGold;
 	int hpMax;
 	int damageMax;
 	int defence;
 	int staminaMax;
+	int buyGold;
 	int rarity;
 };

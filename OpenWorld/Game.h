@@ -4,26 +4,10 @@
 #include <random>
 #include <iostream>
 #include <mmsystem.h>
-#include <unordered_map>
 #include <numeric>
 
-// Define a specialization of std::hash for Place
-namespace std {
-	template<> struct hash<Place> {
-		std::size_t operator()(const Place& p) const {
-			// You can use any function that maps a Place to a std::size_t
-			return std::hash<std::string>()(p.getName());
-		}
-	};
-}
-
-namespace std {
-	template<> struct equal_to<Place> {
-		bool operator()(const Place& p1, const Place& p2) const {
-			return p1.getName() == p2.getName();
-		}
-	};
-}
+// Pointer for the place, and a vector for the next places
+using mapPoint = std::pair<Place, std::vector<Place*>>;
 
 // Player is manipulated manipulated through this object
 class Game
@@ -77,7 +61,7 @@ private:
 	Menu menu;
 	Player player;
 	std::vector<Item> shopItems;
-	Place& currentPlace;
-	std::unordered_map<Place, std::vector<Place*>> map_graph;
+	int currentPoint = 0;
+	std::vector<mapPoint> worldMap;
 };
 

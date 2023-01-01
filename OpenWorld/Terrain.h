@@ -13,6 +13,8 @@ public:
 		Place(name), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum), 
 		enemiesNightRaritySum(nightSum), previousTerrainName(previousTerrainName) {};
 
+	Terrain(const Terrain& otherTerrain);
+
 	// Operators
 
 	// Functions

@@ -51,11 +51,12 @@ void Game::generateWorldMap() {
 		// Choose a random settlement or terrain to add to the map
 		if (rollBetween(0, 6)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
-			map_graph.emplace(terrains[selected_terrain_index], std::vector<Place*>{});
+			Terrain terrain = Terrain(terrains[selected_terrain_index]);
+			worldMap.emplace_back(std::move(terrain), std::vector<Place*>{});
 		}
 		else {
 			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
-			map_graph.emplace(std::move(settlements[selected_settlement_index]), std::vector<Place*>{});
+			worldMap.emplace_back(std::move(settlements[selected_settlement_index]), std::vector<Place*>{});
 			settlements.erase(settlements.begin() + selected_settlement_index);
 		}
 	}
@@ -63,23 +64,36 @@ void Game::generateWorldMap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
+
 	// Connect the nodes on the map
-	for (auto& [node, connections] : map_graph) {
+	for (auto& place : worldMap) {
 		// Generate a random number of connections for this node
 		int num_connections = rollBetween(0, 3);
+
 		// Choose the nodes to connect to randomly from the list of all other nodes
-		std::vector<Place*> nodes(map_graph.size());
-		std::iota(nodes.begin(), nodes.end(), static_cast<Place*>(0));
+		std::vector<Place*> nodes;
+		nodes.reserve(worldMap.size());  // optional optimization
+
+		// Iterate over the places in the map and extract the pointers to them
+		for (auto& key : worldMap) {
+			nodes.emplace_back(&key.first);
+		}
+
+		// Randomize them
 		std::shuffle(nodes.begin(), nodes.end(), gen);
+
+		// Resize
 		nodes.resize(num_connections);
+
 		// Add the connections to the graph
-		connections = nodes;
+		place.second = nodes;
 	}
+
+	//TODO: add current place to pointed ones
 }
 
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), 
-currentPlace(ResourceParser::getInstance().getParsedSettlements()[rollBetween(0, (int)ResourceParser::getInstance().getParsedSettlements().size() - 1)])
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu())
 {
 	// TODO: replace to cpp
 	// Start palying music
@@ -165,14 +179,13 @@ void Game::travel(int travelOption)
 	if (playing) {
 		std::cout << "You have arrived to your destination." << std::endl; 
 
-		auto it = map_graph.find(currentPlace);
-		if (it != map_graph.end()) {
-			// Get next Place
-			currentPlace = *it->second[travelOption];
-		}
-		else {
-			// The node was not found in the map
-			std::cout << "The node was not found in the map" << std::endl;
+		// Quick and dirty solution
+		for (int mapIndex = 0; mapIndex < worldMap.size(); mapIndex++)
+		{
+			if (worldMap[mapIndex].first.id == worldMap[currentPoint].second[travelOption]->id) {
+				currentPoint = mapIndex;
+				break;
+			}
 		}
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
@@ -338,7 +351,7 @@ void Game::gameLoop()
 		switch (selectedMenuPoint)
 		{
 		case 0:
-			travel(menu.travelMenu(player, map_graph.find(currentPlace)->second));
+			travel(menu.travelMenu(player, worldMap[currentPoint].second));
 			break;
 		case 1:
 			rest(menu.restMenu(player));

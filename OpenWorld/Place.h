@@ -8,7 +8,11 @@ class Place
 {
 public:
 	Place(std::string name) : name(name), id(++count) {};
+
 	// Operators
+	bool operator==(const Place& other) const {
+		return id == other.id;
+	}
 
 	// Functions
 

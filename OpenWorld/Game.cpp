@@ -43,7 +43,7 @@ Item Game::getRandomArmor()
 }
 
 void Game::generateWorldMap() {
-	auto& settlements = ResourceParser::getInstance().getParsedSettlements();
+	auto settlements = ResourceParser::getInstance().getParsedSettlements();
 	auto& terrains = ResourceParser::getInstance().getParsedTerrains();
 
 	// Add random nodes to the map
@@ -51,7 +51,7 @@ void Game::generateWorldMap() {
 		// Choose a random settlement or terrain to add to the map
 		if (rollBetween(0, 4)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
-			Terrain terrain = Terrain(terrains[selected_terrain_index]);
+			Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
 			worldMap.emplace_back(std::move(terrain), std::vector<Place*>{});
 		}
 		else {
@@ -61,58 +61,69 @@ void Game::generateWorldMap() {
 		}
 	}
 
+	// Seed the random number generator with the current time
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
+	std::vector<mapPoint*> nodesWithReqs;
 
 	// Connect the nodes on the map
-	for (auto& place : worldMap) {
+	for (auto& currentPlace : worldMap) {
 		// Generate a random number of connections for this node
-		int num_connections = rollBetween(0, 3);
+		int num_connections = 1;
 
 		// Choose the nodes to connect to randomly from the list of all other nodes
-		std::vector<Place*> nodes;
-		nodes.reserve(worldMap.size());  // optional optimization
+		std::vector<Place*> otherNodes;
+		otherNodes.reserve(worldMap.size() - 1);  // optional optimization
 
 		// Iterate over the places in the map and extract the pointers to them
-		for (auto& key : worldMap) {
-			nodes.emplace_back(&key.first);
-		}
+		for (auto& otherPlace : worldMap) {
+			if (((currentPlace.first.getName() != otherPlace.first.getName()) &&				// skip nodes with the same name
+				(currentPlace.first.getPreviousTerrainName() == "") && 
+				(otherPlace.first.getPreviousTerrainName() == "")) ||							// and add only if there is no requirement
+				(currentPlace.first.getPreviousTerrainName() == otherPlace.first.getName()) ||
+				(otherPlace.first.getPreviousTerrainName() == currentPlace.first.getName())) {	// or its satisfied
 
-		// Randomize them
-		std::shuffle(nodes.begin(), nodes.end(), gen);
-
-		// Resize
-		nodes.resize(num_connections);
-
-		// Add the connections to the graph
-		place.second.insert(place.second.end(), nodes.begin(), nodes.end());
-
-		// Add this node to connected node's connections except if already added
-
-		// Iterate connections
-		for (auto& connection : place.second) {
-
-			// Iterate worldMap
-			for (int mapIndex = 0; mapIndex < worldMap.size(); mapIndex++)
-			{
-				// If Place found which this node points to
-				if (worldMap[mapIndex].first.id == connection->id) {
-
-					// Iterate their connection
-					auto it = std::find(worldMap[mapIndex].second.begin(), worldMap[mapIndex].second.end(), &place.first);
-					if (it == worldMap[mapIndex].second.end()) {
-						// Place was not found in the connections vector
-						// Add the connection
-						worldMap[mapIndex].second.emplace_back(&place.first);
-					}
-				}
+				otherNodes.emplace_back(&otherPlace.first);
 			}
 		}
 
+		// Randomize them
+		std::shuffle(otherNodes.begin(), otherNodes.end(), gen);
+
+		// Resize
+		otherNodes.resize(num_connections);
+
+		// Add the connections to the graph, maybe delete 
+		/*
+		otherNodes.erase(std::remove_if(std::begin(otherNodes), std::end(otherNodes), 
+			[&](auto& current) {
+				return  (current->getPreviousTerrainName() != "") && (currentPlace.first.getName() != current->getPreviousTerrainName()); 
+			}), std::end(otherNodes));
+			*/
+		currentPlace.second.insert(currentPlace.second.end(), otherNodes.begin(), otherNodes.end());
+
+		// Add this node to connected node's connections except if already added
+		// Iterate connections
+		for (auto& currentConnection : currentPlace.second) {
+
+			// Find the place in the map
+			for (auto& [otherPlace, otherConnections] : worldMap) {
+				if (otherPlace.id == currentConnection->id) {
+					// Check if the current node is already in the connections
+					auto it = std::find(otherConnections.begin(), otherConnections.end(), &currentPlace.first);
+					if (it == otherConnections.end()) {
+						// Place was not found in the connections vector
+						// Add the connection
+						otherConnections.emplace_back(&currentPlace.first);
+					}
+					break;
+				}
+			}
+		}
 	}
 
-	//TODO: add current place to pointed ones
+	// Delete nodes without connections from nodesWithReqs and connect remaining nodes to random other nodes
 }
 
 
@@ -168,7 +179,7 @@ void Game::travel(int travelOption)
 	// Chance for an encounter
 	chance = rollBetween(0, 4);
 	dramaticPause();
-	if (chance > 0) {
+	if (chance > 2) {
 		Enemy enemy = spawnEnemy() *= player.getLevel();
 
 		std::vector <std::string> staticLines = {

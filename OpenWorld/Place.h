@@ -7,7 +7,8 @@
 class Place
 {
 public:
-	Place(std::string name) : name(name), id(++count) {};
+	Place(const std::string& name, const std::string& previousTerrainName = "") : 
+		name(name), previousTerrainName(previousTerrainName), id(++count) {};
 
 	// Operators
 	bool operator==(const Place& other) const {
@@ -18,6 +19,8 @@ public:
 
 	// Accessors
 	inline const std::string getName() const { return name; };
+	inline const std::string& getPreviousTerrainName() const { return previousTerrainName; };
+
 
 	static int count;
 
@@ -27,6 +30,7 @@ public:
 protected:
 
 	std::string name;
+	std::string previousTerrainName = "";
 
 	//Mabye place* vector
 	// how to allocate deallocate?

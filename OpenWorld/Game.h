@@ -14,6 +14,8 @@ class Game
 {
 public:
 
+	std::vector<Place*> getPlaceConnections(const Place& place);
+
 	// Constructors
 	Game();
 
@@ -29,6 +31,8 @@ public:
 	Item getRandomWeapon();
 	Item getRandomArmor();
 	void generateWorldMap();
+
+	std::vector<Place*> getReachablePlaces(Place* start_place);
 
 	// Static method to return a reference to the single instance
 	static Game& getInstance()
@@ -62,6 +66,8 @@ private:
 	Player player;
 	std::vector<Item> shopItems;
 	int currentPoint = 0;
+	
+	// Use vector for constant_time acces, as we only ned to populate once (list could be used otherwise, as the insertion is more efficient)
 	std::vector<mapPoint> worldMap;
 };
 

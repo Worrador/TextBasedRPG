@@ -135,7 +135,7 @@ Player Menu::playerCreationMenu()
     // Do not return with std::move as it prohibits copy elision.
 }
 
-int Menu::mainMenu(Place& currentPlace)
+int Menu::mainMenu()
 {
     std::vector <std::string> staticMenuLines = {
         "MAIN MENU"

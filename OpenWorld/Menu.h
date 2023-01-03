@@ -41,7 +41,6 @@ public:
 		const std::function <void(std::stringstream&, const int)>& dynamicMenuFn = nullptr);
 
 	Player playerCreationMenu();
-	int mainMenu();
 	int travelMenu(Player& player, std::vector<Place*>& possibleDestinations);
 	void shopMenu(Player& player, std::vector<Item>& shopItems);
 	void buyMenu(Player& player, std::vector<Item>& shopItems);

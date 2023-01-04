@@ -65,18 +65,13 @@ void Game::generateWorldMap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	std::vector<mapPoint*> nodesWithReqs;
-
 	// Connect the nodes on the map
 	for (auto& currentPlace : worldMap) {
-		// If there is a previous terrain requirementm then skip and store its pointer 
-		// (this place can be added by others if requirement is fulfilled but it cannot add places for itself)
 		// Generate a random number of connections for this node
 		int num_connections = 1;
 
 		// Choose the nodes to connect to randomly from the list of all other nodes
 		std::vector<Place*> otherNodes;
-		otherNodes.reserve(worldMap.size() - 1);  // optional optimization
 
 		// Iterate over the places in the map and extract the pointers to them
 		for (auto& otherPlace : worldMap) {
@@ -90,13 +85,18 @@ void Game::generateWorldMap() {
 			}
 		}
 
+		// Could not connect to any node, and is not yet connected
+		if (otherNodes.empty() && currentPlace.second.empty()) {
+			continue;
+		}
+
 		// Randomize them
 		std::shuffle(otherNodes.begin(), otherNodes.end(), gen);
 
 		// Resize
 		otherNodes.resize(num_connections);
 
-		// Add the connections to the graph
+		// Add the connections to the graph, maybe delete 
 		/*
 		otherNodes.erase(std::remove_if(std::begin(otherNodes), std::end(otherNodes), 
 			[&](auto& current) {
@@ -124,8 +124,6 @@ void Game::generateWorldMap() {
 			}
 		}
 	}
-
-	// Delete nodes without connections from nodesWithReqs and connect remaining nodes to random other nodes
 }
 
 
@@ -181,7 +179,7 @@ void Game::travel(int travelOption)
 	// Chance for an encounter
 	chance = rollBetween(0, 4);
 	dramaticPause();
-	if (chance > 0) {
+	if (chance > 2) {
 		Enemy enemy = spawnEnemy() *= player.getLevel();
 
 		std::vector <std::string> staticLines = {
@@ -371,9 +369,7 @@ void Game::gameLoop()
 {
 	int selectedMenuPoint = 0;
 	while (1) {
-		std::vector <std::string> staticMenuLines = {
-		"MAIN MENU"
-		};
+		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first.getName()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {
 			"Travel",

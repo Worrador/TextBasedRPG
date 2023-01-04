@@ -43,7 +43,7 @@ Item Game::getRandomArmor()
 }
 
 void Game::generateWorldMap() {
-	auto settlements = ResourceParser::getInstance().getParsedSettlements();
+	auto& settlements = ResourceParser::getInstance().getParsedSettlements();
 	auto& terrains = ResourceParser::getInstance().getParsedTerrains();
 
 	// Add random nodes to the map
@@ -65,8 +65,6 @@ void Game::generateWorldMap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	std::vector<mapPoint*> nodesWithReqs;
-
 	// Connect the nodes on the map
 	for (auto& currentPlace : worldMap) {
 		// Generate a random number of connections for this node
@@ -74,7 +72,6 @@ void Game::generateWorldMap() {
 
 		// Choose the nodes to connect to randomly from the list of all other nodes
 		std::vector<Place*> otherNodes;
-		otherNodes.reserve(worldMap.size() - 1);  // optional optimization
 
 		// Iterate over the places in the map and extract the pointers to them
 		for (auto& otherPlace : worldMap) {
@@ -86,6 +83,11 @@ void Game::generateWorldMap() {
 
 				otherNodes.emplace_back(&otherPlace.first);
 			}
+		}
+
+		// Could not connect to any node, and is not yet connected
+		if (otherNodes.empty() && currentPlace.second.empty()) {
+			continue;
 		}
 
 		// Randomize them
@@ -122,8 +124,6 @@ void Game::generateWorldMap() {
 			}
 		}
 	}
-
-	// Delete nodes without connections from nodesWithReqs and connect remaining nodes to random other nodes
 }
 
 
@@ -369,9 +369,7 @@ void Game::gameLoop()
 {
 	int selectedMenuPoint = 0;
 	while (1) {
-		std::vector <std::string> staticMenuLines = {
-		"MAIN MENU"
-		};
+		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first.getName()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {
 			"Travel",

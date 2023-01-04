@@ -189,6 +189,9 @@
     <ResourceCompile Include="OpenWorld.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="C:\Users\Melchan\Desktop\og_derion.png" />
+    <Image Include="resources\icon3.ico" />
+    <Image Include="Resources\logo2.ico" />
     <Image Include="Resources\swordsman.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

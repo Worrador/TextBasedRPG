@@ -38,7 +38,7 @@ void ResourceParser::parseRoles()
             const auto& roleName = converter.to_bytes((sheet->readStr(row, 0)));
 
             parsedRoles.emplace_back(
-                Role(roleName,
+                    roleName,
                     static_cast<int>(sheet->readNum(row, 1)),
                     static_cast<int>(sheet->readNum(row, 2)),
                     static_cast<int>(sheet->readNum(row, 3)),
@@ -46,7 +46,7 @@ void ResourceParser::parseRoles()
                     static_cast<int>(sheet->readNum(row, 5)),
                     static_cast<int>(sheet->readNum(row, 6)),
                     static_cast<int>(sheet->readNum(row, 7)),
-                    static_cast<int>(sheet->readNum(row, 8))));
+                    static_cast<int>(sheet->readNum(row, 8)));
         }
     }
     book->release();
@@ -106,11 +106,11 @@ void ResourceParser::parseItems()
 
             if (sheet_index == 0) {
                 parsedWeaponsRaritySum += item.getRarity();
-                parsedWeapons.emplace_back(std::move(item));
+                parsedWeapons.push_back(std::move(item));
             }
             else {
                 parsedArmorsRaritySum += item.getRarity();
-                parsedArmors.emplace_back(std::move(item));
+                parsedArmors.push_back(std::move(item));
             }
         }
     }
@@ -136,14 +136,14 @@ void ResourceParser::parseEnemies()
         {
             // Get name of enemy and convert it to string
             const auto& enemyName = converter.to_bytes((sheet->readStr(row, 0)));
-            Enemy enemy = Enemy(enemyName,
+
+            parsedEnemies.emplace_back(
+                enemyName,
                 static_cast<int>(sheet->readNum(row, 1)),
                 static_cast<int>(sheet->readNum(row, 2)),
                 static_cast<int>(sheet->readNum(row, 3)),
                 static_cast<int>(sheet->readNum(row, 4)),
                 static_cast<int>(sheet->readNum(row, 5)));
-
-            parsedEnemies.emplace_back(std::move(enemy));
         }
     }
     book->release();
@@ -222,9 +222,9 @@ void ResourceParser::parseTerrains()
                     enemiesNight.erase(std::remove(enemiesNight.begin(), enemiesNight.end(), enemyName), enemiesNight.end());
                 }
             }
-
-            Terrain terrain = Terrain(enemyName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, previousTerrainName);
-            parsedTerrains.emplace_back(std::move(terrain));
+            
+            // Constructing in-place
+            parsedTerrains.emplace_back(enemyName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, previousTerrainName);
         }
     }
     book->release();
@@ -256,7 +256,7 @@ void ResourceParser::parseSettlements()
         // Iterate rows, we don't need the first one as it only contains the names of columns, get all the settlement names
         for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
         {
-            parsedSettlements.emplace_back(Settlement(converter.to_bytes(sheet->readStr(row, 0)), converter.to_bytes(sheet->readStr(row, 1))));
+            parsedSettlements.emplace_back(converter.to_bytes(sheet->readStr(row, 0)), converter.to_bytes(sheet->readStr(row, 1)));
         }
     }
     book->release();

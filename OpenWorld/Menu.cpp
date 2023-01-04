@@ -8,8 +8,6 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
 
     // Call the pre-menu callback function, if it is provided
     int numberOfMenuPoints = (int)(dynamicMenuPoints.size() - 1);
-    // TODO: ezzel kell meghivni majd:    
-    // std::min(numberOfMenuPoints, 0);
 
     while (1)
     {
@@ -72,12 +70,25 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
 
 }
 
+std::string Menu::createBanner(const std::string& title)
+{
+    std::stringstream ss;
+    auto banner_width = title.length() + 6;
+
+    ss << std::string(banner_width, '#') << std::endl;
+    ss << "#> " << title << " <#" << std::endl;
+    ss << std::string(banner_width, '#');
+
+    // Named return value optimization is used (NRVO) when only one object can be returned
+    return ss.str();
+}
+
 Player Menu::playerCreationMenu()
 {
     std::cout << "\033c";
     std::cout << "Welcome player!" << std::endl << std::endl << "This is a command line RPG game which you can play using only your keyboard." <<
         std::endl << "You can select between your options using the keyboard arrows and the Enter key." << std::endl << "If you want to step out of the current menu, use the ESC key." << std::endl << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::cout << "Let's create your character!" << std::endl << std::endl;
 
     std::string name;

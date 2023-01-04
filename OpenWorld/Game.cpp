@@ -59,8 +59,7 @@ void Game::addConnections(int point) {
 		// Choose a random settlement or terrain to add to the map
 		if (rollBetween(0, 4)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
-			Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
-
+			//Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
 			// If current point or terrain has a prerequisite then check if things can work out, else continue
 			/*if ((terrain.getPreviousTerrainName() == worldMap[point].first.getName()) ||
 				(terrain.getName() == worldMap[point].first.getPreviousTerrainName())) {
@@ -68,12 +67,13 @@ void Game::addConnections(int point) {
 			}
 			else {
 				connectionIndex--;
+				worldMapIndex--;
 			}*/
-			worldMap.emplace_back(std::move(terrain), std::vector<int>{point});
+			worldMap.emplace_back(std::make_unique<Terrain>(terrains[selected_terrain_index]), std::vector<int>{point});
 		}
 		else {
 			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
-			worldMap.emplace_back(std::move(settlements[selected_settlement_index]), std::vector<int>{point});
+			worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{point});
 			settlements.erase(settlements.begin() + selected_settlement_index);
 		}
 		// Add connection to current node
@@ -95,7 +95,8 @@ void Game::generateWorldMap() {
 
 	// Select starting settlement:
 	auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
-	worldMap.emplace_back(std::move(settlements[selected_settlement_index]), std::vector<int>{});
+	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
+	settlements.erase(settlements.begin() + selected_settlement_index);
 	addConnections(0);
 
 	/*
@@ -214,11 +215,11 @@ void dramaticPause()
 {
 	std::cout << "\033c";
 	std::cout << ".";
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	std::cout << ".";
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	std::cout << ".";
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	std::cout << "\033c";
 }
 
@@ -415,7 +416,7 @@ void Game::gameLoop()
 {
 	int selectedMenuPoint = 0;
 	while (1) {
-		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first.getName()) };
+		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {
 			"Travel",
@@ -432,13 +433,7 @@ void Game::gameLoop()
 		{
 		case 0:
 			for (auto index : worldMap[currentPoint].second) {
-				if (worldMap[index].first.isSettlement) {
-					options.emplace_back(static_cast<Settlement*>(worldMap[index].first).getTravelName());
-				}
-				else {
-					options.emplace_back(static_cast<Terrain*>(worldMap[index].first).getTravelName());
-				}
-				
+				options.emplace_back(worldMap[index].first->getTravelName());
 			}
 			travel(menu.travelMenu(player, options));
 			break;

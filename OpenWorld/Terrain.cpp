@@ -7,4 +7,5 @@ Terrain::Terrain(const Terrain& otherTerrain) : Place(otherTerrain.name, otherTe
 	enemiesDayRaritySum = otherTerrain.enemiesDayRaritySum;
 	enemiesNightRaritySum = otherTerrain.enemiesNightRaritySum;
 	previousTerrainName = otherTerrain.previousTerrainName;
+	travelName = otherTerrain.travelName;
 }

@@ -9,7 +9,7 @@
 
 
 // Pointer for the place, and a vector for the next places
-using mapPoint = std::pair<Place, std::vector<int>>;
+using mapPoint = std::pair<std::unique_ptr<Place>, std::vector<int>>;
 
 // Player is manipulated manipulated through this object
 class Game

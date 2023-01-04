@@ -8,12 +8,13 @@ class Place
 {
 public:
 	Place(const std::string& name, const std::string& previousTerrainName, const bool isSettlement = false) :
-		name(name), previousTerrainName(previousTerrainName), id(++count), isSettlement(isSettlement) {};
+		name(name), previousTerrainName(previousTerrainName), id(++count) {};
 
 	// Operators
 
 	// Functions
-	virtual std::string getTravelName();
+	// Make class purely virtual so derived classes must implement this method too
+	virtual std::string getTravelName() = 0;
 
 	// Accessors
 	inline const std::string& getName() const { return name; };
@@ -24,7 +25,6 @@ public:
 
 	// Later make it const
 	int id;
-	bool isSettlement;
 
 protected:
 

@@ -42,10 +42,55 @@ Item Game::getRandomArmor()
 	return parsedItems[itemIndex];
 }
 
-void Game::generateWorldMap() {
-	auto& settlements = ResourceParser::getInstance().getParsedSettlements();
-	auto& terrains = ResourceParser::getInstance().getParsedTerrains();
+// Get local modifyable variables
+static auto settlements = ResourceParser::getInstance().getParsedSettlements();
+static auto terrains = ResourceParser::getInstance().getParsedTerrains();
+static std::queue<int> to_process;
+static int worldMapIndex = 0;
 
+void Game::addConnections(int point) {
+	// First add the connections to the map
+	for (auto connectionIndex = 0; connectionIndex < rollBetween(1, 2); connectionIndex++) {
+		if (settlements.empty()) {
+			return;
+		}
+		worldMapIndex++;
+		// Choose a random settlement or terrain to add to the map
+		if (rollBetween(0, 4)) {
+			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
+			Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
+			worldMap.emplace_back(std::move(terrain), std::vector<int>{point});
+		}
+		else {
+			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
+			worldMap.emplace_back(std::move(settlements[selected_settlement_index]), std::vector<int>{point});
+			settlements.erase(settlements.begin() + selected_settlement_index);
+		}
+		// Add connection to current node
+		to_process.push(worldMapIndex);
+		worldMap[point].second.emplace_back(worldMapIndex);
+	}
+	// While the queue is not empty, process the nodes in it
+	while (!to_process.empty()) {
+		int queuedPoint = to_process.front();
+		to_process.pop();
+		// Recursively create connections for the current node
+		addConnections(queuedPoint);
+	}
+}
+
+
+
+void Game::generateWorldMap() {
+
+	// Select starting settlement:
+	auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
+	worldMap.emplace_back(std::move(settlements[selected_settlement_index]), std::vector<int>{});
+	settlements.erase(settlements.begin() + selected_settlement_index);
+
+	addConnections(0);
+
+	/*
 	// Add random nodes to the map
 	while(!settlements.empty()) {
 		// Choose a random settlement or terrain to add to the map
@@ -102,7 +147,7 @@ void Game::generateWorldMap() {
 			[&](auto& current) {
 				return  (current->getPreviousTerrainName() != "") && (currentPlace.first.getName() != current->getPreviousTerrainName()); 
 			}), std::end(otherNodes));
-			*/
+			*//*
 		currentPlace.second.insert(currentPlace.second.end(), otherNodes.begin(), otherNodes.end());
 
 		// Add this node to connected node's connections except if already added
@@ -123,7 +168,7 @@ void Game::generateWorldMap() {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 
@@ -213,14 +258,7 @@ void Game::travel(int travelOption)
 	if (playing) {
 		std::cout << "You have arrived to your destination." << std::endl; 
 
-		// Quick and dirty solution
-		for (int mapIndex = 0; mapIndex < worldMap.size(); mapIndex++)
-		{
-			if (worldMap[mapIndex].first.id == worldMap[currentPoint].second[travelOption]->id) {
-				currentPoint = mapIndex;
-				break;
-			}
-		}
+		currentPoint = worldMap[currentPoint].second[travelOption];
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
 	}
@@ -379,11 +417,16 @@ void Game::gameLoop()
 			"Quit",
 		};
 
+		std::vector<std::string> options = {};
+
 		menu.menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
 		switch (selectedMenuPoint)
 		{
 		case 0:
-			travel(menu.travelMenu(player, worldMap[currentPoint].second));
+			for (auto index : worldMap[currentPoint].second) {
+				options.emplace_back(worldMap[index].first.getName());
+			}
+			travel(menu.travelMenu(player, options));
 			break;
 		case 1:
 			rest(menu.restMenu(player));

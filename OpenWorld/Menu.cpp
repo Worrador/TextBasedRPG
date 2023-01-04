@@ -146,7 +146,7 @@ Player Menu::playerCreationMenu()
     // Do not return with std::move as it prohibits copy elision.
 }
 
-int Menu::travelMenu(Player& player, std::vector<Place*>& possibleDestinations)
+int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints)
 {
     if (player.getStamina() < 1) {
         std::cout << std::endl << "You don't have enough stamina to travel." << std::endl;
@@ -160,11 +160,6 @@ int Menu::travelMenu(Player& player, std::vector<Place*>& possibleDestinations)
     };
 
     staticMenuLines.emplace_back("Where do you wish to travel?");
-    // List of menu points
-    std::vector <std::string> dynamicMenuPoints = {};
-    for (auto dest : possibleDestinations) {
-        dynamicMenuPoints.push_back(dest->getName());
-    }
 
     int selectedMenuPoint = 0;
     menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);

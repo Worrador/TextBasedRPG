@@ -5,9 +5,11 @@
 #include <iostream>
 #include <mmsystem.h>
 #include <numeric>
+#include <queue>
+
 
 // Pointer for the place, and a vector for the next places
-using mapPoint = std::pair<Place, std::vector<Place*>>;
+using mapPoint = std::pair<Place, std::vector<int>>;
 
 // Player is manipulated manipulated through this object
 class Game
@@ -30,6 +32,7 @@ public:
 	// Functions
 	Item getRandomWeapon();
 	Item getRandomArmor();
+	void addConnections(int point);
 	void generateWorldMap();
 
 	std::vector<Place*> getReachablePlaces(Place* start_place);

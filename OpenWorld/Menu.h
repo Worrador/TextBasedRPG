@@ -43,7 +43,7 @@ public:
 	std::string createBanner(const std::string& title);
 
 	Player playerCreationMenu();
-	int travelMenu(Player& player, std::vector<Place*>& possibleDestinations);
+	int travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints);
 	void shopMenu(Player& player, std::vector<Item>& shopItems);
 	void buyMenu(Player& player, std::vector<Item>& shopItems);
 	void sellMenu(Player& player);

@@ -16,8 +16,6 @@ class Game
 {
 public:
 
-	std::vector<Place*> getPlaceConnections(const Place& place);
-
 	// Constructors
 	Game();
 
@@ -34,8 +32,6 @@ public:
 	Item getRandomArmor();
 	void addConnections(int point);
 	void generateWorldMap();
-
-	std::vector<Place*> getReachablePlaces(Place* start_place);
 
 	// Static method to return a reference to the single instance
 	static Game& getInstance()

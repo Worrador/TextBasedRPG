@@ -49,8 +49,9 @@ static std::queue<int> to_process;
 static int worldMapIndex = 0;
 
 void Game::addConnections(int point) {
+
 	// First add the connections to the map
-	for (auto connectionIndex = 0; connectionIndex < rollBetween(1, 2); connectionIndex++) {
+	for (int connectionIndex = 0; connectionIndex < rollBetween(1, 2); connectionIndex++) {
 		if (settlements.empty()) {
 			return;
 		}
@@ -59,6 +60,15 @@ void Game::addConnections(int point) {
 		if (rollBetween(0, 4)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
 			Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
+
+			// If current point or terrain has a prerequisite then check if things can work out, else continue
+			/*if ((terrain.getPreviousTerrainName() == worldMap[point].first.getName()) ||
+				(terrain.getName() == worldMap[point].first.getPreviousTerrainName())) {
+				worldMap.emplace_back(std::move(terrain), std::vector<int>{point});
+			}
+			else {
+				connectionIndex--;
+			}*/
 			worldMap.emplace_back(std::move(terrain), std::vector<int>{point});
 		}
 		else {
@@ -86,8 +96,6 @@ void Game::generateWorldMap() {
 	// Select starting settlement:
 	auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
 	worldMap.emplace_back(std::move(settlements[selected_settlement_index]), std::vector<int>{});
-	settlements.erase(settlements.begin() + selected_settlement_index);
-
 	addConnections(0);
 
 	/*
@@ -424,7 +432,13 @@ void Game::gameLoop()
 		{
 		case 0:
 			for (auto index : worldMap[currentPoint].second) {
-				options.emplace_back(worldMap[index].first.getName());
+				if (worldMap[index].first.isSettlement) {
+					options.emplace_back(static_cast<Settlement*>(worldMap[index].first).getTravelName());
+				}
+				else {
+					options.emplace_back(static_cast<Terrain*>(worldMap[index].first).getTravelName());
+				}
+				
 			}
 			travel(menu.travelMenu(player, options));
 			break;

@@ -167,10 +167,24 @@ void ResourceParser::parseTerrains()
         for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
         {
             // Get name of Terrain and convert it to string
-            const auto& enemyName = converter.to_bytes((sheet->readStr(row, 0)));
+            const auto& terrainName = converter.to_bytes((sheet->readStr(row, 0)));
 
-            // Get roles of item and convert it to string
-            const auto enemies_day_string = converter.to_bytes(sheet->readStr(row, 1));
+            // Get name of traveling option and convert it to string
+            const auto& travelName = converter.to_bytes((sheet->readStr(row, 1)));
+
+            // Get names of required previous terains
+            std::string previousTerrainName = "";
+            const auto readPreviousTerrainName = sheet->readStr(row, 2);
+            if (readPreviousTerrainName) {
+                previousTerrainName = converter.to_bytes(readPreviousTerrainName);
+            }
+
+            // Get number of entrances of terrain
+            const auto& numOfEntrances = static_cast<int>(sheet->readNum(row, 3));
+
+
+            // Get enemies and convert it to string
+            const auto enemies_day_string = converter.to_bytes(sheet->readStr(row, 4));
 
             // Separate roles by ',' and create roles vector
             std::istringstream iss(enemies_day_string);
@@ -180,8 +194,8 @@ void ResourceParser::parseTerrains()
                 enemiesDay.emplace_back(str);
             }
 
-            // Get roles of item and convert it to string
-            const auto enemies_night_string = converter.to_bytes(sheet->readStr(row, 2));
+            // Get enemies and convert it to string
+            const auto enemies_night_string = converter.to_bytes(sheet->readStr(row, 5));
 
             // Separate roles by ',' and create roles vector
             std::istringstream iss2(enemies_night_string);
@@ -193,11 +207,6 @@ void ResourceParser::parseTerrains()
 
             int enemiesDayRaritySum = 0;
             int enemiesNightRaritySum = 0;
-            std::string previousTerrainName = "";
-            const auto readPreviousTerrainName = sheet->readStr(row, 3);
-            if (readPreviousTerrainName) {
-                previousTerrainName = converter.to_bytes(readPreviousTerrainName);
-            }
 
             for (auto& enemyName : enemiesDay) {
                 auto it = std::find_if(parsedEnemies.begin(), parsedEnemies.end(), [&](const Enemy& current) {return (current.getName() == enemyName); });
@@ -224,7 +233,7 @@ void ResourceParser::parseTerrains()
             }
             
             // Constructing in-place
-            parsedTerrains.emplace_back(enemyName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, previousTerrainName);
+            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum);
         }
     }
     book->release();

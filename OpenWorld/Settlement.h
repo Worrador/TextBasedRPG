@@ -14,8 +14,16 @@ public:
 
 
 	// Functions
-	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " settlement)"); };
-
+	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };
+	inline int getConnectionSize() override { 
+		if (settlementSize == "large")
+			return 3;
+		if (settlementSize == "medium")
+			return 2;
+		if (settlementSize == "small")
+			return 1;
+		return 0;
+	};
 	// Accessors
 
 	// Modifiers

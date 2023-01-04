@@ -19,6 +19,7 @@ public:
 	// Operators
 
 	// Functions
+	inline int getConnectionSize() override { return 0; };
 
 	// Accessors
 	inline const std::vector<std::string>& getEnemiesDay() const { return enemiesDay; };

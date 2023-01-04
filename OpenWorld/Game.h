@@ -30,7 +30,7 @@ public:
 	// Functions
 	Item getRandomWeapon();
 	Item getRandomArmor();
-	void addConnections(int point);
+	void addConnections(int point, int additionalNumberOfConnections);
 	void generateWorldMap();
 
 	// Static method to return a reference to the single instance

@@ -1,6 +1,6 @@
 #include "Terrain.h"
 
-Terrain::Terrain(const Terrain& otherTerrain) : Place(otherTerrain.name, otherTerrain.previousTerrainName)
+Terrain::Terrain(const Terrain& otherTerrain) : Place(otherTerrain.name, otherTerrain.previousTerrainName, otherTerrain.isFixed)
 {
 	enemiesDay = otherTerrain.enemiesDay;
 	enemiesNight = otherTerrain.enemiesNight;

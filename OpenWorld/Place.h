@@ -7,8 +7,8 @@
 class Place
 {
 public:
-	Place(const std::string& name, const std::string& previousTerrainName, const bool isSettlement = false) :
-		name(name), previousTerrainName(previousTerrainName), id(++count) {};
+	Place(const std::string& name, const std::string& previousTerrainName, const bool isFixed = false) :
+		name(name), previousTerrainName(previousTerrainName), id(++count), isFixed(isFixed) {};
 
 	// Operators
 
@@ -21,15 +21,19 @@ public:
 	inline const std::string& getName() const { return name; };
 	inline const std::string& getPreviousTerrainName() const { return previousTerrainName; };
 
+	virtual void setConnectionSize(const int& connectionSize) = 0;
+
 	static int count;
 
 	// Later make it const
 	int id;
+	bool isFixed = false;
 
 protected:
 
 	std::string name;
 	std::string previousTerrainName = "";
+
 
 	//Mabye place* vector
 	// how to allocate deallocate?

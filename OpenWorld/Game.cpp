@@ -20,11 +20,9 @@ Enemy Game::spawnEnemy()
 
 int Game::rollBetween(int lower, int higher)
 {
-	std::mt19937 rng(std::random_device{}());
-
 	std::uniform_int_distribution<> roll_dist(lower, higher);
 
-	return roll_dist(rng);
+	return roll_dist(randomNumberGenerator);
 }
 
 
@@ -61,8 +59,6 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 		if (rollBetween(0, 10)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
 
-			// Akkor adhatjuk be az ujat ha annak még vvan slotja
-
 			// Keep generating a new random number until it fits the rquirements
 			while (((terrains[selected_terrain_index].getPreviousTerrainName() != worldMap[mapIndex].first->getName()) &&
 				(terrains[selected_terrain_index].getName() != worldMap[mapIndex].first->getPreviousTerrainName()) &&
@@ -91,12 +87,6 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 		// Recursively create connections for the current node
 		addConnections(queuedPlaceIndex, worldMap[queuedPlaceIndex].first->getConnectionSize());
 	}
-
-	// Mabye just make it better since caves might be added another exit..that might not be a problem tho
-	// If this if statment's content is reached that means that the requirements in regards of connections were too hard
-	//if (!settlements.empty()) {
-	//	addConnections(mapIndex, connectionSize + 1);
-	//}
 }
 
 
@@ -108,10 +98,23 @@ void Game::generateWorldMap() {
 	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
 	settlements.erase(settlements.begin() + selected_settlement_index);
 	addConnections(0, worldMap[0].first->getConnectionSize());
+
+	// Mabye just make it better since caves might be added another exit..that might not be a problem tho
+	// If this if statment's content is reached that means that the requirements in regards of connections were too hard
+	while (!settlements.empty()) {
+		auto random_place_index = rollBetween(0, (int)worldMap.size() - 1);
+		while ((worldMap[random_place_index].first->getPreviousTerrainName() != "") ||
+			(worldMap[random_place_index].first->isFixed)) {
+			random_place_index = rollBetween(0, (int)worldMap.size() - 1);
+		}
+
+		worldMap[random_place_index].first->setConnectionSize(worldMap[random_place_index].first->getConnectionSize() + 1);
+		addConnections(random_place_index, worldMap[random_place_index].first->getConnectionSize());
+	}
 }
 
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu())
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
 {
 	// TODO: replace to cpp
 	// Start palying music

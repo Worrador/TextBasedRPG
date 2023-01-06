@@ -190,8 +190,10 @@ void ResourceParser::parseTerrains()
 
             // Get number of entrances of terrain
             auto connectionSize = static_cast<int>(sheet->readNum(row, 3));
+            auto isFixed = true;
             if (connectionSize == 0) {
-                connectionSize = randomBetween(1, 2);
+                connectionSize = randomBetween(2, 3);
+                isFixed = false;
             }
 
             // Get enemies and convert it to string
@@ -244,7 +246,7 @@ void ResourceParser::parseTerrains()
             }
             
             // Constructing in-place
-            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, connectionSize);
+            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, connectionSize, isFixed);
         }
     }
     book->release();

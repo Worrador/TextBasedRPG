@@ -10,8 +10,8 @@ public:
 	Terrain() = default;
 	Terrain(const std::string& name, const std::string& travelName, const std::string& previousTerrainName, 
 		std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum,
-		const int& connectionSize) :
-		Place(name, previousTerrainName), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum),
+		const int& connectionSize, const bool& isFixed) :
+		Place(name, previousTerrainName, isFixed), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum),
 		enemiesNightRaritySum(nightSum), travelName(travelName), connectionSize(connectionSize) {};
 
 
@@ -20,7 +20,7 @@ public:
 	// Operators
 
 	// Functions
-	inline int getConnectionSize() override { return connectionSize; };
+
 
 	// Accessors
 	inline const std::vector<std::string>& getEnemiesDay() const { return enemiesDay; };
@@ -28,7 +28,10 @@ public:
 	inline const int& getEnemiesDayRaritySum() const { return enemiesDayRaritySum; }
 	inline const int& getEnemiesNightRaritySum() const { return enemiesNightRaritySum; }
 	inline std::string getTravelName() override { return travelName; };
+	inline int getConnectionSize() override { return connectionSize; };
+
 	// Modifiers
+	void setConnectionSize(const int& connectionSize) override { this->connectionSize = connectionSize; };
 
 private:
 	std::vector<std::string> enemiesDay;

@@ -66,8 +66,9 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 			// Keep generating a new random number until it fits the rquirements
 			while (((terrains[selected_terrain_index].getPreviousTerrainName() != worldMap[mapIndex].first->getName()) &&
 				(terrains[selected_terrain_index].getName() != worldMap[mapIndex].first->getPreviousTerrainName()) &&
-				(terrains[selected_terrain_index].getPreviousTerrainName() != "")) ||
-			() {	// And no same named location is present already
+				((terrains[selected_terrain_index].getPreviousTerrainName() != "") || (worldMap[mapIndex].first->getPreviousTerrainName() != ""))) ||
+				(terrains[selected_terrain_index].getName() == worldMap[mapIndex].first->getName()) ||
+				(std::find_if(worldMap[mapIndex].second.begin(), worldMap[mapIndex].second.end(), [&](const auto& p) {return worldMap[p].first->getName() == terrains[selected_terrain_index].getName(); }) != worldMap[mapIndex].second.end())) {	// And no same named location is present already
 				selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
 			}
 			//Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
@@ -93,9 +94,9 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 
 	// Mabye just make it better since caves might be added another exit..that might not be a problem tho
 	// If this if statment's content is reached that means that the requirements in regards of connections were too hard
-	if (!settlements.empty()) {
-		addConnections(mapIndex, connectionSize + 1);
-	}
+	//if (!settlements.empty()) {
+	//	addConnections(mapIndex, connectionSize + 1);
+	//}
 }
 
 
@@ -155,6 +156,8 @@ void dramaticPause()
 void Game::travel(int travelOption)
 {
 	if (travelOption == ESCAPE) {
+		// Give back stamina >.<
+		player.setStamina(player.getStamina() + 1);
 		return;
 	}
 	int chance = 0;

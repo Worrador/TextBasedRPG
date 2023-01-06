@@ -9,9 +9,10 @@ class Terrain : public Place
 public:
 	Terrain() = default;
 	Terrain(const std::string& name, const std::string& travelName, const std::string& previousTerrainName, 
-		std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum) :
+		std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum,
+		const int& connectionSize) :
 		Place(name, previousTerrainName), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum),
-		enemiesNightRaritySum(nightSum), travelName(travelName) {};
+		enemiesNightRaritySum(nightSum), travelName(travelName), connectionSize(connectionSize) {};
 
 
 	Terrain(const Terrain& otherTerrain);
@@ -19,7 +20,7 @@ public:
 	// Operators
 
 	// Functions
-	inline int getConnectionSize() override { return 0; };
+	inline int getConnectionSize() override { return connectionSize; };
 
 	// Accessors
 	inline const std::vector<std::string>& getEnemiesDay() const { return enemiesDay; };
@@ -33,6 +34,8 @@ private:
 	std::vector<std::string> enemiesDay;
 	std::vector<std::string> enemiesNight;
 	std::string travelName;
+
+	int connectionSize;
 
 	int enemiesDayRaritySum = 0;
 	int enemiesNightRaritySum = 0;

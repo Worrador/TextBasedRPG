@@ -8,4 +8,5 @@ Terrain::Terrain(const Terrain& otherTerrain) : Place(otherTerrain.name, otherTe
 	enemiesNightRaritySum = otherTerrain.enemiesNightRaritySum;
 	previousTerrainName = otherTerrain.previousTerrainName;
 	travelName = otherTerrain.travelName;
+	connectionSize = otherTerrain.connectionSize;
 }

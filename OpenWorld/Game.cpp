@@ -48,37 +48,40 @@ static auto terrains = ResourceParser::getInstance().getParsedTerrains();
 static std::queue<int> placesQueue;
 static int worldMapIndex = 0;
 
-void Game::addConnections(int point, int additionalNumberOfConnections = 0) {
+void Game::addConnections(int mapIndex, int connectionSize) {
 
+	auto presentConnections = worldMap[mapIndex].second.size();
 	// First add the connections to the map
-	for (int connectionIndex = 0; connectionIndex < rollBetween(1, 2) + additionalNumberOfConnections; connectionIndex++) {
+	for (int connectionIndex = 0; connectionIndex < (connectionSize - presentConnections); connectionIndex++) {
 		if (settlements.empty()) {
 			return;
 		}
 		worldMapIndex++;
 		// Choose a random settlement or terrain to add to the map
-		if (rollBetween(0, 5)) {
+		if (rollBetween(0, 10)) {
 			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
-			//Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
-			// If current point or terrain has a prerequisite then check if things can work out, else continue
-			/*if ((terrain.getPreviousTerrainName() == worldMap[point].first.getName()) ||
-				(terrain.getName() == worldMap[point].first.getPreviousTerrainName())) {
-				worldMap.emplace_back(std::move(terrain), std::vector<int>{point});
+
+			// Akkor adhatjuk be az ujat ha annak még vvan slotja
+
+			// Keep generating a new random number until it fits the rquirements
+			while (((terrains[selected_terrain_index].getPreviousTerrainName() != worldMap[mapIndex].first->getName()) &&
+				(terrains[selected_terrain_index].getName() != worldMap[mapIndex].first->getPreviousTerrainName()) &&
+				(terrains[selected_terrain_index].getPreviousTerrainName() != "")) ||
+			() {	// And no same named location is present already
+				selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
 			}
-			else {
-				connectionIndex--;
-				worldMapIndex--;
-			}*/
-			worldMap.emplace_back(std::make_unique<Terrain>(terrains[selected_terrain_index]), std::vector<int>{point});
+			//Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
+
+			worldMap.emplace_back(std::make_unique<Terrain>(terrains[selected_terrain_index]), std::vector<int>{mapIndex});
 		}
 		else {
 			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
-			worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{point});
+			worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{mapIndex});
 			settlements.erase(settlements.begin() + selected_settlement_index);
 		}
 		// Add connection to current node
 		placesQueue.push(worldMapIndex);
-		worldMap[point].second.emplace_back(worldMapIndex);
+		worldMap[mapIndex].second.emplace_back(worldMapIndex);
 	}
 	// While the queue is not empty, process the nodes in it
 	while (!placesQueue.empty()) {
@@ -86,6 +89,12 @@ void Game::addConnections(int point, int additionalNumberOfConnections = 0) {
 		placesQueue.pop();
 		// Recursively create connections for the current node
 		addConnections(queuedPlaceIndex, worldMap[queuedPlaceIndex].first->getConnectionSize());
+	}
+
+	// Mabye just make it better since caves might be added another exit..that might not be a problem tho
+	// If this if statment's content is reached that means that the requirements in regards of connections were too hard
+	if (!settlements.empty()) {
+		addConnections(mapIndex, connectionSize + 1);
 	}
 }
 

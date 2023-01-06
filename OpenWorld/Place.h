@@ -20,7 +20,6 @@ public:
 	// Accessors
 	inline const std::string& getName() const { return name; };
 	inline const std::string& getPreviousTerrainName() const { return previousTerrainName; };
-	inline const int& getNumOfEntrances() const { return numOfEntrances; };
 
 	static int count;
 
@@ -31,7 +30,6 @@ protected:
 
 	std::string name;
 	std::string previousTerrainName = "";
-	int numOfEntrances = -1;
 
 	//Mabye place* vector
 	// how to allocate deallocate?

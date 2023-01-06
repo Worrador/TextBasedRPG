@@ -1,5 +1,14 @@
 #include "ResourceParser.h"
 
+int static randomBetween(int lower, int higher)
+{
+    std::mt19937 rng(std::random_device{}());
+
+    std::uniform_int_distribution<> roll_dist(lower, higher);
+
+    return roll_dist(rng);
+}
+
 ResourceParser::ResourceParser()
 {
     this->parseRoles();
@@ -180,8 +189,10 @@ void ResourceParser::parseTerrains()
             }
 
             // Get number of entrances of terrain
-            const auto& numOfEntrances = static_cast<int>(sheet->readNum(row, 3));
-
+            auto connectionSize = static_cast<int>(sheet->readNum(row, 3));
+            if (connectionSize == 0) {
+                connectionSize = randomBetween(1, 2);
+            }
 
             // Get enemies and convert it to string
             const auto enemies_day_string = converter.to_bytes(sheet->readStr(row, 4));
@@ -233,19 +244,10 @@ void ResourceParser::parseTerrains()
             }
             
             // Constructing in-place
-            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum);
+            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, connectionSize);
         }
     }
     book->release();
-}
-
-int static randomBetween(int lower, int higher)
-{
-    std::mt19937 rng(std::random_device{}());
-
-    std::uniform_int_distribution<> roll_dist(lower, higher);
-
-    return roll_dist(rng);
 }
 
 void ResourceParser::parseSettlements()

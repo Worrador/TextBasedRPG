@@ -17,11 +17,11 @@ public:
 	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };
 	inline int getConnectionSize() override { 
 		if (settlementSize == "large")
-			return 3;
+			return 4;
 		if (settlementSize == "medium")
-			return 2;
+			return 3;
 		if (settlementSize == "small")
-			return 1;
+			return 2;
 		return 0;
 	};
 	// Accessors

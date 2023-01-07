@@ -10,13 +10,13 @@ public:
 		Place(name, ""), settlementSize(settlementSize) 
 	{
 		if (settlementSize == "large") {
-			connectionSize = 6;
+			maxConnectionSize = 6;
 		}
 		else if (settlementSize == "medium") {
-			connectionSize = 4;
+			maxConnectionSize = 4;
 		}
 		else {
-			connectionSize = 2;
+			maxConnectionSize = 2;
 		}
 			
 		//else (settlementSize == "small")
@@ -29,15 +29,15 @@ public:
 
 	// Functions
 	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };
-	inline int getConnectionSize() override { return connectionSize; };
+	inline int getMaxConnectionSize() override { return maxConnectionSize; };
 
-	void setConnectionSize(const int& connectionSize) override { this->connectionSize = connectionSize; };
+	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
 	// Accessors
 
 	// Modifiers
 private:
 	settlementSize settlementSize;
-	int connectionSize = 0;
+	int maxConnectionSize = 0;
 
 };
 

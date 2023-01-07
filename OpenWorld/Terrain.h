@@ -8,11 +8,8 @@ class Terrain : public Place
 {
 public:
 	Terrain() = default;
-	Terrain(const std::string& name, const std::string& travelName, const std::string& previousTerrainName, 
-		std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum,
-		const int& connectionSize, const bool& isFixed) :
-		Place(name, previousTerrainName, isFixed), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum),
-		enemiesNightRaritySum(nightSum), travelName(travelName), connectionSize(connectionSize) {};
+	Terrain(const std::string& name, const std::string& travelName, const std::string& previousTerrainName, const std::vector<std::string>& followingTerrainNames,
+		std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum);
 
 
 	Terrain(const Terrain& otherTerrain);
@@ -28,17 +25,17 @@ public:
 	inline const int& getEnemiesDayRaritySum() const { return enemiesDayRaritySum; }
 	inline const int& getEnemiesNightRaritySum() const { return enemiesNightRaritySum; }
 	inline std::string getTravelName() override { return travelName; };
-	inline int getConnectionSize() override { return connectionSize; };
+	inline int getMaxConnectionSize() override { return maxConnectionSize; };
 
 	// Modifiers
-	void setConnectionSize(const int& connectionSize) override { this->connectionSize = connectionSize; };
+	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
 
 private:
 	std::vector<std::string> enemiesDay;
 	std::vector<std::string> enemiesNight;
 	std::string travelName;
 
-	int connectionSize;
+	int maxConnectionSize;
 
 	int enemiesDayRaritySum = 0;
 	int enemiesNightRaritySum = 0;

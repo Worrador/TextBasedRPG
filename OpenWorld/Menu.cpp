@@ -153,7 +153,7 @@ int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints
         std::this_thread::sleep_for(std::chrono::seconds(1));
         return ESCAPE;
     }
-    player.setStamina(player.getStamina() - 1);
+    //player.setStamina(player.getStamina() - 1);
     std::vector <std::string> staticMenuLines = {
     "TRAVEL",
     "",

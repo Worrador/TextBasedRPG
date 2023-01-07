@@ -1,14 +1,5 @@
 #include "ResourceParser.h"
 
-int static randomBetween(int lower, int higher)
-{
-    std::mt19937 rng(std::random_device{}());
-
-    std::uniform_int_distribution<> roll_dist(lower, higher);
-
-    return roll_dist(rng);
-}
-
 ResourceParser::ResourceParser()
 {
     this->parseRoles();
@@ -181,19 +172,29 @@ void ResourceParser::parseTerrains()
             // Get name of traveling option and convert it to string
             const auto& travelName = converter.to_bytes((sheet->readStr(row, 1)));
 
-            // Get names of required previous terains
+            // Get names of required previous terrains
             std::string previousTerrainName = "";
             const auto readPreviousTerrainName = sheet->readStr(row, 2);
             if (readPreviousTerrainName) {
                 previousTerrainName = converter.to_bytes(readPreviousTerrainName);
             }
 
-            // Get number of entrances of terrain
-            auto connectionSize = static_cast<int>(sheet->readNum(row, 3));
-            auto isFixed = true;
-            if (connectionSize == 0) {
-                connectionSize = randomBetween(2, 3);
-                isFixed = false;
+            // Get names of required following terrains
+            const auto followingTerrainName = sheet->readStr(row, 3);
+            std::vector<std::string> followingTerrainNames;
+            if (followingTerrainName) {
+                previousTerrainName = converter.to_bytes(followingTerrainName);
+
+                // Separate roles by ';' and create roles vector
+                std::istringstream iss(previousTerrainName);
+                std::vector<std::string> enemiesDay;
+                std::string str;
+                while (std::getline(iss, str, ';')) {
+                    followingTerrainNames.emplace_back(str);
+                }
+            }
+            else {
+                followingTerrainNames.emplace_back("");
             }
 
             // Get enemies and convert it to string
@@ -246,7 +247,7 @@ void ResourceParser::parseTerrains()
             }
             
             // Constructing in-place
-            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum, connectionSize, isFixed);
+            parsedTerrains.emplace_back(terrainName, travelName, previousTerrainName, followingTerrainNames, enemiesDay, enemiesNight, enemiesDayRaritySum, enemiesNightRaritySum);
         }
     }
     book->release();

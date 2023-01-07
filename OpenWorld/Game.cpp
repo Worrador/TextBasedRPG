@@ -50,6 +50,7 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 
 	auto presentConnections = worldMap[mapIndex].second.size();
 	// First add the connections to the map
+	// rand(0, (connectionSize - presentConnections))
 	for (int connectionIndex = 0; connectionIndex < (connectionSize - presentConnections); connectionIndex++) {
 		if (settlements.empty()) {
 			return;
@@ -57,16 +58,30 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 		worldMapIndex++;
 		// Choose a random settlement or terrain to add to the map
 		if (rollBetween(0, 10)) {
-			auto selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
+			int selected_terrain_index;
 
 			// Keep generating a new random number until it fits the rquirements
-			while (((terrains[selected_terrain_index].getPreviousTerrainName() != worldMap[mapIndex].first->getName()) &&
-				(terrains[selected_terrain_index].getName() != worldMap[mapIndex].first->getPreviousTerrainName()) &&
-				((terrains[selected_terrain_index].getPreviousTerrainName() != "") || (worldMap[mapIndex].first->getPreviousTerrainName() != ""))) ||
-				(terrains[selected_terrain_index].getName() == worldMap[mapIndex].first->getName()) ||
-				(std::find_if(worldMap[mapIndex].second.begin(), worldMap[mapIndex].second.end(), [&](const auto& p) {return worldMap[p].first->getName() == terrains[selected_terrain_index].getName(); }) != worldMap[mapIndex].second.end())) {	// And no same named location is present already
+			auto requ1 = false, requ2 = false, requ3 = false, requ4 = false, requ5 = false, requ6 = false, requ7 = false;
+			while (! ( ( (requ1 || requ2 ) && (requ3 || requ4)) &&  requ5 && requ6) ) {	// And no same named location is present already
+
 				selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
+
+				requ1 = (std::find_if(worldMap[mapIndex].first->getFollowingTerrainNames().begin(), worldMap[mapIndex].first->getFollowingTerrainNames().end(), 
+					[&](const auto& p) {
+						return (p == terrains[selected_terrain_index].getName()); 
+					}) != worldMap[mapIndex].first->getFollowingTerrainNames().end());
+
+				requ2 = (worldMap[mapIndex].first->getFollowingTerrainNames()[0] == "");
+
+
+
+				requ3 = (terrains[selected_terrain_index].getPreviousTerrainName() == worldMap[mapIndex].first->getName());
+				requ4 = (terrains[selected_terrain_index].getPreviousTerrainName() == "");
+
+				requ5 = (terrains[selected_terrain_index].getName() != worldMap[mapIndex].first->getName());
+				requ6 = (std::find_if(worldMap[mapIndex].second.begin(), worldMap[mapIndex].second.end(), [&](const auto& p) {return worldMap[p].first->getName() == terrains[selected_terrain_index].getName(); }) == worldMap[mapIndex].second.end());
 			}
+			// Az a baj hogy a bridgecrosst akarja összekötni a follow a streammel 2szer, de egyszer lehet csak..
 			//Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
 
 			worldMap.emplace_back(std::make_unique<Terrain>(terrains[selected_terrain_index]), std::vector<int>{mapIndex});
@@ -85,7 +100,7 @@ void Game::addConnections(int mapIndex, int connectionSize) {
 		int queuedPlaceIndex = placesQueue.front();
 		placesQueue.pop();
 		// Recursively create connections for the current node
-		addConnections(queuedPlaceIndex, worldMap[queuedPlaceIndex].first->getConnectionSize());
+		addConnections(queuedPlaceIndex, worldMap[queuedPlaceIndex].first->getMaxConnectionSize());
 	}
 }
 
@@ -97,19 +112,25 @@ void Game::generateWorldMap() {
 	auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
 	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
 	settlements.erase(settlements.begin() + selected_settlement_index);
-	addConnections(0, worldMap[0].first->getConnectionSize());
+	addConnections(0, worldMap[0].first->getMaxConnectionSize());
 
 	// Mabye just make it better since caves might be added another exit..that might not be a problem tho
 	// If this if statment's content is reached that means that the requirements in regards of connections were too hard
 	while (!settlements.empty()) {
-		auto random_place_index = rollBetween(0, (int)worldMap.size() - 1);
-		while ((worldMap[random_place_index].first->getPreviousTerrainName() != "") ||
-			(worldMap[random_place_index].first->isFixed)) {
-			random_place_index = rollBetween(0, (int)worldMap.size() - 1);
+		int random_ind;
+		auto req1 = true, req2 = true;
+		while (req1 || req2)
+		
+		{
+			random_ind = rollBetween(0, (int)worldMap.size() - 1);
+			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
+				req1 &= (std::find_if(worldMap[random_ind].second.begin(), worldMap[random_ind].second.end(), [&](const auto& p) {return worldMap[p].first->getName() == followingName; }) != worldMap[random_ind].second.end());
+			}
+			req2 = ( (worldMap[random_ind].first->getFollowingTerrainNames()[0] == "") && (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()) );
 		}
 
-		worldMap[random_place_index].first->setConnectionSize(worldMap[random_place_index].first->getConnectionSize() + 1);
-		addConnections(random_place_index, worldMap[random_place_index].first->getConnectionSize());
+		worldMap[random_ind].first->setMaxConnectionSize(worldMap[random_ind].first->getMaxConnectionSize() + 1);
+		addConnections(random_ind, worldMap[random_ind].first->getMaxConnectionSize());
 	}
 }
 
@@ -201,7 +222,7 @@ void Game::travel(int travelOption)
 
 	if (playing) {
 		std::cout << "You have arrived to your destination." << std::endl; 
-
+		previousPoint = currentPoint;
 		currentPoint = worldMap[currentPoint].second[travelOption];
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
@@ -260,11 +281,11 @@ void Game::run(Enemy& enemy)
 	if (player.getStamina() >= 2) {
 		player.setStamina(player.getStamina() - 2);
 		std::cout << player.getName() << " has run away from battle." << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
 	else {
 		std::cout << player.getName() << " is too tired to run, so rests for a while to regain some stamina." << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		player.setStamina(min(3, player.getStaminaMax()));
 		wait(enemy);
 	}
@@ -368,7 +389,13 @@ void Game::gameLoop()
 		{
 		case 0:
 			for (auto index : worldMap[currentPoint].second) {
-				options.emplace_back(worldMap[index].first->getTravelName());
+				if (previousPoint == index) {
+					options.emplace_back(worldMap[index].first->getTravelName() + " (go back)");
+				}
+				else {
+					options.emplace_back(worldMap[index].first->getTravelName());
+				}
+				
 			}
 			travel(menu.travelMenu(player, options));
 			break;

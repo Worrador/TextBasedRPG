@@ -46,36 +46,6 @@ static auto terrains = ResourceParser::getInstance().getParsedTerrains();
 static std::queue<int> placesQueue;
 static int worldMapIndex = 0;
 
-// Returns true if the selected terrain is a valid choice for the current place
-bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex) {
-	const auto& currentPlace = *(worldMap[currentPlaceIndex].first);
-	const auto& selectedTerrain = terrains[selectedTerrainIndex];
-
-	// Check if the selected terrain is one of the allowed following terrains
-	bool reqAllowedFollowingTerrain = std::find(currentPlace.getFollowingTerrainNames().begin(), currentPlace.getFollowingTerrainNames().end(), selectedTerrain.getName()) != currentPlace.getFollowingTerrainNames().end();
-
-	// Check if the current place is allowed to be followed by any terrain
-	bool reqAllowedAnyFollowingTerrain = currentPlace.getFollowingTerrainNames()[0] == "";
-
-	// Check if the selected terrain allows the current place as a previous terrain
-	bool reqCurrentPlaceAllowedAsPrevious = selectedTerrain.getPreviousTerrainName() == currentPlace.getName();
-
-	// Check if the selected terrain allows any previous terrain
-	bool reqAnyPlaceAllowedAsPrevious = selectedTerrain.getPreviousTerrainName() == "";
-
-	// Check if the selected terrain has the same name as the current place
-	bool reqNamesAreDifferent = selectedTerrain.getName() != currentPlace.getName();
-
-	// Check if the selected terrain has already been added to this palce
-	bool reqTerrainNotAlreadyAdded = std::find_if(worldMap[currentPlaceIndex].second.begin(), worldMap[currentPlaceIndex].second.end(),
-		[&](const auto& p) {
-			return worldMap[p].first->getName() == selectedTerrain.getName();
-		}) == worldMap[currentPlaceIndex].second.end();
-
-		return (reqAllowedFollowingTerrain || reqAllowedAnyFollowingTerrain) && (reqCurrentPlaceAllowedAsPrevious || reqAnyPlaceAllowedAsPrevious) && reqNamesAreDifferent && reqTerrainNotAlreadyAdded;
-}
-
-
 void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
 	// Calculate the number of connections that need to be added
@@ -121,6 +91,38 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 	}
 }
 
+// Returns true if the selected terrain is a valid choice for the current place
+bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex) {
+	const auto& currentPlace = *(worldMap[currentPlaceIndex].first);
+	const auto& selectedTerrain = terrains[selectedTerrainIndex];
+
+	// Check if the selected terrain is one of the allowed following terrains
+	bool reqAllowedFollowingTerrain = std::find(currentPlace.getFollowingTerrainNames().begin(), currentPlace.getFollowingTerrainNames().end(), selectedTerrain.getName()) != currentPlace.getFollowingTerrainNames().end();
+
+	// Check if the current place is allowed to be followed by any terrain
+	bool reqAllowedAnyFollowingTerrain = currentPlace.getFollowingTerrainNames()[0] == "";
+
+	// Check if the selected terrain allows the current place as a previous terrain
+	bool reqCurrentPlaceAllowedAsPrevious = selectedTerrain.getPreviousTerrainName() == currentPlace.getName();
+
+	// Check if the selected terrain allows any previous terrain
+	bool reqAnyPlaceAllowedAsPrevious = selectedTerrain.getPreviousTerrainName() == "";
+
+	// Check if the selected terrain has the same name as the current place
+	bool reqNamesAreDifferent = selectedTerrain.getName() != currentPlace.getName();
+
+	// Check if the selected terrain has already been added to this palce
+	bool reqTerrainNotAlreadyAdded = std::find_if(worldMap[currentPlaceIndex].second.begin(), worldMap[currentPlaceIndex].second.end(), 
+		[&](const auto& p) {
+			return worldMap[p].first->getName() == selectedTerrain.getName();
+		}) == worldMap[currentPlaceIndex].second.end();
+
+	return (reqAllowedFollowingTerrain || reqAllowedAnyFollowingTerrain) && (reqCurrentPlaceAllowedAsPrevious || reqAnyPlaceAllowedAsPrevious) && reqNamesAreDifferent && reqTerrainNotAlreadyAdded;
+}
+
+
+
+
 void Game::generateWorldMap() {
 
 	// Select starting settlement
@@ -145,8 +147,10 @@ void Game::generateWorldMap() {
 			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
 				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.begin(), worldMap[random_ind].second.end(), [&](const auto& mapInd) {return worldMap[mapInd].first->getName() == followingName; }) != worldMap[random_ind].second.end());
 			}
-			reqSizeLimitReached = ( (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
+			reqSizeLimitReached = ( /*(worldMap[random_ind].first->getFollowingTerrainNames()[0] == "") && */ (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
 		}
+
+		//worldMap[random_ind].first->setMaxConnectionSize(worldMap[random_ind].first->getMaxConnectionSize() + 1);
 		addConnections(random_ind, worldMap[random_ind].first->getMaxConnectionSize());
 	}
 }

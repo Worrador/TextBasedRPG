@@ -24,8 +24,6 @@ public:
 
 	virtual void setMaxConnectionSize(const int& maxConnectionSize) = 0;
 
-	static int count;
-
 	// Later make it const
 
 protected:

@@ -20,6 +20,8 @@ Enemy Game::spawnEnemy()
 
 int Game::rollBetween(int lower, int higher)
 {
+
+	std::mt19937 randomNumberGenerator(std::random_device{}());
 	std::uniform_int_distribution<> roll_dist(lower, higher);
 
 	return roll_dist(randomNumberGenerator);
@@ -46,87 +48,112 @@ static auto terrains = ResourceParser::getInstance().getParsedTerrains();
 static std::queue<int> placesQueue;
 static int worldMapIndex = 0;
 
-void Game::addConnections(int mapIndex, int connectionSize) {
+void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
-	auto presentConnections = worldMap[mapIndex].second.size();
+	// Calculate the number of connections that need to be added
+	int connectionsToAdd = maxConnections - (int)worldMap[currentPlaceIndex].second.size();
+
 	// First add the connections to the map
-	// rand(0, (connectionSize - presentConnections))
-	for (int connectionIndex = 0; connectionIndex < (connectionSize - presentConnections); connectionIndex++) {
+	for (int i = 0; i < connectionsToAdd; i++) {
 		if (settlements.empty()) {
 			return;
 		}
+
 		worldMapIndex++;
+
 		// Choose a random settlement or terrain to add to the map
+		std::unique_ptr<Place> newPlace;
 		if (rollBetween(0, 10)) {
-			int selected_terrain_index;
+			int selectedTerrainIndex;
 
-			// Keep generating a new random number until it fits the rquirements
-			auto requ1 = false, requ2 = false, requ3 = false, requ4 = false, requ5 = false, requ6 = false, requ7 = false;
-			while (! ( ( (requ1 || requ2 ) && (requ3 || requ4)) &&  requ5 && requ6) ) {	// And no same named location is present already
+			// Keep generating a new random number until it fits the requirements
+			do {
+				selectedTerrainIndex = rollBetween(0, (int)terrains.size() - 1);
+			} while (!isValidTerrainChoice(selectedTerrainIndex, currentPlaceIndex));
 
-				selected_terrain_index = rollBetween(0, (int)terrains.size() - 1);
-
-				requ1 = (std::find_if(worldMap[mapIndex].first->getFollowingTerrainNames().begin(), worldMap[mapIndex].first->getFollowingTerrainNames().end(), 
-					[&](const auto& p) {
-						return (p == terrains[selected_terrain_index].getName()); 
-					}) != worldMap[mapIndex].first->getFollowingTerrainNames().end());
-
-				requ2 = (worldMap[mapIndex].first->getFollowingTerrainNames()[0] == "");
-
-
-
-				requ3 = (terrains[selected_terrain_index].getPreviousTerrainName() == worldMap[mapIndex].first->getName());
-				requ4 = (terrains[selected_terrain_index].getPreviousTerrainName() == "");
-
-				requ5 = (terrains[selected_terrain_index].getName() != worldMap[mapIndex].first->getName());
-				requ6 = (std::find_if(worldMap[mapIndex].second.begin(), worldMap[mapIndex].second.end(), [&](const auto& p) {return worldMap[p].first->getName() == terrains[selected_terrain_index].getName(); }) == worldMap[mapIndex].second.end());
-			}
-			// Az a baj hogy a bridgecrosst akarja összekötni a follow a streammel 2szer, de egyszer lehet csak..
-			//Terrain terrain = Terrain(terrains[selected_terrain_index]);	// new is for allocating on heap, this allocates on stack, so destructor call is enough
-
-			worldMap.emplace_back(std::make_unique<Terrain>(terrains[selected_terrain_index]), std::vector<int>{mapIndex});
+			newPlace = std::make_unique<Terrain>(terrains[selectedTerrainIndex]);
 		}
 		else {
-			auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
-			worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{mapIndex});
-			settlements.erase(settlements.begin() + selected_settlement_index);
+			int selectedSettlementIndex = rollBetween(0, (int)settlements.size() - 1);
+			newPlace = std::make_unique<Settlement>(settlements[selectedSettlementIndex]);
+			settlements.erase(settlements.begin() + selectedSettlementIndex);
 		}
+
+		// Add the new place to the world map
+		worldMap.emplace_back(std::move(newPlace), std::vector<int>{currentPlaceIndex});
+
 		// Add connection to current node
 		placesQueue.push(worldMapIndex);
-		worldMap[mapIndex].second.emplace_back(worldMapIndex);
+		worldMap[currentPlaceIndex].second.emplace_back(worldMapIndex);
 	}
+
 	// While the queue is not empty, process the nodes in it
 	while (!placesQueue.empty()) {
 		int queuedPlaceIndex = placesQueue.front();
 		placesQueue.pop();
+
 		// Recursively create connections for the current node
 		addConnections(queuedPlaceIndex, worldMap[queuedPlaceIndex].first->getMaxConnectionSize());
 	}
 }
 
+// Returns true if the selected terrain is a valid choice for the current place
+bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex) {
+	const auto& currentPlace = *(worldMap[currentPlaceIndex].first);
+	const auto& selectedTerrain = terrains[selectedTerrainIndex];
+
+	// Check if the selected terrain is one of the allowed following terrains
+	bool reqAllowedFollowingTerrain = std::find(currentPlace.getFollowingTerrainNames().begin(), currentPlace.getFollowingTerrainNames().end(), selectedTerrain.getName()) != currentPlace.getFollowingTerrainNames().end();
+
+	// Check if the current place is allowed to be followed by any terrain
+	bool reqAllowedAnyFollowingTerrain = currentPlace.getFollowingTerrainNames()[0] == "";
+
+	// Check if the selected terrain allows the current place as a previous terrain
+	bool reqCurrentPlaceAllowedAsPrevious = selectedTerrain.getPreviousTerrainName() == currentPlace.getName();
+
+	// Check if the selected terrain allows any previous terrain
+	bool reqAnyPlaceAllowedAsPrevious = selectedTerrain.getPreviousTerrainName() == "";
+
+	// Check if the selected terrain has the same name as the current place
+	bool reqNamesAreDifferent = selectedTerrain.getName() != currentPlace.getName();
+
+	// Check if the selected terrain has already been added to this palce
+	bool reqTerrainNotAlreadyAdded = std::find_if(worldMap[currentPlaceIndex].second.begin(), worldMap[currentPlaceIndex].second.end(), 
+		[&](const auto& p) {
+			return worldMap[p].first->getName() == selectedTerrain.getName();
+		}) == worldMap[currentPlaceIndex].second.end();
+
+	return (reqAllowedFollowingTerrain || reqAllowedAnyFollowingTerrain) && (reqCurrentPlaceAllowedAsPrevious || reqAnyPlaceAllowedAsPrevious) && reqNamesAreDifferent && reqTerrainNotAlreadyAdded;
+}
+
+
 
 
 void Game::generateWorldMap() {
 
-	// Select starting settlement:
+	// Select starting settlement
 	auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
+
+	// Add to world map
 	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
+
+	// Pop from settlements list
 	settlements.erase(settlements.begin() + selected_settlement_index);
+
+	// Add connections to settlmenet recursively
 	addConnections(0, worldMap[0].first->getMaxConnectionSize());
 
-	// Mabye just make it better since caves might be added another exit..that might not be a problem tho
-	// If this if statment's content is reached that means that the requirements in regards of connections were too hard
+	// Map not yet populated entirely, retry as long as there are settlements left
 	while (!settlements.empty()) {
 		int random_ind;
-		auto req1 = true, req2 = true;
-		while (req1 || req2)
-		
-		{
+		auto reqNoFollowingAvailable = true, reqSizeLimitReached = true;
+
+		while (reqNoFollowingAvailable || reqSizeLimitReached){
 			random_ind = rollBetween(0, (int)worldMap.size() - 1);
 			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
-				req1 &= (std::find_if(worldMap[random_ind].second.begin(), worldMap[random_ind].second.end(), [&](const auto& p) {return worldMap[p].first->getName() == followingName; }) != worldMap[random_ind].second.end());
+				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.begin(), worldMap[random_ind].second.end(), [&](const auto& mapInd) {return worldMap[mapInd].first->getName() == followingName; }) != worldMap[random_ind].second.end());
 			}
-			req2 = ( (worldMap[random_ind].first->getFollowingTerrainNames()[0] == "") && (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()) );
+			reqSizeLimitReached = ( /*(worldMap[random_ind].first->getFollowingTerrainNames()[0] == "") && */ (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
 		}
 
 		worldMap[random_ind].first->setMaxConnectionSize(worldMap[random_ind].first->getMaxConnectionSize() + 1);
@@ -135,7 +162,7 @@ void Game::generateWorldMap() {
 }
 
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu())
 {
 	// TODO: replace to cpp
 	// Start palying music

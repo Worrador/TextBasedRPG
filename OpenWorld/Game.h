@@ -31,6 +31,7 @@ public:
 	Item getRandomWeapon();
 	Item getRandomArmor();
 	void addConnections(int point, int additionalNumberOfConnections);
+	bool isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex);
 	void generateWorldMap();
 
 	// Static method to return a reference to the single instance
@@ -66,7 +67,6 @@ private:
 	std::vector<Item> shopItems;
 	int currentPoint = 0;
 	int previousPoint = 0;
-	std::mt19937 randomNumberGenerator;
 	
 	// Use vector for constant_time acces, as we only ned to populate once (list could be used otherwise, as the insertion is more efficient)
 	std::vector<mapPoint> worldMap;

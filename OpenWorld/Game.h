@@ -70,5 +70,6 @@ private:
 	
 	// Use vector for constant_time acces, as we only ned to populate once (list could be used otherwise, as the insertion is more efficient)
 	std::vector<mapPoint> worldMap;
+	std::mt19937 randomNumberGenerator;
 };
 

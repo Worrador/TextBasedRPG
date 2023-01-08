@@ -20,8 +20,6 @@ Enemy Game::spawnEnemy()
 
 int Game::rollBetween(int lower, int higher)
 {
-
-	std::mt19937 randomNumberGenerator(std::random_device{}());
 	std::uniform_int_distribution<> roll_dist(lower, higher);
 
 	return roll_dist(randomNumberGenerator);
@@ -51,19 +49,15 @@ static int worldMapIndex = 0;
 void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
 	// Calculate the number of connections that need to be added
-	int connectionsToAdd = maxConnections - (int)worldMap[currentPlaceIndex].second.size();
+	int connectionsToAdd = rollBetween(0, maxConnections - (int)worldMap[currentPlaceIndex].second.size());
 
 	// First add the connections to the map
 	for (int i = 0; i < connectionsToAdd; i++) {
-		if (settlements.empty()) {
-			return;
-		}
-
 		worldMapIndex++;
 
 		// Choose a random settlement or terrain to add to the map
 		std::unique_ptr<Place> newPlace;
-		if (rollBetween(0, 10)) {
+		if (rollBetween(0, 6) || (settlements.empty())) {
 			int selectedTerrainIndex;
 
 			// Keep generating a new random number until it fits the requirements
@@ -156,13 +150,13 @@ void Game::generateWorldMap() {
 			reqSizeLimitReached = ( /*(worldMap[random_ind].first->getFollowingTerrainNames()[0] == "") && */ (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
 		}
 
-		worldMap[random_ind].first->setMaxConnectionSize(worldMap[random_ind].first->getMaxConnectionSize() + 1);
+		//worldMap[random_ind].first->setMaxConnectionSize(worldMap[random_ind].first->getMaxConnectionSize() + 1);
 		addConnections(random_ind, worldMap[random_ind].first->getMaxConnectionSize());
 	}
 }
 
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu())
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
 {
 	// TODO: replace to cpp
 	// Start palying music

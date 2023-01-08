@@ -8,8 +8,10 @@ Terrain::Terrain(const std::string& name, const std::string& travelName, const s
 	Place(name, previousTerrainName), enemiesDay(enemiesDay), enemiesNight(enemiesNight), enemiesDayRaritySum(daySum),
 	enemiesNightRaritySum(nightSum), travelName(travelName)
 {
-	if ( (followingTerrainNames[0] == "") || followingTerrainNames.size() > 3){
-		maxConnectionSize = 3;
+
+	// Without a map 2 destination max is plenty
+	if ( (followingTerrainNames[0] == "") || followingTerrainNames.size() > 2){
+		maxConnectionSize = 2;
 	}
 	else {
 		maxConnectionSize = (int)followingTerrainNames.size();

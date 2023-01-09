@@ -6,13 +6,13 @@
 #include "ResourceParser.h"
 #include <windows.h>
 
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define ESCAPE 27
-#define UNIQUE -1
-#define ENTER '\r'
+constexpr auto KEY_UP = 72;
+constexpr auto KEY_DOWN = 80;
+constexpr auto KEY_LEFT = 75;
+constexpr auto KEY_RIGHT = 77;
+constexpr auto ESCAPE = 27;
+constexpr auto UNIQUE = -1;
+constexpr auto ENTER = '\r';
 
 enum class menuState {
 	Main = 0,

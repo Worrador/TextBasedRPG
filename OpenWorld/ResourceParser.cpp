@@ -270,7 +270,7 @@ void ResourceParser::parseSettlements()
         // Iterate rows, we don't need the first one as it only contains the names of columns, get all the settlement names
         for (int row = sheet->firstRow() + 1; row < sheet->lastRow(); ++row)
         {
-            parsedSettlements.emplace_back(converter.to_bytes(sheet->readStr(row, 0)), converter.to_bytes(sheet->readStr(row, 1)));
+            parsedSettlements.emplace_back(converter.to_bytes(sheet->readStr(row, 0)), converter.to_bytes(sheet->readStr(row, 1)), static_cast<int>(sheet->readNum(row, 2)));
         }
     }
     book->release();

@@ -1,27 +1,16 @@
 #pragma once
 #include "Place.h"
+#include "Shop.h"
+#include <random>
 
-using settlementSize = std::string;
+using settlementSizeType = std::string;
+
+constexpr auto MAXSETTLEMENTSIZE = 7;
 
 class Settlement : public Place
 {
 public:
-	Settlement(const std::string& name, const settlementSize& settlementSize) :
-		Place(name, ""), settlementSize(settlementSize) 
-	{
-		if (settlementSize == "large") {
-			maxConnectionSize = 6;
-		}
-		else if (settlementSize == "medium") {
-			maxConnectionSize = 4;
-		}
-		else {
-			maxConnectionSize = 2;
-		}
-			
-		//else (settlementSize == "small")
-			
-	};
+	Settlement(const std::string& name, const settlementSizeType& settlementSize, const int& maxConnectionSize);
 
 	// Operators
 
@@ -36,8 +25,9 @@ public:
 
 	// Modifiers
 private:
-	settlementSize settlementSize;
+	settlementSizeType settlementSize;
 	int maxConnectionSize = 0;
+	std::vector<Shop> settlementShops;
 
 };
 

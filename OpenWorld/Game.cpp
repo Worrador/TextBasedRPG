@@ -88,7 +88,7 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 		// Choose a random settlement or terrain to add to the map
 		std::unique_ptr<Place> newPlace;
 		if (rollBetween(0, 6) || (settlements.empty())) {
-			int selectedTerrainIndex;
+			int selectedTerrainIndex = 0;
 
 			// Keep generating a new random number until it fits the requirements
 			do {
@@ -154,8 +154,7 @@ void Game::generateWorldMap() {
 
 Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
 {
-	// TODO: replace to cpp
-	// Start palying music
+	// Start playing music
 	PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	DWORD leftVolume = 2000;
 	DWORD rightVolume = 2000;

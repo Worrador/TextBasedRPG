@@ -4,6 +4,10 @@
 
 using shopType = std::string;
 
+constexpr auto SHOP_TYPE_ARMOR = "Armor smith";
+constexpr auto SHOP_TYPE_WEAPON = "Weapon smith";
+constexpr auto SHOP_TYPE_CONSUMABLE = "Potion brewer";
+
 class Shop
 {
 public:
@@ -21,7 +25,7 @@ public:
 
 
 private:
-	std::string shopName;	// Armor smith, Weapon smith, Potion brewer
+	shopType shopName;	// Armor smith, Weapon smith, Potion brewer
 	std::vector<Item> shopItems;
 };
 

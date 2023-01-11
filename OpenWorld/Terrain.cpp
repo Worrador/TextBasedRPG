@@ -28,3 +28,9 @@ Terrain::Terrain(const Terrain& otherTerrain) : Place(otherTerrain.name, otherTe
 	travelName = otherTerrain.travelName;
 	maxConnectionSize = otherTerrain.maxConnectionSize;
 }
+
+const std::vector<std::string>& Terrain::getMenuOptions()
+{
+	static std::vector<std::string> options;
+	return options;
+}

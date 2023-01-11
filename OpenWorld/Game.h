@@ -11,6 +11,15 @@
 // Pointer for the place, and a vector for the next places
 using mapPoint = std::pair<std::unique_ptr<Place>, std::vector<int>>;
 
+constexpr auto MENU_TYPE_TRAVEL = "Travel";
+constexpr auto MENU_TYPE_MAP = "Map";
+constexpr auto MENU_TYPE_REST = "Rest";
+constexpr auto MENU_TYPE_PLAYER_SHEET = "Player sheet";
+constexpr auto MENU_TYPE_SHOP_ARMOR = SHOP_TYPE_ARMOR;
+constexpr auto MENU_TYPE_SHOP_WEAPON = SHOP_TYPE_WEAPON;
+constexpr auto MENU_TYPE_SHOP_CONSUMABLE = SHOP_TYPE_CONSUMABLE;
+constexpr auto MENU_TYPE_QUIT = "Quit";
+
 // Player is manipulated manipulated through this object
 class Game
 {
@@ -28,8 +37,6 @@ public:
 	Game& operator=(Game&&) = delete;
 
 	// Functions
-	Item getRandomWeapon();
-	Item getRandomArmor();
 	void addConnections(int point, int additionalNumberOfConnections);
 	bool isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex);
 	void generateWorldMap();
@@ -64,7 +71,6 @@ private:
 	bool playing;
 	Menu menu;
 	Player player;
-	std::vector<Item> shopItems;
 	int currentPoint = 0;
 	int previousPoint = 0;
 	

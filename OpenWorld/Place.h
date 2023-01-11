@@ -16,6 +16,7 @@ public:
 	// Make class purely virtual so derived classes must implement this method too
 	virtual std::string getTravelName() = 0;
 	virtual int getMaxConnectionSize() = 0;
+	virtual const std::vector<std::string>& getMenuOptions() = 0;
 
 	// Accessors
 	inline const std::string& getName() const { return name; };

@@ -26,6 +26,7 @@ public:
 	inline const int& getEnemiesNightRaritySum() const { return enemiesNightRaritySum; }
 	inline std::string getTravelName() override { return travelName; };
 	inline int getMaxConnectionSize() override { return maxConnectionSize; };
+	const std::vector<std::string>& getMenuOptions() override;
 
 	// Modifiers
 	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };

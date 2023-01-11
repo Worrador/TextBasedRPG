@@ -25,21 +25,6 @@ int Game::rollBetween(int lower, int higher)
 	return roll_dist(randomNumberGenerator);
 }
 
-
-Item Game::getRandomArmor()
-{
-	// Generate items this should be in the location constructor
-	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getArmorsRaritySum());
-	std::vector<Item> parsedItems = ResourceParser::getInstance().getParsedArmors();
-
-	int itemIndex = -1;
-	while (randomItemNum > 0) {
-		itemIndex++;
-		randomItemNum -= parsedItems[itemIndex].getRarity();
-	}
-	return parsedItems[itemIndex];
-}
-
 // Get local modifyable variables
 static auto settlements = ResourceParser::getInstance().getParsedSettlements();
 static auto terrains = ResourceParser::getInstance().getParsedTerrains();
@@ -74,7 +59,6 @@ bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex)
 
 		return (reqAllowedFollowingTerrain || reqAllowedAnyFollowingTerrain) && (reqCurrentPlaceAllowedAsPrevious || reqAnyPlaceAllowedAsPrevious) && reqNamesAreDifferent && reqTerrainNotAlreadyAdded;
 }
-
 
 void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
@@ -151,7 +135,6 @@ void Game::generateWorldMap() {
 	}
 }
 
-
 Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
 {
 	// Start playing music
@@ -159,27 +142,8 @@ Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu(
 	DWORD leftVolume = 2000;
 	DWORD rightVolume = 2000;
 	waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
-	shopItems.emplace_back(getRandomWeapon());
-	shopItems.emplace_back(getRandomWeapon());
-	shopItems.emplace_back(getRandomWeapon());
-	shopItems.emplace_back(getRandomArmor());
-	shopItems.emplace_back(getRandomArmor());
 	generateWorldMap();
 };
-
-Item Game::getRandomWeapon()
-{
-	// Generate items this should be in the location constructor
-	int randomItemNum = rollBetween(0, ResourceParser::getInstance().getWeaponsRaritySum());
-	auto& parsedItems = ResourceParser::getInstance().getParsedWeapons();
-
-	int itemIndex = -1;
-	while (randomItemNum > 0) {
-		itemIndex++;
-		randomItemNum -= parsedItems[itemIndex].getRarity();
-	}
-	return parsedItems[itemIndex];
-}
 
 void dramaticPause()
 {
@@ -391,19 +355,20 @@ void Game::gameLoop()
 		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {
-			"Travel",
-			"Rest",
-			"Shop",
-			"Player sheet",
-			"Quit",
+			MENU_TYPE_TRAVEL,
+			MENU_TYPE_REST,
+			MENU_TYPE_PLAYER_SHEET,
+			MENU_TYPE_QUIT,
 		};
+
+		// Add additional menu points before the quit option
+		dynamicMenuPoints.insert(dynamicMenuPoints.begin() + dynamicMenuPoints.size() - 1, 
+			worldMap[currentPoint].first->getMenuOptions().begin(), worldMap[currentPoint].first->getMenuOptions().end());
 
 		std::vector<std::string> options = {};
 
 		menu.menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
-		switch (selectedMenuPoint)
-		{
-		case 0:
+		if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_TRAVEL) {
 			for (auto index : worldMap[currentPoint].second) {
 				if (previousPoint == index) {
 					options.emplace_back(worldMap[index].first->getTravelName() + " (go back)");
@@ -411,32 +376,41 @@ void Game::gameLoop()
 				else {
 					options.emplace_back(worldMap[index].first->getTravelName());
 				}
-				
+
 			}
 			travel(menu.travelMenu(player, options));
-			break;
-		case 1:
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_MAP) {
+			std::cout << "Not yet implemented" << std::endl;
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_REST) {
 			rest(menu.restMenu(player));
-			break;
-		case 2:
-			menu.shopMenu(player, shopItems);
-			break;
-		case 3:
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_PLAYER_SHEET) {
 			menu.playerSheetMenu(player);
-			break;
-		case 4:
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_SHOP_ARMOR) {
+			auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get());
+			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_ARMOR).getShopItems());
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_SHOP_WEAPON) {
+			auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get());
+			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_WEAPON).getShopItems());
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_SHOP_CONSUMABLE) {
+			auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get());
+			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_CONSUMABLE).getShopItems());
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_QUIT) {
 			if (menu.quitMenu() == 0) {
 				return;
 			}
-			break;
-		case ESCAPE:
-			selectedMenuPoint = 4;
-			break;
-		default:
-			break;
 		}
-		if (playing != true) {
-			return;
+		else if(selectedMenuPoint == ESCAPE) {
+			selectedMenuPoint = (int)dynamicMenuPoints.size() - 1;
+		}
+		else {
+
 		}
 	}
 }

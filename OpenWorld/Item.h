@@ -2,16 +2,15 @@
 #include "Role.h"
 #include <algorithm>
 #include <vector>
+#include <map>
 
 using itemType = std::string;
+using itemRarity = std::string;
 
 class Item
 {
 public:
-	Item(const std::string& name, const std::vector<roleName>& roles, const itemType& itemType, int hpMax, int damageMax, int defence, int staminaMax) :
-		name(name), roles(roles), itemType(itemType),level((int)std::floor((hpMax + damageMax + defence + staminaMax) / 2)), hpMax(hpMax),
-		buyGold(hpMax * 2 + damageMax * 2 + defence * 3 + staminaMax), sellGold((int)std::floor(buyGold / 2)), damageMax(damageMax),
-		defence(defence), staminaMax(staminaMax), rarity((int)std::floor(10000 / (buyGold * buyGold))) {};
+	Item(const std::string& name, const std::vector<roleName>& roles, const itemType& itemType, int hpMax, int damageMax, int defence, int staminaMax);
 
 	// Operators
 
@@ -27,8 +26,9 @@ public:
 	inline int getDamageMax() const { return damageMax; };
 	inline int getDefence() const { return defence; };
 	inline int getStaminaMax() const { return staminaMax; };
-	inline itemType getItemType() const { return itemType; };
-	inline int getRarity() const { return rarity; };
+	inline itemType getItemType() const { return type; };
+	inline int getRarityValue() const { return rarity; };
+	inline itemRarity getRarityName() const { return rarityName; };
 
 	// Modifiers
 
@@ -37,7 +37,7 @@ private:
 	// as it is not possible to change the value of a const data member.
 	std::string name;
 	std::vector<roleName> roles;	// multiple classes could use it
-	itemType itemType;
+	itemType type;
 	int level;
 	int sellGold;
 	int hpMax;
@@ -46,4 +46,14 @@ private:
 	int staminaMax;
 	int buyGold;
 	int rarity;
+	itemRarity rarityName;
+
+
+	static inline const std::map<itemRarity, int> itemRarityThresholds = {
+		{"Uncommon", 750},
+		{"Rare", 500},
+		{"Epic", 250},
+		{"Legendary", 100},
+		{"Mythic", 50}
+	};
 };

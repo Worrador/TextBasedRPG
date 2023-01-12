@@ -66,15 +66,15 @@ void ItemParser::parseItems()
 
             switch (sheet_index) {
             case 0:
-                parsedWeaponsRaritySum += item.getRarity();
+                parsedWeaponsRaritySum += item.getRarityValue();
                 parsedWeapons.push_back(std::move(item));
                 break;
             case 1:
-                parsedArmorsRaritySum += item.getRarity();
+                parsedArmorsRaritySum += item.getRarityValue();
                 parsedArmors.push_back(std::move(item));
                 break;
             case 2:
-                parsedConsumablesRaritySum += item.getRarity();
+                parsedConsumablesRaritySum += item.getRarityValue();
                 parsedConsumables.push_back(std::move(item));
                 break;
             default:

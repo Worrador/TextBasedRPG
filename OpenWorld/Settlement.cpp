@@ -61,9 +61,9 @@ void Settlement::addRandomShopItem(std::vector<Item>& shopItems, shopType type)
 		itemIndex = -1;
 		randomItemNumCounter = getRandomBetween(0, itemRaritySum);
 		std::shuffle(parsedItems.begin(), parsedItems.end(), randomNumberGenerator);
-		while (randomItemNumCounter >= 0) {
+		while (randomItemNumCounter > 0) {
 			itemIndex++;
-			randomItemNumCounter -= parsedItems[itemIndex].getRarity();
+			randomItemNumCounter -= parsedItems[itemIndex].getRarityValue();
 		}
 	} while ((shopItems.size() != 0) && (std::find_if(shopItems.begin(), shopItems.end(),
 		[&](const auto& item) {

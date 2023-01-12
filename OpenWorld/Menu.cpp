@@ -241,6 +241,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
             }
             ss << std::endl;
             ss << "Item type: " << shopItems[selectedMenuPoint].getItemType() << std::endl;
+            ss << "Rarity: " << shopItems[selectedMenuPoint].getRarityName() << std::endl;
             ss << "Max HP: " << shopItems[selectedMenuPoint].getHpMax() << std::endl;
             ss << "Max damage: " << shopItems[selectedMenuPoint].getDamageMax() << std::endl;
             ss << "Defence: " << shopItems[selectedMenuPoint].getDefence() << std::endl;

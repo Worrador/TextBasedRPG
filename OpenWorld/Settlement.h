@@ -1,13 +1,12 @@
 #pragma once
 #include "Place.h"
 #include "Shop.h"
+#include "ItemParser.h"
 #include <random>
 
 using settlementSizeType = std::string;
 
 constexpr auto MAXSETTLEMENTSIZE = 7;
-
-class ResourceParser;
 
 class Settlement : public Place
 {
@@ -24,7 +23,7 @@ public:
 	// Accessors
 	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };
 	inline int getMaxConnectionSize() override { return maxConnectionSize; };
-	const std::vector<std::string>& getMenuOptions() override;
+	const std::vector<std::string> getMenuOptions() const override;
 	Shop& getShop(shopType shop);
 
 	// Modifiers

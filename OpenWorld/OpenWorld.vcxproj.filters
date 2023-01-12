@@ -22,6 +22,9 @@
     <Filter Include="Source Files\GameData">
       <UniqueIdentifier>{7106ee4e-3054-4002-ad61-83973db91e94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ResourceParsers">
+      <UniqueIdentifier>{ffd307fe-cdcd-4313-b9ae-5434a82e0705}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,9 +38,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Actors</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceParser.cpp">
-      <Filter>Source Files\GameData</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files\GameFlow</Filter>
@@ -60,6 +60,24 @@
     <ClCompile Include="Place.cpp">
       <Filter>Source Files\GameData</Filter>
     </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>Source Files\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="SettlementParser.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
+    <ClCompile Include="RoleParser.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainParser.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemParser.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyParser.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -80,9 +98,6 @@
     <ClInclude Include="Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Role.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +111,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoleParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettlementParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

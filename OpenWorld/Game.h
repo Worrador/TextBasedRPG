@@ -1,5 +1,7 @@
 #pragma once
-#include "ResourceParser.h"
+#include "EnemyParser.h"
+#include "SettlementParser.h"
+#include "TerrainParser.h"
 #include "Menu.h"
 #include <random>
 #include <iostream>

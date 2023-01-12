@@ -151,32 +151,40 @@
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyParser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemParser.cpp" />
     <ClCompile Include="Place.cpp" />
+    <ClCompile Include="RoleParser.cpp" />
+    <ClCompile Include="SettlementParser.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ResourceParser.cpp" />
     <ClCompile Include="Role.cpp" />
     <ClCompile Include="Settlement.cpp" />
+    <ClCompile Include="TerrainParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyParser.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemParser.h" />
     <ClInclude Include="Place.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RoleParser.h" />
+    <ClInclude Include="SettlementParser.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="ResourceParser.h" />
     <ClInclude Include="Role.h" />
     <ClInclude Include="Settlement.h" />
+    <ClInclude Include="TerrainParser.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="1.wav" />

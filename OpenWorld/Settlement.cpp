@@ -1,5 +1,4 @@
 #include "Settlement.h"
-#include "ResourceParser.h"
 
 int Settlement::getRandomBetween(int lower, int higher)
 {
@@ -38,43 +37,45 @@ Settlement::Settlement(const std::string& name, const settlementSizeType& settle
 
 void Settlement::addRandomShopItem(std::vector<Item>& shopItems, shopType type)
 {
-	int randomItemNum;
+	int itemRaritySum;
 	std::vector<Item> parsedItems;
 
 	// Generate items this should be in the location constructor
 	if (type == SHOP_TYPE_ARMOR) {
-		randomItemNum = getRandomBetween(0, ResourceParser::getInstance().getWeaponsRaritySum());
-		parsedItems = ResourceParser::getInstance().getParsedArmors();
+		itemRaritySum = ItemParser::getInstance().getArmorsRaritySum();
+		parsedItems = ItemParser::getInstance().getParsedArmors();
 	}
 	else if (type == SHOP_TYPE_WEAPON) {
-		randomItemNum = getRandomBetween(0, ResourceParser::getInstance().getConsumablesRaritySum());
-		parsedItems = ResourceParser::getInstance().getParsedWeapons();
+		itemRaritySum = ItemParser::getInstance().getWeaponsRaritySum();
+		parsedItems = ItemParser::getInstance().getParsedWeapons();
 	}
 	else {
-		randomItemNum = getRandomBetween(0, ResourceParser::getInstance().getConsumablesRaritySum());
-		parsedItems = ResourceParser::getInstance().getParsedConsumables();
+		itemRaritySum = ItemParser::getInstance().getConsumablesRaritySum();
+		parsedItems = ItemParser::getInstance().getParsedConsumables();
 	}
 
 	// shuffle parseditems vector while we do not get an item that is not already present in the vector
 	int itemIndex;
+	int randomItemNumCounter;
 	do {
 		itemIndex = -1;
+		randomItemNumCounter = getRandomBetween(0, itemRaritySum);
 		std::shuffle(parsedItems.begin(), parsedItems.end(), randomNumberGenerator);
-		while (randomItemNum > 0) {
+		while (randomItemNumCounter >= 0) {
 			itemIndex++;
-			randomItemNum -= parsedItems[itemIndex].getRarity();
+			randomItemNumCounter -= parsedItems[itemIndex].getRarity();
 		}
-	} while (std::find_if(parsedItems.begin(), parsedItems.end(),
+	} while ((shopItems.size() != 0) && (std::find_if(shopItems.begin(), shopItems.end(),
 		[&](const auto& item) {
 			return(item.getName() == parsedItems[itemIndex].getName());
-		}) != parsedItems.end());
+		}) != shopItems.end()));
 
 	shopItems.push_back(parsedItems[itemIndex]);
 }
 
-const std::vector<std::string>& Settlement::getMenuOptions()
+const std::vector<std::string> Settlement::getMenuOptions() const
 {
-	static std::vector<std::string> options;
+	std::vector<std::string> options;
 	for (const auto& shop : settlementShops) {
 		options.emplace_back(shop.getShopName());
 	}

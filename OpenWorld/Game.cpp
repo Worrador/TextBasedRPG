@@ -8,7 +8,7 @@ Enemy Game::spawnEnemy()
 
 	// Generate items this should be in the location constructor
 	int randomEnemyNum = 10;
-	auto& enemies = ResourceParser::getInstance().getParsedEnemies();
+	auto& enemies = EnemyParser::getInstance().getParsedEnemies();
 
 	int enemyIndex = -1;
 	while (randomEnemyNum > 0) {
@@ -26,8 +26,8 @@ int Game::rollBetween(int lower, int higher)
 }
 
 // Get local modifyable variables
-static auto settlements = ResourceParser::getInstance().getParsedSettlements();
-static auto terrains = ResourceParser::getInstance().getParsedTerrains();
+static auto settlements = SettlementParser::getInstance().getParsedSettlements();
+static auto terrains = TerrainParser::getInstance().getParsedTerrains();
 static std::queue<int> placesQueue;
 static int worldMapIndex = 0;
 
@@ -357,18 +357,23 @@ void Game::gameLoop()
 		std::vector <std::string> dynamicMenuPoints = {
 			MENU_TYPE_TRAVEL,
 			MENU_TYPE_REST,
+			MENU_TYPE_MAP,
 			MENU_TYPE_PLAYER_SHEET,
 			MENU_TYPE_QUIT,
 		};
 
 		// Add additional menu points before the quit option
+		std::vector <std::string> placeMenuOptions = worldMap[currentPoint].first->getMenuOptions();
 		dynamicMenuPoints.insert(dynamicMenuPoints.begin() + dynamicMenuPoints.size() - 1, 
-			worldMap[currentPoint].first->getMenuOptions().begin(), worldMap[currentPoint].first->getMenuOptions().end());
+			placeMenuOptions.begin(), placeMenuOptions.end());
 
 		std::vector<std::string> options = {};
 
 		menu.menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
-		if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_TRAVEL) {
+		if (selectedMenuPoint == ESCAPE) {
+				selectedMenuPoint = (int)dynamicMenuPoints.size() - 1;
+		}
+		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_TRAVEL) {
 			for (auto index : worldMap[currentPoint].second) {
 				if (previousPoint == index) {
 					options.emplace_back(worldMap[index].first->getTravelName() + " (go back)");
@@ -405,9 +410,6 @@ void Game::gameLoop()
 			if (menu.quitMenu() == 0) {
 				return;
 			}
-		}
-		else if(selectedMenuPoint == ESCAPE) {
-			selectedMenuPoint = (int)dynamicMenuPoints.size() - 1;
 		}
 		else {
 

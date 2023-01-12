@@ -85,7 +85,6 @@ void TerrainParser::parseTerrains()
             int enemiesDayRaritySum = 0;
             int enemiesNightRaritySum = 0;
 
-            // TODO: Terrain töltse fel magát mint a settlement a shoppokat
             const auto& parsedEnemies = EnemyParser::getInstance().getParsedEnemies();
             for (auto& enemyName : enemiesDay) {
                 auto it = std::find_if(parsedEnemies.begin(), parsedEnemies.end(), [&](const Enemy& current) {return (current.getName() == enemyName); });

@@ -131,7 +131,7 @@ Player Menu::playerCreationMenu()
             "Now choose a class!"
         };
         // List of menu points
-        auto& roles = ResourceParser::getInstance().getParsedRoles();
+        auto& roles = RoleParser::getInstance().getParsedRoles();
         std::vector <std::string> dynamicMenuPoints;
 
         for (auto& role : roles) {

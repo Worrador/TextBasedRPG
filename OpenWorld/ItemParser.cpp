@@ -23,9 +23,9 @@ void ItemParser::parseItems()
         return;
     }
 
-    for (int sheet_index = 0; sheet_index < 2; ++sheet_index)
+    for (int sheet_index = 0; sheet_index < 3; ++sheet_index)
     {
-        libxl::Sheet* sheet = book->getSheet(0);
+        libxl::Sheet* sheet = book->getSheet(sheet_index);
         if (!sheet) {
             continue;
         }
@@ -64,13 +64,21 @@ void ItemParser::parseItems()
                 static_cast<int>(sheet->readNum(row, 5)),
                 static_cast<int>(sheet->readNum(row, 6)));
 
-            if (sheet_index == 0) {
+            switch (sheet_index) {
+            case 0:
                 parsedWeaponsRaritySum += item.getRarity();
                 parsedWeapons.push_back(std::move(item));
-            }
-            else {
+                break;
+            case 1:
                 parsedArmorsRaritySum += item.getRarity();
                 parsedArmors.push_back(std::move(item));
+                break;
+            case 2:
+                parsedConsumablesRaritySum += item.getRarity();
+                parsedConsumables.push_back(std::move(item));
+                break;
+            default:
+                break;
             }
         }
     }

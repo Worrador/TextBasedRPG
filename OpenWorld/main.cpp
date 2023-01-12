@@ -2,13 +2,27 @@
 //
 
 #include "Game.h"
-#include "ResourceParser.h"
+#include "RoleParser.h"
+#include "ItemParser.h"
+#include "EnemyParser.h"
+#include "SettlementParser.h"
+#include "TerrainParser.h"
+
+
+
 
 int main()
 {
     // Parse resources
-    if (ResourceParser::getInstance().getResourceError()) {
-        std::cout << "Resource error";
+    auto resourceErrors = 0;
+    resourceErrors += RoleParser::getInstance().getResourceError();
+    resourceErrors += ItemParser::getInstance().getResourceError();
+    resourceErrors += EnemyParser::getInstance().getResourceError();
+    resourceErrors += SettlementParser::getInstance().getResourceError();
+    resourceErrors += TerrainParser::getInstance().getResourceError();
+
+    if (resourceErrors) {
+        std::cout << "Resource error: " << resourceErrors;
         return 0;
     }
 

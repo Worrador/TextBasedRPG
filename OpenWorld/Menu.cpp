@@ -38,6 +38,8 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
         }
 
         std::cout << ss.str();
+
+        // Error handling in case of empty menu options
         if (selectedMenuPoint < 0) {
             FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
             _getch();
@@ -227,6 +229,10 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 
         auto getDynamicItemStats = [shopItems](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
+            if (selectedMenuPoint < 0) {
+                return;
+            }
+
             ss << std::endl << "------------------------------------" << std::endl;
             ss << std::endl << "Costs: " << shopItems[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
             ss << "Equipable by: ";

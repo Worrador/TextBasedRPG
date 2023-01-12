@@ -16,6 +16,7 @@ public:
 
 	// Operators
 	Player& operator+=(const Item& item);
+	Player& operator-=(const Item& item);
 
 	// Functions
 	void levelUp();

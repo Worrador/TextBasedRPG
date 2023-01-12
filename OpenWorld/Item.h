@@ -50,10 +50,10 @@ private:
 
 
 	static inline const std::map<itemRarity, int> itemRarityThresholds = {
-		{"Uncommon", 750},
-		{"Rare", 500},
-		{"Epic", 250},
+		{"Mythic", 50},
 		{"Legendary", 100},
-		{"Mythic", 50}
+		{"Epic", 250},
+		{"Rare", 500},
+		{"Uncommon", 750}
 	};
 };

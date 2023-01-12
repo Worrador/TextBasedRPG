@@ -13,6 +13,19 @@ Player& Player::operator+=(const Item& item)
 	return *this;
 }
 
+Player& Player::operator-=(const Item& item)
+{
+	this->setHpMax(this->getHpMax() - item.getHpMax());
+	this->setHp(std::min(this->getHp(), this->getHpMax()));
+	this->setDamage(this->getDamageMax() - item.getDamageMax());
+	this->setDefence(this->getDefence() - item.getDefence());
+
+	this->setStaminaMax(this->getStaminaMax() - item.getStaminaMax());
+	this->setStamina(std::min(this->getStamina(), this->getStaminaMax()));
+
+	return *this;
+}
+
 void Player::levelUp()
 {
 	// The player levels himself up in game as well,is okay to be here
@@ -70,6 +83,10 @@ void Player::equipItem(const int& itemPos)
 void Player::unequipItem(const int& itemPos)
 {
 	// Unequip item without question
-	Inventory.push_back(std::move(Equipment[itemPos]));
+
+	// Modify player stats
+	*this -= Equipment[itemPos];
+
+	Inventory.emplace_back(std::move(Equipment[itemPos]));
 	Equipment.erase(Equipment.begin() + itemPos);
 }

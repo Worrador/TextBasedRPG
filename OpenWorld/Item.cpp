@@ -14,6 +14,7 @@ Item::Item(const std::string& name, const std::vector<roleName>& roles, const it
 	for (const auto& [rarityName, treshold] : itemRarityThresholds) {
 		if (rarity <= treshold) {
 			this->rarityName = rarityName;
+			break;
 		}
 	}
 }

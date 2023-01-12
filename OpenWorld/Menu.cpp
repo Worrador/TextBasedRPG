@@ -427,6 +427,10 @@ void Menu::playerSheetMenu(Player& player)
         if ((int)dynamicMenuPoints.size() == 0) {
             selectedMenuPoint = -1; // indicating error for menugenerator
         }
+        // For level up
+        if ((int)dynamicMenuPoints.size() <= selectedMenuPoint) {
+            selectedMenuPoint = 0; // indicating error for menugenerator
+        }
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerInfo);
 
         switch (selectedMenuPoint) {

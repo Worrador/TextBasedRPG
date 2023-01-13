@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="12025355057609268002">
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="22" column="105"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="23" column="107"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="24" column="69"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="25" column="71"/>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." verbose="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.h" line="10" column="2"/>
+            <symbol>Terrain::maxConnectionSize</symbol>
+        </error>
+        <error id="constVariable" severity="style" msg="Variable &apos;followingName&apos; can be declared as reference to const" verbose="Variable &apos;followingName&apos; can be declared as reference to const" cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Game.cpp" line="151" column="15" info="Variable &apos;followingName&apos; can be declared as reference to const"/>
+            <symbol>followingName</symbol>
+        </error>
+        <error id="useStlAlgorithm" severity="style" msg="Consider using std::accumulate algorithm instead of a raw loop." verbose="Consider using std::accumulate algorithm instead of a raw loop." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Game.cpp" line="29" column="27"/>
+        </error>
+  <FileInfo check="ctu">
+<function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="11" col="73" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="33" col="34" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="88" col="36" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="96" col="18" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="101" col="39" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="107" col="45" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="133" col="46" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:42:7" call-funcname="addConnections" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="142" col="16" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="150" col="28" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="197" col="22" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:65:7" call-funcname="fight" call-argnr="2" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="332" col="8" call-argexpr="false" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="347" col="23" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:65:7" call-funcname="fight" call-argnr="2" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="353" col="9" call-argexpr="false" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:60:6" call-funcname="rollBetween" call-argnr="1" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="360" col="23" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/>  </FileInfo>
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:64:7" my-argnr="1" my-argname="attacker" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="241" col="6" value="0"/>
+    <unsafe-usage my-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.h:66:7" my-argnr="1" my-argname="enemy" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Game.cpp" line="288" col="39" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="spawnEnemy" lineNumber="3"/>
+    <functiondecl functionName="rollBetween" lineNumber="43"/>
+    <functiondecl functionName="isValidTerrainChoice" lineNumber="57"/>
+    <functiondecl functionName="addConnections" lineNumber="85"/>
+    <functiondecl functionName="generateWorldMap" lineNumber="130"/>
+    <functiondecl functionName="playMusic" lineNumber="160"/>
+    <functiondecl functionName="dramaticPause" lineNumber="175"/>
+    <functiondecl functionName="travel" lineNumber="187"/>
+    <functiondecl functionName="makeAttack" lineNumber="239"/>
+    <functiondecl functionName="fight" lineNumber="260"/>
+    <functiondecl functionName="run" lineNumber="284"/>
+    <functiondecl functionName="wait" lineNumber="303"/>
+    <functiondecl functionName="rest" lineNumber="336"/>
+    <functiondecl functionName="gameLoop" lineNumber="379"/>
+    <functioncall functionName="Buy"/>
+    <functioncall functionName="Character"/>
+    <functioncall functionName="Enemy"/>
+    <functioncall functionName="EnemyParser"/>
+    <functioncall functionName="FlushConsoleInputBuffer"/>
+    <functioncall functionName="Game"/>
+    <functioncall functionName="GetStdHandle"/>
+    <functioncall functionName="Item"/>
+    <functioncall functionName="ItemParser"/>
+    <functioncall functionName="MENU_TYPE_MAP"/>
+    <functioncall functionName="MENU_TYPE_PLAYER_SHEET"/>
+    <functioncall functionName="MENU_TYPE_QUIT"/>
+    <functioncall functionName="MENU_TYPE_REST"/>
+    <functioncall functionName="MENU_TYPE_SHOP_ARMOR"/>
+    <functioncall functionName="MENU_TYPE_SHOP_CONSUMABLE"/>
+    <functioncall functionName="MENU_TYPE_SHOP_WEAPON"/>
+    <functioncall functionName="MENU_TYPE_TRAVEL"/>
+    <functioncall functionName="Main"/>
+    <functioncall functionName="NULL"/>
+    <functioncall functionName="Place"/>
+    <functioncall functionName="PlaySound"/>
+    <functioncall functionName="Player"/>
+    <functioncall functionName="PlayerSheet"/>
+    <functioncall functionName="Rest"/>
+    <functioncall functionName="Role"/>
+    <functioncall functionName="RoleParser"/>
+    <functioncall functionName="SHOP_TYPE_ARMOR"/>
+    <functioncall functionName="SHOP_TYPE_CONSUMABLE"/>
+    <functioncall functionName="SHOP_TYPE_WEAPON"/>
+    <functioncall functionName="SND_LOOP"/>
+    <functioncall functionName="STD_INPUT_HANDLE"/>
+    <functioncall functionName="Sell"/>
+    <functioncall functionName="Settlement"/>
+    <functioncall functionName="SettlementParser"/>
+    <functioncall functionName="Shop"/>
+    <functioncall functionName="Terrain"/>
+    <functioncall functionName="TerrainParser"/>
+    <functioncall functionName="Travel"/>
+    <functioncall functionName="_getch"/>
+    <functioncall functionName="addConnections"/>
+    <functioncall functionName="aggressivity"/>
+    <functioncall functionName="back_inserter"/>
+    <functioncall functionName="begin"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="chance"/>
+    <functioncall functionName="codecvt_utf8"/>
+    <functioncall functionName="copy_if"/>
+    <functioncall functionName="createBanner"/>
+    <functioncall functionName="currentEnemies"/>
+    <functioncall functionName="currentEnemiesRaritySum"/>
+    <functioncall functionName="currentPlaceIndex"/>
+    <functioncall functionName="currentPoint"/>
+    <functioncall functionName="damageMax"/>
+    <functioncall functionName="damageMin"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="defence"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dmgAttacker"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="dmgMax"/>
+    <functioncall functionName="dmgMin"/>
+    <functioncall functionName="dramaticPause"/>
+    <functioncall functionName="dynamicMenuPoints"/>
+    <functioncall functionName="dynamic_cast"/>
+    <functioncall functionName="emplace_back"/>
+    <functioncall functionName="empty"/>
+    <functioncall functionName="end"/>
+    <functioncall functionName="enemy"/>
+    <functioncall functionName="enemyIndex"/>
+    <functioncall functionName="erase"/>
+    <functioncall functionName="exp"/>
+    <functioncall functionName="expDrop"/>
+    <functioncall functionName="expNext"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="fight"/>
+    <functioncall functionName="find"/>
+    <functioncall functionName="find_if"/>
+    <functioncall functionName="first"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="followingTerrainNames"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="front"/>
+    <functioncall functionName="generateWorldMap"/>
+    <functioncall functionName="get"/>
+    <functioncall functionName="getDamageMax"/>
+    <functioncall functionName="getDamageMin"/>
+    <functioncall functionName="getDefence"/>
+    <functioncall functionName="getEnemiesNight"/>
+    <functioncall functionName="getEquipment"/>
+    <functioncall functionName="getExp"/>
+    <functioncall functionName="getExpDrop"/>
+    <functioncall functionName="getFollowingTerrainNames"/>
+    <functioncall functionName="getGold"/>
+    <functioncall functionName="getHp"/>
+    <functioncall functionName="getInstance"/>
+    <functioncall functionName="getLevel"/>
+    <functioncall functionName="getMaxConnectionSize"/>
+    <functioncall functionName="getMenuOptions"/>
+    <functioncall functionName="getName"/>
+    <functioncall functionName="getParsedEnemies"/>
+    <functioncall functionName="getParsedSettlements"/>
+    <functioncall functionName="getParsedTerrains"/>
+    <functioncall functionName="getPreviousTerrainName"/>
+    <functioncall functionName="getRarity"/>
+    <functioncall functionName="getRole"/>
+    <functioncall functionName="getRoleName"/>
+    <functioncall functionName="getShop"/>
+    <functioncall functionName="getShopItems"/>
+    <functioncall functionName="getStamina"/>
+    <functioncall functionName="getStaminaIncr"/>
+    <functioncall functionName="getStaminaMax"/>
+    <functioncall functionName="getStartingDef"/>
+    <functioncall functionName="getStartingDmgMax"/>
+    <functioncall functionName="getStartingHpMax"/>
+    <functioncall functionName="getStartingStaminaMax"/>
+    <functioncall functionName="getTravelName"/>
+    <functioncall functionName="gold"/>
+    <functioncall functionName="higher"/>
+    <functioncall functionName="hp"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="hpMax"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="index"/>
+    <functioncall functionName="insert"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="isMale"/>
+    <functioncall functionName="isValidTerrainChoice"/>
+    <functioncall functionName="level"/>
+    <functioncall functionName="lower"/>
+    <functioncall functionName="mainMenuChoice"/>
+    <functioncall functionName="makeAttack"/>
+    <functioncall functionName="make_unique"/>
+    <functioncall functionName="mapInd"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="maxConnectionSize"/>
+    <functioncall functionName="menuGenerator"/>
+    <functioncall functionName="menuState"/>
+    <functioncall functionName="milliseconds"/>
+    <functioncall functionName="min"/>
+    <functioncall functionName="move"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="newExpDrop"/>
+    <functioncall functionName="newPlace"/>
+    <functioncall functionName="nullptr"/>
+    <functioncall functionName="options"/>
+    <functioncall functionName="p"/>
+    <functioncall functionName="pair"/>
+    <functioncall functionName="playMusic"/>
+    <functioncall functionName="player"/>
+    <functioncall functionName="playerCreationMenu"/>
+    <functioncall functionName="playerInitialize"/>
+    <functioncall functionName="playerSheetMenu"/>
+    <functioncall functionName="playing"/>
+    <functioncall functionName="pop"/>
+    <functioncall functionName="previousTerrainName"/>
+    <functioncall functionName="push"/>
+    <functioncall functionName="queuedPlaceIndex"/>
+    <functioncall functionName="quitMenu"/>
+    <functioncall functionName="randomEnemyNum"/>
+    <functioncall functionName="randomNumberGenerator"/>
+    <functioncall functionName="random_ind"/>
+    <functioncall functionName="rarity"/>
+    <functioncall functionName="rest"/>
+    <functioncall functionName="restMenu"/>
+    <functioncall functionName="restOption"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="rightVolume"/>
+    <functioncall functionName="role"/>
+    <functioncall functionName="rollBetween"/>
+    <functioncall functionName="roll_dist"/>
+    <functioncall functionName="run"/>
+    <functioncall functionName="second"/>
+    <functioncall functionName="seconds"/>
+    <functioncall functionName="selectedMenuPoint"/>
+    <functioncall functionName="selectedSettlementIndex"/>
+    <functioncall functionName="selectedTerrainIndex"/>
+    <functioncall functionName="selected_settlement_index"/>
+    <functioncall functionName="setExp"/>
+    <functioncall functionName="setGold"/>
+    <functioncall functionName="setHp"/>
+    <functioncall functionName="setStamina"/>
+    <functioncall functionName="shopItems"/>
+    <functioncall functionName="shopMenu"/>
+    <functioncall functionName="shopName"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sleep_for"/>
+    <functioncall functionName="spawnEnemy"/>
+    <functioncall functionName="stamina"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="staminaMax"/>
+    <functioncall functionName="staminaNeeded"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="staticLines"/>
+    <functioncall functionName="staticMenuLines"/>
+    <functioncall functionName="string"/>
+    <functioncall functionName="switch"/>
+    <functioncall functionName="travel"/>
+    <functioncall functionName="travelMenu"/>
+    <functioncall functionName="travelOption"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="unique_ptr"/>
+    <functioncall functionName="vector"/>
+    <functioncall functionName="void"/>
+    <functioncall functionName="wait"/>
+    <functioncall functionName="waveOutSetVolume"/>
+    <functioncall functionName="wchar_t"/>
+    <functioncall functionName="while"/>
+    <functioncall functionName="worldMapIndex"/>
+  </FileInfo>
+</analyzerinfo>

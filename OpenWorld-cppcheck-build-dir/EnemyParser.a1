@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="7599085001048998634">
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." verbose="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/EnemyParser.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.h" line="10" column="2"/>
+            <symbol>Terrain::maxConnectionSize</symbol>
+        </error>
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="parseEnemies" lineNumber="15"/>
+    <functioncall functionName="Character"/>
+    <functioncall functionName="Enemy"/>
+    <functioncall functionName="EnemyParser"/>
+    <functioncall functionName="Terrain"/>
+    <functioncall functionName="aggressivity"/>
+    <functioncall functionName="codecvt_utf8"/>
+    <functioncall functionName="damageMax"/>
+    <functioncall functionName="damageMin"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="defence"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="dmgMax"/>
+    <functioncall functionName="dmgMin"/>
+    <functioncall functionName="emplace_back"/>
+    <functioncall functionName="enemyName"/>
+    <functioncall functionName="expDrop"/>
+    <functioncall functionName="firstRow"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="followingTerrainNames"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="getSheet"/>
+    <functioncall functionName="gold"/>
+    <functioncall functionName="hp"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="hpMax"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="lastRow"/>
+    <functioncall functionName="load"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="maxConnectionSize"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="newExpDrop"/>
+    <functioncall functionName="parseEnemies"/>
+    <functioncall functionName="previousTerrainName"/>
+    <functioncall functionName="rarity"/>
+    <functioncall functionName="readNum"/>
+    <functioncall functionName="readStr"/>
+    <functioncall functionName="release"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="row"/>
+    <functioncall functionName="sheet"/>
+    <functioncall functionName="stamina"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="staminaMax"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="string"/>
+    <functioncall functionName="to_bytes"/>
+    <functioncall functionName="wchar_t"/>
+    <functioncall functionName="xlCreateXMLBook"/>
+  </FileInfo>
+</analyzerinfo>

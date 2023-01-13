@@ -4,6 +4,15 @@ Item::Item(const std::string& name, const std::vector<roleName>& roles, const it
 	int defence, int staminaMax) :
 	name(name), roles(roles), type(type), hpMax(hpMax), damageMax(damageMax), defence(defence), staminaMax(staminaMax)
 {
+
+	static const std::map<itemRarity, int> itemRarityThresholds = {
+		{"Mythic", 50},
+		{"Legendary", 100},
+		{"Epic", 250},
+		{"Rare", 500},
+		{"Uncommon", 750}
+	};
+
 	level = (int)std::floor((hpMax + damageMax + defence + staminaMax) / 2);
 	buyGold = hpMax * 2 + damageMax * 2 + defence * 3 + staminaMax;
 	sellGold = (int)std::floor(buyGold / 2);

@@ -47,13 +47,4 @@ private:
 	int buyGold;
 	int rarity;
 	itemRarity rarityName;
-
-
-	static inline const std::map<itemRarity, int> itemRarityThresholds = {
-		{"Mythic", 50},
-		{"Legendary", 100},
-		{"Epic", 250},
-		{"Rare", 500},
-		{"Uncommon", 750}
-	};
 };

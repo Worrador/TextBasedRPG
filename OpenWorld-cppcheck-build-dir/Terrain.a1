@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="1660404727659983613">
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." verbose="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.h" line="10" column="2"/>
+            <symbol>Terrain::maxConnectionSize</symbol>
+        </error>
+        <error id="useInitializationList" severity="performance" msg="Variable &apos;enemiesDay&apos; is assigned in constructor body. Consider performing initialization in initialization list." verbose="When an object of a class is created, the constructors of all member variables are called consecutively in the order the variables are declared, even if you don&apos;t explicitly write them to the initialization list. You could avoid assigning &apos;enemiesDay&apos; a value by passing the value to the constructor in the initialization list." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.cpp" line="24" column="2"/>
+            <symbol>enemiesDay</symbol>
+        </error>
+        <error id="useInitializationList" severity="performance" msg="Variable &apos;enemiesNight&apos; is assigned in constructor body. Consider performing initialization in initialization list." verbose="When an object of a class is created, the constructors of all member variables are called consecutively in the order the variables are declared, even if you don&apos;t explicitly write them to the initialization list. You could avoid assigning &apos;enemiesNight&apos; a value by passing the value to the constructor in the initialization list." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.cpp" line="25" column="2"/>
+            <symbol>enemiesNight</symbol>
+        </error>
+        <error id="useInitializationList" severity="performance" msg="Variable &apos;travelName&apos; is assigned in constructor body. Consider performing initialization in initialization list." verbose="When an object of a class is created, the constructors of all member variables are called consecutively in the order the variables are declared, even if you don&apos;t explicitly write them to the initialization list. You could avoid assigning &apos;travelName&apos; a value by passing the value to the constructor in the initialization list." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.cpp" line="28" column="2"/>
+            <symbol>travelName</symbol>
+        </error>
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="Null pointer">
+    <unsafe-usage my-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.h:11:2" my-argnr="4" my-argname="followingTerrainNames" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp" line="13" col="8" value="0"/>
+  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.h:11:2" my-argnr="4" my-argname="followingTerrainNames" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp" line="13" col="8" value="0"/>
+    <unsafe-usage my-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.h:15:2" my-argnr="1" my-argname="otherTerrain" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Terrain.cpp" line="24" col="15" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="getMenuOptions" lineNumber="32"/>
+    <functioncall functionName="Character"/>
+    <functioncall functionName="Enemy"/>
+    <functioncall functionName="Place"/>
+    <functioncall functionName="Terrain"/>
+    <functioncall functionName="aggressivity"/>
+    <functioncall functionName="damageMax"/>
+    <functioncall functionName="damageMin"/>
+    <functioncall functionName="daySum"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="defence"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="dmgMax"/>
+    <functioncall functionName="dmgMin"/>
+    <functioncall functionName="enemiesDay"/>
+    <functioncall functionName="enemiesDayRaritySum"/>
+    <functioncall functionName="enemiesNight"/>
+    <functioncall functionName="enemiesNightRaritySum"/>
+    <functioncall functionName="expDrop"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="followingTerrainNames"/>
+    <functioncall functionName="gold"/>
+    <functioncall functionName="hp"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="hpMax"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="maxConnectionSize"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="newExpDrop"/>
+    <functioncall functionName="nightSum"/>
+    <functioncall functionName="previousTerrainName"/>
+    <functioncall functionName="rarity"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="stamina"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="staminaMax"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="string"/>
+    <functioncall functionName="travelName"/>
+  </FileInfo>
+</analyzerinfo>

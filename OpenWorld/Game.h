@@ -43,6 +43,8 @@ public:
 	bool isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex);
 	void generateWorldMap();
 
+	void playMusic();
+
 	// Static method to return a reference to the single instance
 	static Game& getInstance()
 	{
@@ -76,7 +78,7 @@ private:
 	int currentPoint = 0;
 	int previousPoint = 0;
 	
-	// Use vector for constant_time acces, as we only ned to populate once (list could be used otherwise, as the insertion is more efficient)
+	// Use vector for constant_time acces, as we only need to populate once (list could be used otherwise, as the insertion is more efficient)
 	std::vector<mapPoint> worldMap;
 	std::mt19937 randomNumberGenerator;
 };

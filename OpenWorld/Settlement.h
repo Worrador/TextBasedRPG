@@ -19,6 +19,10 @@ public:
 	// Operators
 
 	// Functions
+	inline const std::vector<std::string>& getEnemiesDay() const override { return std::vector<std::string>(); };
+	inline const std::vector<std::string>& getEnemiesNight() const override { return std::vector<std::string>(); };
+	inline const int& getEnemiesDayRaritySum() const override { return 0; }
+	inline const int& getEnemiesNightRaritySum() const override { return 0; }
 
 	// Accessors
 	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };
@@ -35,5 +39,10 @@ private:
 	std::vector<Shop> settlementShops;
 	std::mt19937 randomNumberGenerator;
 
+
+	std::vector<std::string> enemiesOutsideDay;
+	std::vector<std::string> enemiesOutsideNight;
+	int enemiesOutsideDayRaritySum = 0;
+	int enemiesOutsideNightRaritySum = 0;
 };
 

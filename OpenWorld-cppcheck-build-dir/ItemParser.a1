@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="4492056503846541402">
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="parseItems" lineNumber="15"/>
+    <functioncall functionName="Item"/>
+    <functioncall functionName="ItemParser"/>
+    <functioncall functionName="Role"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="codecvt_utf8"/>
+    <functioncall functionName="continue"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="emplace_back"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="getRarityValue"/>
+    <functioncall functionName="getSheet"/>
+    <functioncall functionName="getline"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="iss"/>
+    <functioncall functionName="item"/>
+    <functioncall functionName="item_type_string"/>
+    <functioncall functionName="load"/>
+    <functioncall functionName="move"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="name_string"/>
+    <functioncall functionName="parseItems"/>
+    <functioncall functionName="push_back"/>
+    <functioncall functionName="readNum"/>
+    <functioncall functionName="readStr"/>
+    <functioncall functionName="release"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="role_names_string"/>
+    <functioncall functionName="roles"/>
+    <functioncall functionName="row"/>
+    <functioncall functionName="sheet"/>
+    <functioncall functionName="sheet_index"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="str"/>
+    <functioncall functionName="string"/>
+    <functioncall functionName="switch"/>
+    <functioncall functionName="to_bytes"/>
+    <functioncall functionName="wchar_t"/>
+    <functioncall functionName="while"/>
+    <functioncall functionName="xlCreateXMLBook"/>
+  </FileInfo>
+</analyzerinfo>

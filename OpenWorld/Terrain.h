@@ -20,10 +20,10 @@ public:
 
 
 	// Accessors
-	inline const std::vector<std::string>& getEnemiesDay() const { return enemiesDay; };
-	inline const std::vector<std::string>& getEnemiesNight() const { return enemiesNight; };
-	inline const int& getEnemiesDayRaritySum() const { return enemiesDayRaritySum; }
-	inline const int& getEnemiesNightRaritySum() const { return enemiesNightRaritySum; }
+	inline const std::vector<std::string>& getEnemiesDay() const override { return enemiesDay; };
+	inline const std::vector<std::string>& getEnemiesNight() const override { return enemiesNight; };
+	inline const int& getEnemiesDayRaritySum() const override { return enemiesDayRaritySum; }
+	inline const int& getEnemiesNightRaritySum() const override { return enemiesNightRaritySum; }
 	inline std::string getTravelName() override { return travelName; };
 	inline int getMaxConnectionSize() override { return maxConnectionSize; };
 	const std::vector<std::string> getMenuOptions() const override;

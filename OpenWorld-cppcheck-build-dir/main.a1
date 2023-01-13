@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="3991951002416245546">
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/main.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="22" column="105"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/main.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="23" column="107"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/main.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="24" column="69"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/main.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="25" column="71"/>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." verbose="Member variable &apos;Terrain::maxConnectionSize&apos; is not initialized in the constructor." cwe="398" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/main.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Terrain.h" line="10" column="2"/>
+            <symbol>Terrain::maxConnectionSize</symbol>
+        </error>
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="main" lineNumber="14"/>
+    <functioncall functionName="Buy"/>
+    <functioncall functionName="Character"/>
+    <functioncall functionName="Enemy"/>
+    <functioncall functionName="EnemyParser"/>
+    <functioncall functionName="Game"/>
+    <functioncall functionName="Item"/>
+    <functioncall functionName="ItemParser"/>
+    <functioncall functionName="Main"/>
+    <functioncall functionName="Place"/>
+    <functioncall functionName="Player"/>
+    <functioncall functionName="PlayerSheet"/>
+    <functioncall functionName="Rest"/>
+    <functioncall functionName="Role"/>
+    <functioncall functionName="RoleParser"/>
+    <functioncall functionName="SHOP_TYPE_ARMOR"/>
+    <functioncall functionName="SHOP_TYPE_CONSUMABLE"/>
+    <functioncall functionName="SHOP_TYPE_WEAPON"/>
+    <functioncall functionName="Sell"/>
+    <functioncall functionName="Settlement"/>
+    <functioncall functionName="SettlementParser"/>
+    <functioncall functionName="Shop"/>
+    <functioncall functionName="Terrain"/>
+    <functioncall functionName="TerrainParser"/>
+    <functioncall functionName="Travel"/>
+    <functioncall functionName="aggressivity"/>
+    <functioncall functionName="codecvt_utf8"/>
+    <functioncall functionName="damageMax"/>
+    <functioncall functionName="damageMin"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="defence"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="dmgMax"/>
+    <functioncall functionName="dmgMin"/>
+    <functioncall functionName="exp"/>
+    <functioncall functionName="expDrop"/>
+    <functioncall functionName="expNext"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="followingTerrainNames"/>
+    <functioncall functionName="gameLoop"/>
+    <functioncall functionName="getInstance"/>
+    <functioncall functionName="getResourceError"/>
+    <functioncall functionName="getRoleName"/>
+    <functioncall functionName="getStartingDef"/>
+    <functioncall functionName="getStartingDmgMax"/>
+    <functioncall functionName="getStartingHpMax"/>
+    <functioncall functionName="getStartingStaminaMax"/>
+    <functioncall functionName="gold"/>
+    <functioncall functionName="hp"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="hpMax"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="isMale"/>
+    <functioncall functionName="level"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="maxConnectionSize"/>
+    <functioncall functionName="menuState"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="newExpDrop"/>
+    <functioncall functionName="nullptr"/>
+    <functioncall functionName="pair"/>
+    <functioncall functionName="previousTerrainName"/>
+    <functioncall functionName="rarity"/>
+    <functioncall functionName="resourceErrors"/>
+    <functioncall functionName="role"/>
+    <functioncall functionName="shopItems"/>
+    <functioncall functionName="shopName"/>
+    <functioncall functionName="stamina"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="staminaMax"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="string"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="unique_ptr"/>
+    <functioncall functionName="vector"/>
+    <functioncall functionName="void"/>
+    <functioncall functionName="wchar_t"/>
+  </FileInfo>
+</analyzerinfo>

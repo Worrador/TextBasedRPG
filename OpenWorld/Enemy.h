@@ -14,7 +14,7 @@ public:
 	Enemy& operator=(Enemy&&) = default;
 
 	// Operators
-	Enemy& operator*=(const int& scaleToLevel);
+	Enemy& operator*(const int& scaleToLevel);
 
 	// Functions
 

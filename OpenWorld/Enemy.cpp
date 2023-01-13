@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy& Enemy::operator*=(const int& scaleToLevel)
+Enemy& Enemy::operator*(const int& scaleToLevel)
 {
 	int scaler = std::max((int)(scaleToLevel * 0.5), 1);
 	this->setHpMax(this->getHpMax() * scaler);

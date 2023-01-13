@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="11913410036566679642">
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/SettlementParser.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="22" column="105"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/SettlementParser.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="23" column="107"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/SettlementParser.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="24" column="69"/>
+        </error>
+        <error id="returnTempReference" severity="error" msg="Reference to temporary returned." verbose="Reference to temporary returned." cwe="562" file0="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/SettlementParser.cpp">
+            <location file="D:\Suli\GitHub\CppProjects\DnD\OpenWorld\Settlement.h" line="25" column="71"/>
+        </error>
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="parseSettlements" lineNumber="15"/>
+    <functioncall functionName="Item"/>
+    <functioncall functionName="ItemParser"/>
+    <functioncall functionName="Role"/>
+    <functioncall functionName="Settlement"/>
+    <functioncall functionName="SettlementParser"/>
+    <functioncall functionName="Shop"/>
+    <functioncall functionName="codecvt_utf8"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="emplace_back"/>
+    <functioncall functionName="firstRow"/>
+    <functioncall functionName="followingTerrainNames"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="getSheet"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="lastRow"/>
+    <functioncall functionName="load"/>
+    <functioncall functionName="maxConnectionSize"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="parseSettlements"/>
+    <functioncall functionName="previousTerrainName"/>
+    <functioncall functionName="readNum"/>
+    <functioncall functionName="readStr"/>
+    <functioncall functionName="release"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="row"/>
+    <functioncall functionName="sheet"/>
+    <functioncall functionName="shopItems"/>
+    <functioncall functionName="shopName"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="string"/>
+    <functioncall functionName="to_bytes"/>
+    <functioncall functionName="vector"/>
+    <functioncall functionName="wchar_t"/>
+    <functioncall functionName="xlCreateXMLBook"/>
+  </FileInfo>
+</analyzerinfo>

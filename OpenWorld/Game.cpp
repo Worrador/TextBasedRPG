@@ -2,20 +2,42 @@
 
 Enemy Game::spawnEnemy()
 {
-	// too big defense means negative damage.. :O
-	//return Enemy("Golem", player.getLevel() * difficulty, difficulty, 1, 1, difficulty, player.getLevel() * difficulty, player.getLevel() * difficulty);
+	// Get list of enemies of current place
+	auto currentEnemyNames = worldMap[currentPoint].first->getEnemiesNight();
 
+	// If ther are no enemies for some reason, then get enemies from neighboring places
+	while (currentEnemyNames.empty()) {
+		//TODO: In case of a settlement only beeing close to other settlments we some error handling is needed
+		currentEnemyNames = worldMap[worldMap[currentPoint].second[rollBetween(0, (int)worldMap[currentPoint].second.size() - 1)]].first->getEnemiesNight();
+	}
 
-	// Generate items this should be in the location constructor
-	int randomEnemyNum = 10;
-	auto& enemies = EnemyParser::getInstance().getParsedEnemies();
+	// Get enemies that match criteria
+	auto parsedEnemies = EnemyParser::getInstance().getParsedEnemies();
+	std::vector<Enemy> currentEnemies;
+	std::copy_if(parsedEnemies.begin(), parsedEnemies.end(), std::back_inserter(currentEnemies),
+		[&](const auto& enemy) {
+			return(std::find_if(currentEnemyNames.begin(), currentEnemyNames.end(), 
+				[&](const auto& enemyName) {
+					return(enemyName == enemy.getName());
+				}) != currentEnemyNames.end());
+		});
 
+	// Get raritySum of enemies of current place
+	auto currentEnemiesRaritySum = 0;
+
+	for (const auto& enemy: currentEnemies) {
+		currentEnemiesRaritySum += enemy.getRarity();
+	}
+
+	// Generate random number and iterate until an enemy is selected
+	int randomEnemyNum = rollBetween(0, currentEnemiesRaritySum);
 	int enemyIndex = -1;
+
 	while (randomEnemyNum > 0) {
 		enemyIndex++;
-		randomEnemyNum -= enemies[enemyIndex].getRarity();
+		randomEnemyNum -= currentEnemies[enemyIndex].getRarity();
 	}
-	return enemies[enemyIndex]; // Maybe sclale here or after return, need to be careful because of references
+	return currentEnemies[enemyIndex];
 }
 
 int Game::rollBetween(int lower, int higher)
@@ -135,13 +157,18 @@ void Game::generateWorldMap() {
 	}
 }
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
+void Game::playMusic()
 {
 	// Start playing music
 	PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	DWORD leftVolume = 2000;
 	DWORD rightVolume = 2000;
 	waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
+};
+
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
+{
+	playMusic();
 	generateWorldMap();
 };
 
@@ -170,7 +197,7 @@ void Game::travel(int travelOption)
 	chance = rollBetween(0, 4);
 	dramaticPause();
 	if (chance > 2) {
-		Enemy enemy = spawnEnemy() *= player.getLevel();
+		Enemy enemy = spawnEnemy() * player.getLevel();
 
 		std::vector <std::string> staticLines = {
 			"You have met an enemy " + enemy.getName()
@@ -257,16 +284,17 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 void Game::run(Enemy& enemy)
 {
 	std::cout << "\033c";
-	// Running costs stamina, maybe the more items you have, the more it costs
-	if (player.getStamina() >= 2) {
-		player.setStamina(player.getStamina() - 2);
+	// Running costs stamina, maybe the more items you have, the more it costs or the faster the enemy is
+	int staminaNeeded = (int)std::floor((enemy.getStamina() + player.getEquipment().size()) / 2);
+	if (player.getStamina() >= staminaNeeded) {
+		player.setStamina(player.getStamina() - staminaNeeded);
 		std::cout << player.getName() << " has run away from battle." << std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
 	else {
 		std::cout << player.getName() << " is too tired to run, so rests for a while to regain some stamina." << std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		player.setStamina(min(3, player.getStaminaMax()));
+		player.setStamina(min(player.getRole().getStaminaIncr(), player.getStaminaMax()));
 		wait(enemy);
 	}
 	
@@ -319,7 +347,7 @@ void Game::rest(int restOption)
 		chance = rollBetween(0, 4);
 		if (chance > 0) {
 
-			Enemy enemy = spawnEnemy() *= player.getLevel();
+			Enemy enemy = spawnEnemy() * player.getLevel();
 			std::cout << "You wake up to a noise of a(n) " + enemy.getName() << std::endl;
 
 			fight(enemy, false);

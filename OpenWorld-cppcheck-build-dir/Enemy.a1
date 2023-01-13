@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="13123530215305332990">
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Enemy.h:17:9" my-argnr="1" my-argname="scaleToLevel" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Enemy.cpp" line="5" col="30" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functioncall functionName="Character"/>
+    <functioncall functionName="Enemy"/>
+    <functioncall functionName="aggressivity"/>
+    <functioncall functionName="damageMax"/>
+    <functioncall functionName="damageMin"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="defence"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="dmgMax"/>
+    <functioncall functionName="dmgMin"/>
+    <functioncall functionName="expDrop"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="getDamageMax"/>
+    <functioncall functionName="getDefence"/>
+    <functioncall functionName="getExpDrop"/>
+    <functioncall functionName="getGold"/>
+    <functioncall functionName="getHp"/>
+    <functioncall functionName="getHpMax"/>
+    <functioncall functionName="getStamina"/>
+    <functioncall functionName="getStaminaMax"/>
+    <functioncall functionName="gold"/>
+    <functioncall functionName="hp"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="hpMax"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="min"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="newExpDrop"/>
+    <functioncall functionName="rarity"/>
+    <functioncall functionName="setDamage"/>
+    <functioncall functionName="setDefence"/>
+    <functioncall functionName="setExpDrop"/>
+    <functioncall functionName="setGold"/>
+    <functioncall functionName="setHp"/>
+    <functioncall functionName="setHpMax"/>
+    <functioncall functionName="setStamina"/>
+    <functioncall functionName="setStaminaMax"/>
+    <functioncall functionName="stamina"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="staminaMax"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="string"/>
+  </FileInfo>
+</analyzerinfo>

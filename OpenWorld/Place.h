@@ -18,6 +18,11 @@ public:
 	virtual int getMaxConnectionSize() = 0;
 	virtual const std::vector<std::string> getMenuOptions() const  = 0;
 
+	virtual const std::vector<std::string>& getEnemiesDay() const = 0;
+	virtual const std::vector<std::string>& getEnemiesNight() const = 0;
+	virtual const int& getEnemiesDayRaritySum() const = 0;
+	virtual const int& getEnemiesNightRaritySum() const = 0;
+
 	// Accessors
 	inline const std::string& getName() const { return name; };
 	inline const std::string& getPreviousTerrainName() const { return previousTerrainName; };

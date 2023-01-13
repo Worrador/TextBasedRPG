@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="17637114430851305655">
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+<class name="Shop" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Shop.h" line="11" col="1" hash="13553039378381464113"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="addRandomItem" lineNumber="3"/>
+    <functioncall functionName="Item"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="shopItems"/>
+    <functioncall functionName="shopName"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="string"/>
+  </FileInfo>
+</analyzerinfo>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<analyzerinfo hash="11097943843971425321">
+  <FileInfo check="Class">
+<class name="Role" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Role.h" line="6" col="1" hash="10328084707331600929"/>
+<class name="Character" file="D:/Suli/GitHub/CppProjects/DnD/OpenWorld/Character.h" line="4" col="1" hash="17499805222824895277"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functioncall functionName="damageMax"/>
+    <functioncall functionName="damageMin"/>
+    <functioncall functionName="defIncr"/>
+    <functioncall functionName="defence"/>
+    <functioncall functionName="dmgIncr"/>
+    <functioncall functionName="dmgMax"/>
+    <functioncall functionName="dmgMin"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="gold"/>
+    <functioncall functionName="hp"/>
+    <functioncall functionName="hpIncr"/>
+    <functioncall functionName="hpMax"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="stamina"/>
+    <functioncall functionName="staminaIncr"/>
+    <functioncall functionName="staminaMax"/>
+    <functioncall functionName="startingDef"/>
+    <functioncall functionName="startingDmgMax"/>
+    <functioncall functionName="startingHpMax"/>
+    <functioncall functionName="startingStaminaMax"/>
+    <functioncall functionName="string"/>
+  </FileInfo>
+</analyzerinfo>

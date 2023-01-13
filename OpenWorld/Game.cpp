@@ -349,7 +349,7 @@ void Game::rest(int restOption)
 
 			Enemy enemy = spawnEnemy() * player.getLevel();
 			std::cout << "You wake up to a noise of a(n) " + enemy.getName() << std::endl;
-
+			_getch();
 			fight(enemy, false);
 		}
 		else {
@@ -379,7 +379,7 @@ void Game::rest(int restOption)
 void Game::gameLoop()
 {
 	int selectedMenuPoint = 0;
-	while (1) {
+	while (playing) {
 		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {

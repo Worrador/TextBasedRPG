@@ -7,7 +7,6 @@ using timeType = std::string;
 class Terrain : public Place
 {
 public:
-	Terrain() = default;
 	Terrain(const std::string& name, const std::string& travelName, const std::string& previousTerrainName, const std::vector<std::string>& followingTerrainNames,
 		std::vector<std::string>& enemiesDay, std::vector<std::string>& enemiesNight, const int& daySum, const int& nightSum);
 
@@ -34,12 +33,13 @@ public:
 private:
 	std::vector<std::string> enemiesDay;
 	std::vector<std::string> enemiesNight;
-	std::string travelName;
 
 	int maxConnectionSize;
 
 	int enemiesDayRaritySum = 0;
 	int enemiesNightRaritySum = 0;
+
+	std::string travelName;
 
 	//Maybe item vector for questing and stuff later?
 	//std::vector<Item>

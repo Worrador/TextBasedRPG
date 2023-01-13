@@ -10,6 +10,7 @@ public:
 	Place(const std::string& name, const std::string& previousTerrainName = "", const std::vector<std::string>& followingTerrainNames = { "" }) :
 		name(name), previousTerrainName(previousTerrainName), followingTerrainNames(followingTerrainNames) {};
 
+	virtual ~Place() {};
 	// Operators
 
 	// Functions

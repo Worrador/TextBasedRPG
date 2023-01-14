@@ -100,9 +100,10 @@ Player Menu::playerCreationMenu()
     std::cin >> name;
 
 
-    bool isMale;
+    bool isMale = true;
 
-    {
+    //TODO: maybe get sex later
+    /*{
         // List of menu points
 
         std::vector <std::string> staticMenuLines = {
@@ -126,7 +127,7 @@ Player Menu::playerCreationMenu()
             isMale = true;
             break;
         }
-    }
+    }*/
 
     {
         std::vector <std::string> staticMenuLines = {
@@ -521,6 +522,7 @@ void Menu::equipItems(Player& player)
                 ss << ", ";
             }
             ss << std::endl;
+            ss << "Item type: " << itemList[selectedMenuPoint].getItemType() << std::endl;
             ss << "Max HP: " << itemList[selectedMenuPoint].getHpMax() << std::endl;
             ss << "Max damage: " << itemList[selectedMenuPoint].getDamageMax() << std::endl;
             ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;
@@ -586,6 +588,7 @@ void Menu::unequipItems(Player& player)
                 ss << ", ";
             }
             ss << std::endl;
+            ss << "Item type: " << itemList[selectedMenuPoint].getItemType() << std::endl;
             ss << "Max HP: " << itemList[selectedMenuPoint].getHpMax() << std::endl;
             ss << "Max damage: " << itemList[selectedMenuPoint].getDamageMax() << std::endl;
             ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;

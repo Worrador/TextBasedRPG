@@ -64,9 +64,42 @@ void Player::equipItem(const int& itemPos)
 	// If role fits
 	if (std::find(itemRoles.begin(), itemRoles.end(), role.getRoleName()) != itemRoles.end()) {
 
+		auto isNotWorn = [&]() -> bool
+		{
+			auto type = Inventory[itemPos].getItemType();
+			int count = (int)std::count_if(Equipment.begin(), Equipment.end(), 
+				[&](const auto& equippedItem) {
+					return (equippedItem.getItemType() == type);
+				});
+
+			// One handed items need special treatment
+			if (type == "one handed") {
+				// Get count of two handed
+				int countTwoHanded = (int)std::count_if(Equipment.begin(), Equipment.end(),
+					[&](const auto& equippedItem) {
+						return (equippedItem.getItemType() == "two handed");
+					});
+				if((countTwoHanded == 0) && (count < 2))
+					return true;
+			}
+			else if (type == "two handed") {
+				// Get count of one handed
+				int countOneHanded = (int)std::count_if(Equipment.begin(), Equipment.end(),
+					[&](const auto& equippedItem) {
+						return (equippedItem.getItemType() == "one handed");
+					});
+				if ((countOneHanded == 0) && (count < 1))
+					return true;
+			}
+			else if(count < 1) {
+				return true;
+			}
+			return false;
+		};
+
+
 		// If similar piece is not already worn, maybe switch it automatically later
-		if ([&]() {for (auto checkPos = 0; checkPos < Equipment.size(); checkPos++) { if(Equipment[checkPos].getItemType() == Inventory[itemPos].getItemType()) return false; } return true; }()) {
-			// Modify player stats
+		if (isNotWorn()){			// Modify player stats
 			*this += Inventory[itemPos];
 
 			Equipment.emplace_back(std::move(Inventory[itemPos]));

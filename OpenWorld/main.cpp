@@ -7,12 +7,14 @@
 #include "EnemyParser.h"
 #include "SettlementParser.h"
 #include "TerrainParser.h"
-
-
-
+#include <fcntl.h>
+#include <io.h>
+#include <stdio.h>
+#include <iostream>
 
 int main()
 {
+    _setmode(_fileno(stdout), _O_U16TEXT);
     // Parse resources
     auto resourceErrors = 0;
     resourceErrors += RoleParser::getInstance().getResourceError();

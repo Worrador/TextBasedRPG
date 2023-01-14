@@ -1,4 +1,4 @@
-#include "Menu.h"
+﻿#include "Menu.h"
 
 // Static Lines -> Static Fn -> Dynamic Points -> Dynamic Fn
 void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>& staticMenuLines, 
@@ -75,11 +75,11 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
 std::string Menu::createBanner(const std::string& title)
 {
     std::stringstream ss;
-    auto banner_width = title.length() + 6;
+    auto banner_width = title.length() + 4;
 
-    ss << std::string(banner_width, '#') << std::endl;
-    ss << "#> " << title << " <#" << std::endl;
-    ss << std::string(banner_width, '#');
+    ss << "╔" << std::string(banner_width, '═') << "╗" << std::endl;
+    ss << "║ " << title << " ║" << std::endl;
+    ss << "╚" << std::string(banner_width, '═') << "╝";
 
     // Named return value optimization is used (NRVO) when only one object can be returned
     return ss.str();

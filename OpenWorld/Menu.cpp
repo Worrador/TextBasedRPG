@@ -71,20 +71,10 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
     return;
 
 }
-#include <fstream>
 
 std::string Menu::createBanner(const std::string& title)
 {
     std::stringstream ss;
-    std::string line = "";
-    std::ifstream inFile;
-    inFile.open("Resources\\settlement_art.txt");
-    if (inFile.is_open()) {
-        while (getline(inFile, line)) {
-            ss << line << std::endl;
-        }
-    }
-    inFile.close();
     auto banner_width = title.length() + 2;
     ss << "\t   \xC9" << std::string(banner_width, '\xCD') << "\xBB" << std::endl;
     ss << "\t   \xBA " << title << " \xBA" << std::endl;

@@ -25,10 +25,10 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
         for (auto index = 0; index < dynamicMenuPoints.size(); index++)
         {
             if (index == selectedMenuPoint) {
-                ss << "> ";
+                ss << "   \xC4\x10 ";
             }
             else {
-                ss << "  ";
+                ss << "       ";
             }
             ss << dynamicMenuPoints[index] << std::endl;
         }
@@ -71,14 +71,33 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
     return;
 
 }
+#include <fstream>
 
 std::string Menu::createBanner(const std::string& title)
 {
     std::stringstream ss;
     auto banner_width = title.length() + 2;
+    const std::string banner = " ~      ~~ \xBA " + title + " \xBA" + "    __     ";
     ss << "\t   \xC9" << std::string(banner_width, '\xCD') << "\xBB" << std::endl;
-    ss << "\t   \xBA " << title << " \xBA" << std::endl;
-    ss << "\t   \xC8" << std::string(banner_width, '\xCD') << "\xBC";
+    ss << banner << std::endl;
+    ss << "\t   \xC8" << std::string(banner_width, '\xCD') << "\xBC" << std::endl;
+
+    std::string line = "";
+    std::ifstream inFile;
+    inFile.open("Resources\\settlement_art.txt");
+    auto lineIndex = 0;
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            if (lineIndex < 1) {
+                lineIndex++;
+            }
+            else {
+                ss << line << std::endl;
+            }
+        }
+    }
+    inFile.close();
+    ss << std::endl << std::string(banner.length(), '\xC4') << '\xB4';
 
     // Named return value optimization is used (NRVO) when only one object can be returned
     return ss.str();

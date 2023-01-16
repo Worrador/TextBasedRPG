@@ -79,7 +79,7 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
 {
     std::stringstream ss;
     auto banner_width = title.length() + 2;
-    const std::string banner = "\xB3 " + title + " \xB3";
+    const std::string banner = "\xB4 " + title + " \xC3";
     //ss << "\t   \xDA" << std::string(banner_width, '\xC4') << "\xBF" << std::endl;
     //ss << banner << std::endl;
     //ss << "\t   \xC0" << std::string(banner_width, '\xC4') << "\xD9" << std::endl;
@@ -92,7 +92,6 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     else {
         inFile.open("Resources\\nature_art.txt");
     }
-    auto lineIndex = 0;
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
             ss << line << std::endl;
@@ -101,13 +100,17 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     inFile.close();
     int divider_length1 = (int)std::floor((ASCII_ART_LENGTH - banner.length()) / 2);
     int divider_length2 = ASCII_ART_LENGTH - (int)banner.length() - divider_length1;
-    ss << std::string(divider_length1, ' ') << "\xDA" << std::string(banner_width, '\xC4') << "\xBF" << std::endl;
-    ss << std::string(divider_length1, '\xC4') << banner;
-    ss << std::string(divider_length2, '\xC4') << '\xB4' << std::endl;
-    ss << std::string(divider_length1, ' ') << "\xC0" << std::string(banner_width, '\xC4') << "\xD9";
+    
+
+    auto myString = "\xDA" + std::string(banner_width, '\xC4') + "\xBF";
+    std::string s = ss.str();
+    s.replace(s.end() - (divider_length2 + banner_width + 3), s.end() - (divider_length2 + 1), myString);
+    s += std::string(divider_length1, '\xC4') + banner;
+    s += std::string(divider_length2, '\xC4') + '\xB4' + '\n';
+    s += std::string(divider_length1, ' ') + "\xC0" + std::string(banner_width, '\xC4') + "\xD9";
 
     // Named return value optimization is used (NRVO) when only one object can be returned
-    return ss.str();
+    return s;
 }
 
 Player Menu::playerCreationMenu()

@@ -23,6 +23,7 @@ public:
 	inline const std::vector<std::string>& getEnemiesNight() const override { return enemiesOutsideNight; };
 	inline const int& getEnemiesDayRaritySum() const override { return enemiesOutsideDayRaritySum; }
 	inline const int& getEnemiesNightRaritySum() const override { return enemiesOutsideNightRaritySum; }
+	virtual const bool isSettlement() const override { return true; }
 
 	// Accessors
 	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };

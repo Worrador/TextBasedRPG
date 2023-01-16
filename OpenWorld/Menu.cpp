@@ -73,7 +73,7 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
 }
 #include <fstream>
 
-std::string Menu::createBanner(const std::string& title)
+std::string Menu::createBanner(const std::string& title, bool isSettlement)
 {
     std::stringstream ss;
     auto banner_width = title.length() + 2;
@@ -84,7 +84,12 @@ std::string Menu::createBanner(const std::string& title)
 
     std::string line = "";
     std::ifstream inFile;
-    inFile.open("Resources\\settlement_art.txt");
+    if (isSettlement) {
+        inFile.open("Resources\\settlement_art.txt");
+    }
+    else {
+        inFile.open("Resources\\nature_art.txt");
+    }
     auto lineIndex = 0;
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
@@ -97,7 +102,7 @@ std::string Menu::createBanner(const std::string& title)
         }
     }
     inFile.close();
-    ss << std::endl << std::string(banner.length(), '\xC4') << '\xB4';
+    ss << std::endl << std::string(32, '\xC4') << '\xB4';
 
     // Named return value optimization is used (NRVO) when only one object can be returned
     return ss.str();

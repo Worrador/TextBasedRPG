@@ -23,6 +23,7 @@ public:
 	virtual const std::vector<std::string>& getEnemiesNight() const = 0;
 	virtual const int& getEnemiesDayRaritySum() const = 0;
 	virtual const int& getEnemiesNightRaritySum() const = 0;
+	virtual const bool isSettlement() const = 0;
 
 	// Accessors
 	inline const std::string& getName() const { return name; };

@@ -26,6 +26,7 @@ public:
 	inline std::string getTravelName() override { return travelName; };
 	inline int getMaxConnectionSize() override { return maxConnectionSize; };
 	const std::vector<std::string> getMenuOptions() const override;
+	virtual const bool isSettlement() const override { return false; }
 
 	// Modifiers
 	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };

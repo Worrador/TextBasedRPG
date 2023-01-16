@@ -380,7 +380,7 @@ void Game::gameLoop()
 {
 	int selectedMenuPoint = 0;
 	while (playing) {
-		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName()) };
+		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName(), worldMap[currentPoint].first->isSettlement()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {
 			MENU_TYPE_TRAVEL,

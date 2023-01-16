@@ -174,5 +174,8 @@
     <Text Include="Resources\settlement_art.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Resources\nature_art.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

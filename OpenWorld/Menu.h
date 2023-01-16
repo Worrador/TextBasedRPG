@@ -40,7 +40,7 @@ public:
 		const bool isEscapeable = true, const std::function <void(std::stringstream&)>& staticMenuFn = nullptr,
 		const std::function <void(std::stringstream&, const int)>& dynamicMenuFn = nullptr);
 
-	std::string createBanner(const std::string& title);
+	std::string createBanner(const std::string& title, bool isSettlement = false);
 
 	Player playerCreationMenu();
 	int travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints);

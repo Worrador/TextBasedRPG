@@ -207,6 +207,7 @@
     <Image Include="Resources\swordsman.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Resources\nature_art.txt" />
     <Text Include="Resources\settlement_art.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -20,15 +20,15 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
         if (staticMenuFn) {
             staticMenuFn(ss);
         }
-        //ss << std::endl;
+        ss << std::endl;
 
         for (auto index = 0; index < dynamicMenuPoints.size(); index++)
         {
             if (index == selectedMenuPoint) {
-                ss << "           \xC4\x10 ";
+                ss << "    \xC4\x10 ";
             }
             else {
-                ss << "               ";
+                ss << "        ";
             }
             ss << dynamicMenuPoints[index] << std::endl;
         }
@@ -73,14 +73,16 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
 }
 #include <fstream>
 
+constexpr auto ASCII_ART_LENGTH = 44;
+
 std::string Menu::createBanner(const std::string& title, bool isSettlement)
 {
     std::stringstream ss;
     auto banner_width = title.length() + 2;
-    const std::string banner = " ~      ~~ \xBA " + title + " \xBA" + "    __     ";
-    ss << "\t   \xC9" << std::string(banner_width, '\xCD') << "\xBB" << std::endl;
-    ss << banner << std::endl;
-    ss << "\t   \xC8" << std::string(banner_width, '\xCD') << "\xBC" << std::endl;
+    const std::string banner = "\xB3 " + title + " \xB3";
+    //ss << "\t   \xDA" << std::string(banner_width, '\xC4') << "\xBF" << std::endl;
+    //ss << banner << std::endl;
+    //ss << "\t   \xC0" << std::string(banner_width, '\xC4') << "\xD9" << std::endl;
 
     std::string line = "";
     std::ifstream inFile;
@@ -93,16 +95,16 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     auto lineIndex = 0;
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
-            if (lineIndex < 1) {
-                lineIndex++;
-            }
-            else {
-                ss << line << std::endl;
-            }
+            ss << line << std::endl;
         }
     }
     inFile.close();
-    ss << std::string(44, '\xC4') << '\xB4';
+    int divider_length1 = (int)std::floor((ASCII_ART_LENGTH - banner.length()) / 2);
+    int divider_length2 = ASCII_ART_LENGTH - (int)banner.length() - divider_length1;
+    ss << std::string(divider_length1, ' ') << "\xDA" << std::string(banner_width, '\xC4') << "\xBF" << std::endl;
+    ss << std::string(divider_length1, '\xC4') << banner;
+    ss << std::string(divider_length2, '\xC4') << '\xB4' << std::endl;
+    ss << std::string(divider_length1, ' ') << "\xC0" << std::string(banner_width, '\xC4') << "\xD9";
 
     // Named return value optimization is used (NRVO) when only one object can be returned
     return ss.str();

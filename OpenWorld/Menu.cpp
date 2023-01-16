@@ -20,15 +20,15 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
         if (staticMenuFn) {
             staticMenuFn(ss);
         }
-        ss << std::endl;
+        //ss << std::endl;
 
         for (auto index = 0; index < dynamicMenuPoints.size(); index++)
         {
             if (index == selectedMenuPoint) {
-                ss << "   \xC4\x10 ";
+                ss << "           \xC4\x10 ";
             }
             else {
-                ss << "       ";
+                ss << "               ";
             }
             ss << dynamicMenuPoints[index] << std::endl;
         }
@@ -102,7 +102,7 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
         }
     }
     inFile.close();
-    ss << std::endl << std::string(32, '\xC4') << '\xB4';
+    ss << std::string(44, '\xC4') << '\xB4';
 
     // Named return value optimization is used (NRVO) when only one object can be returned
     return ss.str();

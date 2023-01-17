@@ -7,6 +7,10 @@
 using settlementSizeType = std::string;
 
 constexpr auto MAXSETTLEMENTSIZE = 7;
+constexpr auto REST_SHARED_ROOM_PRICE_CHEAP = 4;
+constexpr auto REST_PRIVATE_ROOM_PRICE_CHEAP = 6;
+constexpr auto REST_EXPENSIVE_INN_SETTLEMENT_SIZE_TRESHOLD = 5;
+constexpr auto REST_PRIVATE_ROOM_PRICE_EXPENSIVE = 8;
 
 class Settlement : public Place
 {
@@ -23,7 +27,8 @@ public:
 	inline const std::vector<std::string>& getEnemiesNight() const override { return enemiesOutsideNight; };
 	inline const int& getEnemiesDayRaritySum() const override { return enemiesOutsideDayRaritySum; }
 	inline const int& getEnemiesNightRaritySum() const override { return enemiesOutsideNightRaritySum; }
-	virtual const bool isSettlement() const override { return true; }
+	inline const std::vector<std::pair<std::string, int>>& getRestOptions() const override { return restOptions; }
+	const bool isSettlement() const override { return true; }
 
 	// Accessors
 	inline std::string getTravelName() override { return std::string("To " + name + " (A " + settlementSize + " sized settlement)"); };
@@ -39,6 +44,7 @@ private:
 	int maxConnectionSize = 0;
 	std::vector<Shop> settlementShops;
 	std::mt19937 randomNumberGenerator;
+	std::vector<std::pair<std::string, int>> restOptions;
 
 
 	std::vector<std::string> enemiesOutsideDay = {};

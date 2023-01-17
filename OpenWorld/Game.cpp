@@ -417,7 +417,7 @@ void Game::gameLoop()
 			std::cout << "Not yet implemented" << std::endl;
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_REST) {
-			rest(menu.restMenu(player));
+			rest(menu.restMenu(player, *worldMap[currentPoint].first));
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_PLAYER_SHEET) {
 			menu.playerSheetMenu(player);

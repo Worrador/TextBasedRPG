@@ -13,14 +13,16 @@
 // Pointer for the place, and a vector for the next places
 using mapPoint = std::pair<std::unique_ptr<Place>, std::vector<int>>;
 
-constexpr auto MENU_TYPE_TRAVEL = "Travel";
-constexpr auto MENU_TYPE_MAP = "Map";
-constexpr auto MENU_TYPE_REST = "Rest";
-constexpr auto MENU_TYPE_PLAYER_SHEET = "Player sheet";
-constexpr auto MENU_TYPE_SHOP_ARMOR = SHOP_TYPE_ARMOR;
-constexpr auto MENU_TYPE_SHOP_WEAPON = SHOP_TYPE_WEAPON;
-constexpr auto MENU_TYPE_SHOP_CONSUMABLE = SHOP_TYPE_CONSUMABLE;
-constexpr auto MENU_TYPE_QUIT = "Quit";
+// Constants for main menu options
+constexpr auto MENU_TYPE_TRAVEL				= "Travel";
+constexpr auto MENU_TYPE_MAP				= "Map";
+constexpr auto MENU_TYPE_REST				= "Rest";
+constexpr auto MENU_TYPE_PLAYER_SHEET		= "Player sheet";
+constexpr auto MENU_TYPE_SHOP_ARMOR			= SHOP_TYPE_ARMOR;
+constexpr auto MENU_TYPE_SHOP_WEAPON		= SHOP_TYPE_WEAPON;
+constexpr auto MENU_TYPE_SHOP_CONSUMABLE	= SHOP_TYPE_CONSUMABLE;
+constexpr auto MENU_TYPE_QUIT				= "Quit";
+
 
 // Player is manipulated manipulated through this object
 class Game

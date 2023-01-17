@@ -21,6 +21,7 @@ public:
 
 	virtual const std::vector<std::string>& getEnemiesDay() const = 0;
 	virtual const std::vector<std::string>& getEnemiesNight() const = 0;
+	virtual const std::vector<std::pair<std::string, int>>& getRestOptions() const = 0;
 	virtual const int& getEnemiesDayRaritySum() const = 0;
 	virtual const int& getEnemiesNightRaritySum() const = 0;
 	virtual const bool isSettlement() const = 0;

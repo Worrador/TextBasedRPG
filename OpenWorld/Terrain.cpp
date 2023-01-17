@@ -16,6 +16,9 @@ Terrain::Terrain(const std::string& name, const std::string& travelName, const s
 	else {
 		maxConnectionSize = (int)followingTerrainNames.size();
 	}
+
+	// Add rest options based on Settlement sizer
+	restOptions.emplace_back("Sleep on the ground.", 0);
 }
 
 
@@ -27,6 +30,7 @@ Terrain::Terrain(const Terrain& otherTerrain) : Place(otherTerrain.name, otherTe
 	enemiesNightRaritySum = otherTerrain.enemiesNightRaritySum;
 	travelName = otherTerrain.travelName;
 	maxConnectionSize = otherTerrain.maxConnectionSize;
+	restOptions = otherTerrain.restOptions;
 }
 
 const std::vector<std::string> Terrain::getMenuOptions() const

@@ -16,6 +16,7 @@ public:
 	// Operators
 
 	// Functions
+	inline const std::vector<std::pair<std::string, int>>& getRestOptions() const override { return restOptions; }
 
 
 	// Accessors
@@ -26,7 +27,7 @@ public:
 	inline std::string getTravelName() override { return travelName; };
 	inline int getMaxConnectionSize() override { return maxConnectionSize; };
 	const std::vector<std::string> getMenuOptions() const override;
-	virtual const bool isSettlement() const override { return false; }
+	const bool isSettlement() const override { return false; }
 
 	// Modifiers
 	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
@@ -34,6 +35,7 @@ public:
 private:
 	std::vector<std::string> enemiesDay;
 	std::vector<std::string> enemiesNight;
+	std::vector<std::pair<std::string, int>> restOptions;
 
 	int maxConnectionSize;
 

@@ -1,12 +1,15 @@
 #pragma once
 #include "Player.h"
+#include "Place.h"
 #include <conio.h>
 #include <sstream>
 #include <functional> 
 #include "RoleParser.h"
+#include "Settlement.h"
 #include <windows.h>
 #include <fstream>
 
+// Constants for menus
 constexpr auto KEY_UP = 72;
 constexpr auto KEY_DOWN = 80;
 constexpr auto KEY_LEFT = 75;
@@ -56,7 +59,7 @@ public:
 	void shopMenu(Player& player, std::vector<Item>& shopItems);
 	void buyMenu(Player& player, std::vector<Item>& shopItems);
 	void sellMenu(Player& player);
-	int restMenu(Player& player);
+	int restMenu(Player& player, Place& currentPlace);
 	void playerSheetMenu(Player& player);
 	int quitMenu();
 

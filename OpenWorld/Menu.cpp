@@ -389,34 +389,26 @@ void Menu::sellMenu(Player& player)
 {
 }
 
-int Menu::restMenu(Player& player)
+int Menu::restMenu(Player& player, Place& currentPlace)
 {
     int selectedMenuPoint = 0;
+
+    std::vector <std::string> staticMenuLines = {
+    "REST"
+    };
+
+    std::vector <std::string> dynamicMenuPoints = {};
+    std::vector <int> optionPrices = {};
 
     auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
         // Build string stream object
         ss << std::endl << "Gold: " << player.getGold() << std::endl;
     };
 
-    auto getDynamicDescription = [](std::stringstream& ss, const int& selectedMenuPoint) ->void {
+    auto getDynamicDescription = [&](std::stringstream& ss, const int& selectedMenuPoint) ->void {
         // Build string stream object
         ss << std::endl << "------------------------------------" << std::endl;
-        ss << std::endl << "Costs: ";
-        switch (selectedMenuPoint) {
-        case 0:
-            ss << "0";
-            break;
-        case 1:
-            ss << "0";
-            break;
-        case 2:
-            ss << "4";
-            break;
-        case 3:
-            ss << "6";
-            break;
-        }
-        ss << " gold." << std::endl;
+        ss << std::endl << "Costs: " << optionPrices[selectedMenuPoint] << " gold." << std::endl;
 
         switch (selectedMenuPoint) {
         case 0:
@@ -426,65 +418,65 @@ int Menu::restMenu(Player& player)
             ss << "Restores half of your missing hp and stamina. Chance to get mugged.";
             break;
         case 2:
-            ss << "Restores your hp and stamina to full.";
+            ss << "Restores half of your full hp and stamina in addition to your current status.";
             break;
         case 3:
-            ss << "Restores your hp and stamina to full. Enchances some stats for the next fight.";
+            ss << "Restores your hp and stamina to full.";
+            break;
+        case 4:
+            ss << "Restores your hp and stamina to full. Enchances some stats for the next few fights.";
             break;
         }
     };
 
     while (1) {
         // List of menu points
-        std::vector <std::string> staticMenuLines = {
-            "REST"
-        };
+        auto& options = currentPlace.getRestOptions();
+        for (auto& option: options) {
+            dynamicMenuPoints.emplace_back(option.first);
+            optionPrices.emplace_back(option.second);
+        }
 
-        std::vector <std::string> dynamicMenuPoints = {
-            "Sleep in the bushes.",
-            "Sleep on the street.",
-            "Sleep in a shared room at an Inn.",
-            "Sleep in a private room at an Inn."
-        };
         if ((int)dynamicMenuPoints.size() == 0) {
             selectedMenuPoint = -1; // indicating error for menugenerator
         }
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicDescription);
+        if (selectedMenuPoint == ESCAPE) {
+            return selectedMenuPoint;
+        }
+        // If player has enough gold
+        if (player.getGold() >= optionPrices[selectedMenuPoint]) {
 
-        switch (selectedMenuPoint) {
-        case 0:
-        case 1:
-            player.setHp((int)(std::floor((player.getHpMax() + player.getHp()) / 2)));
-            player.setStamina((int)(std::floor((player.getStaminaMax() + player.getStamina()) / 2)));
-            return selectedMenuPoint;
-        case 2:
-            if (player.getGold() >= 4) {
-                player.setGold(player.getGold() - 4);
+            // Remove gold
+            player.setGold(player.getGold() - optionPrices[selectedMenuPoint]);
+
+            // Do action according to the selected option
+            switch (selectedMenuPoint) {
+            case 0:
+            case 1:
+                player.setHp((int)(std::floor((player.getHpMax() + player.getHp()) / 2)));
+                player.setStamina((int)(std::floor((player.getStaminaMax() + player.getStamina()) / 2)));
+                break;
+            case 2:
+                player.setHp(max(player.getHp() + (int)(std::floor(player.getHpMax() / 2)), player.getHpMax()));
+                player.setStamina(max(player.getStamina() + (int)(std::floor(player.getStaminaMax() / 2)), player.getStaminaMax()));
+                break;
+            case 3:
                 player.setHp(player.getHpMax());
                 player.setStamina(player.getStaminaMax());
-                return selectedMenuPoint;
-            }
-            else {
-                std::cout << "Not enough money." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            break;
-        case 3:
-            if (player.getGold() >= 6) {
-                player.setGold(player.getGold() - 6);
+                break;
+            case 4:
                 player.setHp(player.getHpMax());
                 player.setStamina(player.getStaminaMax());
-                return selectedMenuPoint;
+                break;
+            default:
+                return -1;
             }
-            else {
-                std::cout << "Not enough money." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            break;
-        case ESCAPE:
             return selectedMenuPoint;
-        default:
-            break;
+        }
+        else {
+            std::cout << "Not enough money." << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
 }

@@ -397,7 +397,7 @@ void Game::gameLoop()
 
 		std::vector<std::string> options = {};
 
-		menu.menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
+		menu.mainMenuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
 		if (selectedMenuPoint == ESCAPE) {
 				selectedMenuPoint = (int)dynamicMenuPoints.size() - 1;
 		}

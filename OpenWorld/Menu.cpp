@@ -1,9 +1,9 @@
 ﻿#include "Menu.h"
 
 // Static Lines -> Static Fn -> Dynamic Points -> Dynamic Fn
-void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>& staticMenuLines, 
-    const std::vector<std::string>& dynamicMenuPoints, const bool isEscapeable, 
-    const std::function <void(std::stringstream&)>& staticMenuFn, 
+void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>& staticMenuLines,
+    const std::vector<std::string>& dynamicMenuPoints, const bool isEscapeable,
+    const std::function <void(std::stringstream&)>& staticMenuFn,
     const std::function <void(std::stringstream&, const int)>& dynamicMenuFn) {
 
     // Call the pre-menu callback function, if it is provided
@@ -13,7 +13,7 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
     {
         std::stringstream ss;
         ss << "\033c";
-        for (auto line: staticMenuLines)
+        for (auto line : staticMenuLines)
         {
             ss << line << std::endl;
         }
@@ -71,9 +71,85 @@ void Menu::menuGenerator(int& selectedMenuPoint, const std::vector<std::string>&
     return;
 
 }
-#include <fstream>
 
-constexpr auto ASCII_ART_LENGTH = 44;
+// Static Lines -> Static Fn -> Dynamic Points -> Dynamic Fn
+void Menu::mainMenuGenerator(int& selectedMenuPoint, const std::vector<std::string>& staticMenuLines,
+    const std::vector<std::string>& dynamicMenuPoints, const bool isEscapeable,
+    const std::function <void(std::stringstream&)>& staticMenuFn,
+    const std::function <void(std::stringstream&, const int)>& dynamicMenuFn) {
+
+    // Call the pre-menu callback function, if it is provided
+    int numberOfMenuPoints = (int)(dynamicMenuPoints.size() - 1);
+
+    while (1)
+    {
+        std::stringstream ss;
+        ss << "\033c";
+        for (auto& line : staticMenuLines)
+        {
+            ss << line << std::endl;
+        }
+        if (staticMenuFn) {
+            staticMenuFn(ss);
+        }
+        ss << std::string(ASCII_ART_LENGTH, ' ') << '\xB3' << std::endl;
+
+        for (auto index = 0; index < dynamicMenuPoints.size(); index++)
+        {
+            if (index == selectedMenuPoint) {
+                ss << "    \xC4\x10 ";
+                ss << dynamicMenuPoints[index];
+                ss << std::string(ASCII_ART_LENGTH - (MENU_INDEXER_INDENT + 1) - dynamicMenuPoints[index].length(), ' ') << '\xB3' << std::endl;
+            }
+            else {
+                ss << "        ";
+                ss << dynamicMenuPoints[index];
+                ss << std::string(ASCII_ART_LENGTH - (MENU_INDEXER_INDENT + 2) - dynamicMenuPoints[index].length(), ' ') << '\xB3' << std::endl;
+            }
+            
+        }
+        ss << std::string(ASCII_ART_LENGTH, ' ') << '\xB3' << std::endl;
+
+        if (dynamicMenuFn) {
+            dynamicMenuFn(ss, selectedMenuPoint);
+        }
+
+        std::cout << ss.str();
+
+        // Error handling in case of empty menu options
+        if (selectedMenuPoint < 0) {
+            FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+            _getch();
+            selectedMenuPoint = ESCAPE;
+            return;
+        }
+
+        FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+        switch ((_getch())) {
+        case KEY_UP:
+            selectedMenuPoint = (--selectedMenuPoint < 0) ? numberOfMenuPoints : selectedMenuPoint;
+            break;
+        case KEY_DOWN:
+            selectedMenuPoint = (++selectedMenuPoint > numberOfMenuPoints) ? 0 : selectedMenuPoint;
+            break;
+        case ENTER:
+            return;
+        case ESCAPE:
+            if (isEscapeable) {
+                selectedMenuPoint = ESCAPE;
+                return;
+            }
+            else break;
+        default:
+            break;
+        }
+    }
+
+    return;
+
+}
+
+
 
 std::string Menu::createBanner(const std::string& title, bool isSettlement)
 {
@@ -94,7 +170,7 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     }
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
-            ss << line << std::endl;
+            ss << line << '\xB3' << std::endl;
         }
     }
     inFile.close();
@@ -104,10 +180,10 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
 
     auto myString = "\xDA" + std::string(banner_width, '\xC4') + "\xBF";
     std::string s = ss.str();
-    s.replace(s.end() - (divider_length2 + banner_width + 3), s.end() - (divider_length2 + 1), myString);
+    s.replace(s.end() - (divider_length2 + banner_width + 4), s.end() - (divider_length2 + 2), myString);
     s += std::string(divider_length1, '\xC4') + banner;
     s += std::string(divider_length2, '\xC4') + '\xB4' + '\n';
-    s += std::string(divider_length1, ' ') + "\xC0" + std::string(banner_width, '\xC4') + "\xD9";
+    s += std::string(divider_length1, ' ') + "\xC0" + std::string(banner_width, '\xC4') + "\xD9" + std::string(divider_length2, ' ') + "\xB3";
 
     // Named return value optimization is used (NRVO) when only one object can be returned
     return s;

@@ -338,7 +338,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
                 return;
             }
 
-            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "Costs: " << shopItems[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
             std::vector<roleName> roles = shopItems[selectedMenuPoint].getRoles();
@@ -379,7 +379,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 
         }
         else {
-            std::cout << "Not enough money." << std::endl;
+            std::cout << std::endl << "Not enough money." << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
@@ -400,6 +400,16 @@ int Menu::restMenu(Player& player, Place& currentPlace)
     std::vector <std::string> dynamicMenuPoints = {};
     std::vector <int> optionPrices = {};
 
+    auto& options = currentPlace.getRestOptions();
+    for (auto& option : options) {
+        dynamicMenuPoints.emplace_back(option.first);
+        optionPrices.emplace_back(option.second);
+    }
+
+    if ((int)dynamicMenuPoints.size() == 0) {
+        selectedMenuPoint = -1; // indicating error for menugenerator
+    }
+
     auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
         // Build string stream object
         ss << std::endl << "Gold: " << player.getGold() << std::endl;
@@ -407,7 +417,7 @@ int Menu::restMenu(Player& player, Place& currentPlace)
 
     auto getDynamicDescription = [&](std::stringstream& ss, const int& selectedMenuPoint) ->void {
         // Build string stream object
-        ss << std::endl << "------------------------------------" << std::endl;
+        ss << std::endl << MENU_DIVIDER_STRING << std::endl;
         ss << std::endl << "Costs: " << optionPrices[selectedMenuPoint] << " gold." << std::endl;
 
         switch (selectedMenuPoint) {
@@ -430,16 +440,6 @@ int Menu::restMenu(Player& player, Place& currentPlace)
     };
 
     while (1) {
-        // List of menu points
-        auto& options = currentPlace.getRestOptions();
-        for (auto& option: options) {
-            dynamicMenuPoints.emplace_back(option.first);
-            optionPrices.emplace_back(option.second);
-        }
-
-        if ((int)dynamicMenuPoints.size() == 0) {
-            selectedMenuPoint = -1; // indicating error for menugenerator
-        }
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicDescription);
         if (selectedMenuPoint == ESCAPE) {
             return selectedMenuPoint;
@@ -475,7 +475,7 @@ int Menu::restMenu(Player& player, Place& currentPlace)
             return selectedMenuPoint;
         }
         else {
-            std::cout << "Not enough money." << std::endl;
+            std::cout << std::endl << std::endl << "Not enough money." << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
@@ -499,7 +499,7 @@ void Menu::playerSheetMenu(Player& player)
             ss << "Defence: " << player.getDefence() << std::endl;
             ss << "Stamina: " << player.getStamina() << "/" << player.getStaminaMax() << std::endl << std::endl;
 
-            ss << "------------------------------------" << std::endl << std::endl;
+            ss << MENU_DIVIDER_STRING << std::endl << std::endl;
 
             ss << "INVENTORY" << std::endl << std::endl;
             ss << player.getGold() << " gold" << std::endl;
@@ -583,7 +583,7 @@ void Menu::equipItems(Player& player)
             for (auto& equippedItem : player.getEquipment()) {
                 ss << "  " << equippedItem.getName() << std::endl;
             }
-            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl;
             if (player.getInventory().size() == 0) {
                 ss << std::endl << "You don't have anything to equip." << std::endl;
@@ -604,7 +604,7 @@ void Menu::equipItems(Player& player)
             if (selectedMenuPoint < 0) {
                 return;
             }
-            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
@@ -662,7 +662,7 @@ void Menu::unequipItems(Player& player)
 
         auto getDynamicItemStats = [itemList, player](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
-            ss << "------------------------------------" << std::endl;
+            ss << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl << std::endl;
             for (auto& inventoryItem : player.getInventory()) {
                 ss << "  " << inventoryItem.getName() << std::endl;
@@ -670,7 +670,7 @@ void Menu::unequipItems(Player& player)
             if (player.getEquipment().size() == 0) {
                 return;
             }
-            ss << std::endl << "------------------------------------" << std::endl;
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";

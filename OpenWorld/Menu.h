@@ -21,6 +21,7 @@ constexpr auto ASCII_ART_LENGTH = 44;
 constexpr auto MENU_POINT_INDENT = 4;
 constexpr auto MENU_INDEXER_SIZE = 2;
 constexpr auto MENU_INDEXER_INDENT = MENU_POINT_INDENT + MENU_INDEXER_SIZE;
+constexpr auto MENU_DIVIDER_STRING = "\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4";
 
 enum class menuState {
 	Main = 0,

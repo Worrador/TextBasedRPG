@@ -299,7 +299,9 @@ void Menu::shopMenu(Player& player, std::vector<Item>& shopItems)
             buyMenu(player, shopItems);
             break;
         case 1:
-            sellMenu(player);
+            for (auto& item : sellMenu(player)) {
+                shopItems.emplace_back(std::move(item));
+            }
             break;
         case ESCAPE:
             return;
@@ -311,11 +313,9 @@ void Menu::shopMenu(Player& player, std::vector<Item>& shopItems)
 
 void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 {
-
     int selectedMenuPoint = 0;
     // Generate items this should be in the location constructor
     
-
     while (1) {
         // List of menu points
         std::vector <std::string> staticMenuLines = {
@@ -385,8 +385,71 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
     }
 }
 
-void Menu::sellMenu(Player& player)
+// Returns items that the player sold
+std::vector<Item> Menu::sellMenu(Player& player)
 {
+    int selectedMenuPoint = 0;
+    // Generate items this should be in the location constructor
+    auto& inventroy = player.getInventory();
+
+    std::vector<Item> soldItems;
+
+    while (1) {
+        // List of menu points
+        std::vector <std::string> staticMenuLines = {
+            "SELL"
+        };
+        std::vector <std::string> dynamicMenuPoints;
+
+        for (auto& option : inventroy) {
+            dynamicMenuPoints.push_back(option.getName());
+        }
+
+        auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
+            // Build string stream object
+            ss << std::endl << "Gold: " << player.getGold() << std::endl;
+        };
+
+        auto getDynamicItemStats = [&inventroy](std::stringstream& ss, const int selectedMenuPoint) ->void {
+            // Build string stream object
+            if (selectedMenuPoint < 0) {
+                return;
+            }
+
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
+            ss << std::endl << "Sells for: " << inventroy[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
+            ss << "Equipable by: ";
+            std::vector<roleName> roles = inventroy[selectedMenuPoint].getRoles();
+
+            for (auto roleName : roles) {
+                ss << roleName;
+                if (roleName == roles[roles.size() - 1]) {
+                    break;
+                }
+                ss << ", ";
+            }
+            ss << std::endl;
+            ss << "Item type: " << inventroy[selectedMenuPoint].getItemType() << std::endl;
+            ss << "Rarity: " << inventroy[selectedMenuPoint].getRarityName() << std::endl;
+            ss << "Max HP: " << inventroy[selectedMenuPoint].getHpMax() << std::endl;
+            ss << "Max damage: " << inventroy[selectedMenuPoint].getDamageMax() << std::endl;
+            ss << "Defence: " << inventroy[selectedMenuPoint].getDefence() << std::endl;
+            ss << "Max stamina: " << inventroy[selectedMenuPoint].getStaminaMax() << std::endl;
+        };
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicItemStats);
+
+        if (selectedMenuPoint == ESCAPE) {
+            // Return by value std::move() would prohibit NRVO and if no NRVO can be used std::move will be used anyway.
+            return soldItems;
+        }
+
+        player.setGold(player.getGold() + inventroy[selectedMenuPoint].getSellGold());
+        soldItems.emplace_back(std::move(inventroy[selectedMenuPoint]));
+        inventroy.erase(inventroy.begin() + selectedMenuPoint);
+    }
 }
 
 int Menu::restMenu(Player& player, Place& currentPlace)
@@ -487,7 +550,7 @@ void Menu::playerSheetMenu(Player& player)
 
     while (1) {
 
-        auto getStaticPlayerInfo = [player](std::stringstream& ss) ->void {
+        auto getStaticPlayerInfo = [&player](std::stringstream& ss) ->void {
             // Build string stream object
             ss << std::endl;
             ss << "Name: " << player.getName() << std::endl;
@@ -578,7 +641,7 @@ void Menu::equipItems(Player& player)
             ""
         };
 
-        auto getStaticEquippedItems = [player](std::stringstream& ss) ->void {
+        auto getStaticEquippedItems = [&player](std::stringstream& ss) ->void {
             // Build string stream object
             for (auto& equippedItem : player.getEquipment()) {
                 ss << "  " << equippedItem.getName() << std::endl;
@@ -660,7 +723,7 @@ void Menu::unequipItems(Player& player)
             staticMenuLines.push_back("You don't have anything to unequip.");
         }
 
-        auto getDynamicItemStats = [itemList, player](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicItemStats = [&itemList, &player](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             ss << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl << std::endl;

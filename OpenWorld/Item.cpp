@@ -14,7 +14,7 @@ Item::Item(const std::string& name, const std::vector<roleName>& roles, const it
 	};
 
 	level = (int)std::floor((hpMax + damageMax + defence + staminaMax) / 2);
-	buyGold = hpMax * 2 + damageMax * 2 + defence * 3 + staminaMax;
+	buyGold = hpMax * 2 + damageMax * 3 + defence * 4 + staminaMax;
 	sellGold = (int)std::floor(buyGold / 2);
 	rarity = (int)std::floor(10000 / (buyGold * buyGold));
 

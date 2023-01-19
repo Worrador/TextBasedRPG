@@ -5,7 +5,7 @@ class Enemy : public Character
 {
 public:
 	Enemy(const std::string& name, int hpMax, int dmgMax, int defence, int staminaMax, int aggressivity) :
-		Character(name, hpMax, dmgMax, (int)std::floor(dmgMax / 2), defence, staminaMax, (int)std::max(dmgMax, hpMax)), expDrop(dmgMax + hpMax),
+		Character(name, hpMax, dmgMax, (int)std::floor(dmgMax / 2), defence, staminaMax, (int)std::floor(std::max(dmgMax, hpMax) / 5)), expDrop(dmgMax + hpMax),
 		aggressivity(aggressivity), rarity((int)std::floor(10000 / (hpMax + defence + dmgMax) * (1 + staminaMax / staminaMax))) {};
 
 	Enemy (const Enemy&) = default;

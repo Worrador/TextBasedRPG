@@ -30,7 +30,7 @@ public:
 	inline const roleName& getRoleName() const { return role.getRoleName(); };
 	inline const int& getExp() const { return exp; };
 	inline const int& getExpNext() const { return expNext; };
-	inline const std::vector<Item>& getInventory() const { return Inventory; };
+	inline std::vector<Item>& getInventory() { return Inventory; };
 	inline const std::vector<Item>& getEquipment() const { return Equipment; };
 
 	// Stat Modifiers

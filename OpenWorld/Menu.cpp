@@ -201,7 +201,7 @@ Player Menu::playerCreationMenu()
     std::cout << "Please enter your name!" << std::endl;
     // Clear the buffer to prevent interference from previously entered data
     FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
-    std::cin >> name;
+    std::getline(std::cin, name, '\n');
 
 
     bool isMale = true;

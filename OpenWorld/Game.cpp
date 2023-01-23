@@ -268,8 +268,26 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 		makeAttack(player, enemy);
 	}
 
-	std::cout << player.getName() << " has won the battle and is rewarded with " << enemy.getGold() << " gold." << std::endl;
-	player.setGold(player.getGold() + enemy.getGold());
+	std::cout << player.getName() << " has won the battle.";
+	if (player.getStamina() >= 2) {
+		player.setStamina(player.getStamina() - 1);
+		std::cout << std::endl << std::endl << "By carefully searching the area " << player.getName() << " stumbles upon the following items: " << std::endl;
+		std::cout << "  \x10 " << enemy.getGold() << " gold" << std::endl;
+		player.setGold(player.getGold() + enemy.getGold());
+		if (getRandomBetween(0, 1)) {
+			for (auto& loot : enemy.getLootItems()) {
+				std::cout << "  \x10 " << loot.getName() << std::endl;
+				player.addItem(loot);
+			}
+		}
+	}
+	else {
+		std::cout << std::endl << std::endl << player.getName() << " is too tired to search the area, he only finds:" << std::endl;
+		std::cout << "  \x10 " << enemy.getGold() << " gold" << std::endl;
+		player.setGold(player.getGold() + enemy.getGold());
+	}
+
+	
 	player.setExp(player.getExp() + enemy.getExpDrop());
 	return;
 }

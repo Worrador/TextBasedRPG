@@ -16,11 +16,11 @@ constexpr auto RARITY_ITEM_TRESHOLD_4 = 250;
 constexpr auto RARITY_ITEM_TRESHOLD_3 = 500;
 constexpr auto RARITY_ITEM_TRESHOLD_2 = 750;
 
-constexpr auto RARITY_ENEMY_TRESHOLD_6 = 50;
-constexpr auto RARITY_ENEMY_TRESHOLD_5 = 100;
-constexpr auto RARITY_ENEMY_TRESHOLD_4 = 250;
-constexpr auto RARITY_ENEMY_TRESHOLD_3 = 500;
-constexpr auto RARITY_ENEMY_TRESHOLD_2 = 750;
+constexpr auto RARITY_ENEMY_TRESHOLD_5 = 500;
+constexpr auto RARITY_ENEMY_TRESHOLD_6 = 250;
+constexpr auto RARITY_ENEMY_TRESHOLD_4 = 1000;
+constexpr auto RARITY_ENEMY_TRESHOLD_3 = 2000;
+constexpr auto RARITY_ENEMY_TRESHOLD_2 = 3000;
 
 inline int getRandomBetween(int lower, int higher)
 {

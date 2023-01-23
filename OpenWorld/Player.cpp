@@ -62,12 +62,12 @@ void Player::equipItem(const int& itemPos)
 	std::vector<roleName> itemRoles = Inventory[itemPos].getRoles();
 
 	// If role fits
-	if (std::find(itemRoles.begin(), itemRoles.end(), role.getRoleName()) != itemRoles.end()) {
+	if (std::find(itemRoles.cbegin(), itemRoles.cend(), role.getRoleName()) != itemRoles.cend()) {
 
 		auto isNotWorn = [&]() -> bool
 		{
 			auto type = Inventory[itemPos].getItemType();
-			int count = (int)std::count_if(Equipment.begin(), Equipment.end(), 
+			int count = (int)std::count_if(Equipment.cbegin(), Equipment.cend(), 
 				[&](const auto& equippedItem) {
 					return (equippedItem.getItemType() == type);
 				});
@@ -75,7 +75,7 @@ void Player::equipItem(const int& itemPos)
 			// One handed items need special treatment
 			if (type == "one handed") {
 				// Get count of two handed
-				int countTwoHanded = (int)std::count_if(Equipment.begin(), Equipment.end(),
+				int countTwoHanded = (int)std::count_if(Equipment.cbegin(), Equipment.cend(),
 					[&](const auto& equippedItem) {
 						return (equippedItem.getItemType() == "two handed");
 					});
@@ -84,7 +84,7 @@ void Player::equipItem(const int& itemPos)
 			}
 			else if (type == "two handed") {
 				// Get count of one handed
-				int countOneHanded = (int)std::count_if(Equipment.begin(), Equipment.end(),
+				int countOneHanded = (int)std::count_if(Equipment.cbegin(), Equipment.cend(),
 					[&](const auto& equippedItem) {
 						return (equippedItem.getItemType() == "one handed");
 					});

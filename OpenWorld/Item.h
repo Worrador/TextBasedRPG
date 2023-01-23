@@ -1,11 +1,19 @@
 #pragma once
 #include "Role.h"
+#include "Common.h"
 #include <algorithm>
 #include <vector>
-#include <map>
+#include <array>
 
 using itemType = std::string;
-using itemRarity = std::string;
+using itemRarity = std::string_view;
+constexpr std::array<std::pair<std::string_view, int>, 5> itemRarityThresholds{
+	{{RARITY_LEVEL_6, RARITY_ITEM_TRESHOLD_6},
+	 {RARITY_LEVEL_5, RARITY_ITEM_TRESHOLD_5},
+	 {RARITY_LEVEL_4, RARITY_ITEM_TRESHOLD_4},
+	 {RARITY_LEVEL_3, RARITY_ITEM_TRESHOLD_3},
+	 {RARITY_LEVEL_2, RARITY_ITEM_TRESHOLD_2}} };
+
 
 class Item
 {

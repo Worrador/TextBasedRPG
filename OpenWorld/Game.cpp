@@ -8,18 +8,18 @@ Enemy Game::spawnEnemy()
 	// If ther are no enemies for some reason, then get enemies from neighboring places
 	while (currentEnemyNames.empty()) {
 		//TODO: In case of a settlement only beeing close to other settlments we some error handling is needed
-		currentEnemyNames = worldMap[worldMap[currentPoint].second[rollBetween(0, (int)worldMap[currentPoint].second.size() - 1)]].first->getEnemiesNight();
+		currentEnemyNames = worldMap[worldMap[currentPoint].second[getRandomBetween(0, (int)worldMap[currentPoint].second.size() - 1)]].first->getEnemiesNight();
 	}
 
 	// Get enemies that match criteria
 	auto parsedEnemies = EnemyParser::getInstance().getParsedEnemies();
 	std::vector<Enemy> currentEnemies;
-	std::copy_if(parsedEnemies.begin(), parsedEnemies.end(), std::back_inserter(currentEnemies),
+	std::copy_if(parsedEnemies.cbegin(), parsedEnemies.cend(), std::back_inserter(currentEnemies),
 		[&](const auto& enemy) {
-			return(std::find_if(currentEnemyNames.begin(), currentEnemyNames.end(), 
+			return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(), 
 				[&](const auto& enemyName) {
 					return(enemyName == enemy.getName());
-				}) != currentEnemyNames.end());
+				}) != currentEnemyNames.cend());
 		});
 
 	// Get raritySum of enemies of current place
@@ -30,7 +30,7 @@ Enemy Game::spawnEnemy()
 	}
 
 	// Generate random number and iterate until an enemy is selected
-	int randomEnemyNum = rollBetween(0, currentEnemiesRaritySum);
+	int randomEnemyNum = getRandomBetween(0, currentEnemiesRaritySum);
 	int enemyIndex = -1;
 
 	while (randomEnemyNum > 0) {
@@ -38,13 +38,6 @@ Enemy Game::spawnEnemy()
 		randomEnemyNum -= currentEnemies[enemyIndex].getRarity();
 	}
 	return currentEnemies[enemyIndex];
-}
-
-int Game::rollBetween(int lower, int higher)
-{
-	std::uniform_int_distribution<> roll_dist(lower, higher);
-
-	return roll_dist(randomNumberGenerator);
 }
 
 // Get local modifyable variables
@@ -74,10 +67,10 @@ bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex)
 	bool reqNamesAreDifferent = selectedTerrain.getName() != currentPlace.getName();
 
 	// Check if the selected terrain has already been added to this palce
-	bool reqTerrainNotAlreadyAdded = std::find_if(worldMap[currentPlaceIndex].second.begin(), worldMap[currentPlaceIndex].second.end(),
+	bool reqTerrainNotAlreadyAdded = std::find_if(worldMap[currentPlaceIndex].second.cbegin(), worldMap[currentPlaceIndex].second.cend(),
 		[&](const auto& p) {
 			return worldMap[p].first->getName() == selectedTerrain.getName();
-		}) == worldMap[currentPlaceIndex].second.end();
+		}) == worldMap[currentPlaceIndex].second.cend();
 
 		return (reqAllowedFollowingTerrain || reqAllowedAnyFollowingTerrain) && (reqCurrentPlaceAllowedAsPrevious || reqAnyPlaceAllowedAsPrevious) && reqNamesAreDifferent && reqTerrainNotAlreadyAdded;
 }
@@ -85,7 +78,7 @@ bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex)
 void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
 	// Calculate the number of connections that need to be added
-	int connectionsToAdd = rollBetween(0, maxConnections - (int)worldMap[currentPlaceIndex].second.size());
+	int connectionsToAdd = getRandomBetween(0, maxConnections - (int)worldMap[currentPlaceIndex].second.size());
 
 	// First add the connections to the map
 	for (int i = 0; i < connectionsToAdd; i++) {
@@ -93,18 +86,18 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
 		// Choose a random settlement or terrain to add to the map
 		std::unique_ptr<Place> newPlace;
-		if (rollBetween(0, 6) || (settlements.empty())) {
+		if (getRandomBetween(0, 6) || (settlements.empty())) {
 			int selectedTerrainIndex = 0;
 
 			// Keep generating a new random number until it fits the requirements
 			do {
-				selectedTerrainIndex = rollBetween(0, (int)terrains.size() - 1);
+				selectedTerrainIndex = getRandomBetween(0, (int)terrains.size() - 1);
 			} while (!isValidTerrainChoice(selectedTerrainIndex, currentPlaceIndex));
 
 			newPlace = std::make_unique<Terrain>(terrains[selectedTerrainIndex]);
 		}
 		else {
-			int selectedSettlementIndex = rollBetween(0, (int)settlements.size() - 1);
+			int selectedSettlementIndex = getRandomBetween(0, (int)settlements.size() - 1);
 			newPlace = std::make_unique<Settlement>(settlements[selectedSettlementIndex]);
 			settlements.erase(settlements.begin() + selectedSettlementIndex);
 		}
@@ -130,7 +123,7 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 void Game::generateWorldMap() {
 
 	// Select starting settlement
-	auto selected_settlement_index = rollBetween(0, (int)settlements.size() - 1);
+	auto selected_settlement_index = getRandomBetween(0, (int)settlements.size() - 1);
 
 	// Add to world map
 	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
@@ -147,9 +140,9 @@ void Game::generateWorldMap() {
 		auto reqNoFollowingAvailable = true, reqSizeLimitReached = true;
 
 		while (reqNoFollowingAvailable || reqSizeLimitReached){
-			random_ind = rollBetween(0, (int)worldMap.size() - 1);
+			random_ind = getRandomBetween(0, (int)worldMap.size() - 1);
 			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
-				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.begin(), worldMap[random_ind].second.end(), [&](const auto& mapInd) {return worldMap[mapInd].first->getName() == followingName; }) != worldMap[random_ind].second.end());
+				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.cbegin(), worldMap[random_ind].second.cend(), [&](const auto& mapInd) {return worldMap[mapInd].first->getName() == followingName; }) != worldMap[random_ind].second.cend());
 			}
 			reqSizeLimitReached = ( (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
 		}
@@ -166,7 +159,7 @@ void Game::playMusic()
 	waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
 };
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu()), randomNumberGenerator(std::random_device{}())
+Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu())
 {
 	playMusic();
 	generateWorldMap();
@@ -194,7 +187,7 @@ void Game::travel(int travelOption)
 	int chance = 0;
 
 	// Chance for an encounter
-	chance = rollBetween(0, 4);
+	chance = getRandomBetween(0, 4);
 	dramaticPause();
 	if (chance > 2) {
 		Enemy enemy = spawnEnemy() * player.getLevel();
@@ -239,7 +232,7 @@ void Game::travel(int travelOption)
 void Game::makeAttack(Character& attacker, Character& defender)
 {
 	if (attacker.getStamina() > 0) {
-		int dmgAttacker = rollBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence();
+		int dmgAttacker = getRandomBetween(attacker.getDamageMin(), attacker.getDamageMax()) - defender.getDefence();
 		if (dmgAttacker < 0) {
 			dmgAttacker = 0;
 		}
@@ -304,7 +297,7 @@ void Game::wait(Enemy& enemy)
 {
 	// The enemy might not attack you and you can continue your journey, 
 	// this could depend on your level difference, difficulty, terrain and a lot of other things.
-	int chance = rollBetween(1, 4);
+	int chance = getRandomBetween(1, 4);
 	if (chance > 3) {
 		std::vector <std::string> staticLines = {
 			"The " + enemy.getName() + " does not look to attack you. You can continue your journey if you wish to."
@@ -344,7 +337,7 @@ void Game::rest(int restOption)
 	{
 	case 0: // Chance to get Attacked, if survived then increment health and stamina?
 		// Chance for an encounter
-		chance = rollBetween(0, 4);
+		chance = getRandomBetween(0, 4);
 		if (chance > 0) {
 
 			Enemy enemy = spawnEnemy() * player.getLevel();
@@ -357,7 +350,7 @@ void Game::rest(int restOption)
 		}
 		break;
 	case 1:
-		chance = rollBetween(0, 4);
+		chance = getRandomBetween(0, 4);
 		if (chance > 0) {
 			player.setGold(player.getGold() - chance);
 			std::cout << "You wake somewhat rested. But as you touch your pockets you notice that you have been mugged." << std::endl;
@@ -392,8 +385,8 @@ void Game::gameLoop()
 
 		// Add additional menu points before the quit option
 		std::vector <std::string> placeMenuOptions = worldMap[currentPoint].first->getMenuOptions();
-		dynamicMenuPoints.insert(dynamicMenuPoints.begin() + dynamicMenuPoints.size() - 1, 
-			placeMenuOptions.begin(), placeMenuOptions.end());
+		dynamicMenuPoints.insert(dynamicMenuPoints.cbegin() + dynamicMenuPoints.size() - 1, 
+			placeMenuOptions.cbegin(), placeMenuOptions.cend());
 
 		std::vector<std::string> options = {};
 

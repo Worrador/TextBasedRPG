@@ -3,7 +3,6 @@
 #include "SettlementParser.h"
 #include "TerrainParser.h"
 #include "Menu.h"
-#include <random>
 #include <iostream>
 #include <mmsystem.h>
 #include <numeric>
@@ -59,9 +58,6 @@ public:
 
 	void rest( int restOption );
 
-	int rollBetween(int lower, int higher);
-
-
 	void travel( int travelOption );
 	void makeAttack(Character& attacker, Character& defender);
 	void fight( Enemy& enemy, bool playerInitialize );
@@ -82,6 +78,5 @@ private:
 	
 	// Use vector for constant_time acces, as we only need to populate once (list could be used otherwise, as the insertion is more efficient)
 	std::vector<mapPoint> worldMap;
-	std::mt19937 randomNumberGenerator;
 };
 

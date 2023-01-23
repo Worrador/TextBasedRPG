@@ -2,7 +2,6 @@
 #include "Place.h"
 #include "Shop.h"
 #include "ItemParser.h"
-#include <random>
 
 using settlementSizeType = std::string;
 
@@ -15,7 +14,6 @@ constexpr auto REST_PRIVATE_ROOM_PRICE_EXPENSIVE = 8;
 class Settlement : public Place
 {
 public:
-	int getRandomBetween(int lower, int higher);
 	Settlement(const std::string& name, const settlementSizeType& settlementSize, const int& maxConnectionSize);
 
 	void addRandomShopItem(std::vector<Item>& shopItems, shopType type);
@@ -43,7 +41,6 @@ private:
 	settlementSizeType settlementSize;
 	int maxConnectionSize = 0;
 	std::vector<Shop> settlementShops;
-	std::mt19937 randomNumberGenerator;
 	std::vector<std::pair<std::string, int>> restOptions;
 
 

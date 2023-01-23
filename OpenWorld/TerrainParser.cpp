@@ -87,8 +87,8 @@ void TerrainParser::parseTerrains()
 
             const auto& parsedEnemies = EnemyParser::getInstance().getParsedEnemies();
             for (auto& enemyName : enemiesDay) {
-                auto it = std::find_if(parsedEnemies.begin(), parsedEnemies.end(), [&](const Enemy& current) {return (current.getName() == enemyName); });
-                if (it != parsedEnemies.end()) {
+                auto it = std::find_if(parsedEnemies.cbegin(), parsedEnemies.cend(), [&](const Enemy& current) {return (current.getName() == enemyName); });
+                if (it != parsedEnemies.cend()) {
                     // Enemy found
                     enemiesDayRaritySum += it->getRarity();
                 }
@@ -99,8 +99,8 @@ void TerrainParser::parseTerrains()
             }
 
             for (auto& enemyName : enemiesNight) {
-                auto it = std::find_if(parsedEnemies.begin(), parsedEnemies.end(), [&](const Enemy& current) {return (current.getName() == enemyName); });
-                if (it != parsedEnemies.end()) {
+                auto it = std::find_if(parsedEnemies.cbegin(), parsedEnemies.cend(), [&](const Enemy& current) {return (current.getName() == enemyName); });
+                if (it != parsedEnemies.cend()) {
                     // Enemy found
                     enemiesNightRaritySum += it->getRarity();
                 }

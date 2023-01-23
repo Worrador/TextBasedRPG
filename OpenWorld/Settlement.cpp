@@ -1,15 +1,7 @@
 #include "Settlement.h"
 
-int Settlement::getRandomBetween(int lower, int higher)
-{
-	std::uniform_int_distribution<> roll_dist(lower, higher);
-
-	return roll_dist(randomNumberGenerator);
-}
-
-
 Settlement::Settlement(const std::string& name, const settlementSizeType& settlementSize, const int& maxConnectionSize)
-	: Place(name, ""), settlementSize(settlementSize), randomNumberGenerator(std::random_device{}())
+	: Place(name, ""), settlementSize(settlementSize)
 {
 	// Error handling in case something goes wrong, settlement size can only be MAXSETTLEMENTSIZE at max
 	this->maxConnectionSize = (maxConnectionSize > MAXSETTLEMENTSIZE) ? MAXSETTLEMENTSIZE : maxConnectionSize;
@@ -75,10 +67,10 @@ void Settlement::addRandomShopItem(std::vector<Item>& shopItems, shopType type)
 				break;
 			}
 		}
-	} while ((shopItems.size() != 0) && (std::find_if(shopItems.begin(), shopItems.end(),
+	} while ((shopItems.size() != 0) && (std::find_if(shopItems.cbegin(), shopItems.cend(),
 		[&](const auto& item) {
 			return(item.getName() == parsedItems[itemIndex].getName());
-		}) != shopItems.end()));
+		}) != shopItems.cend()));
 
 	shopItems.push_back(parsedItems[itemIndex]);
 }

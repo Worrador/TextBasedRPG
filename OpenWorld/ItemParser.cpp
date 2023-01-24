@@ -67,14 +67,23 @@ void ItemParser::parseItems()
             switch (sheet_index) {
             case 0:
                 parsedWeaponsRaritySum += item.getRarityValue();
+                if (std::find(parsedWeaponTypes.cbegin(), parsedWeaponTypes.cend(), item_type_string) == parsedWeaponTypes.cend()) {
+                    parsedWeaponTypes.emplace_back(item_type_string);
+                }
                 parsedWeapons.push_back(std::move(item));
                 break;
             case 1:
                 parsedArmorsRaritySum += item.getRarityValue();
+                if (std::find(parsedArmorTypes.cbegin(), parsedArmorTypes.cend(), item_type_string) == parsedArmorTypes.cend()) {
+                    parsedArmorTypes.emplace_back(item_type_string);
+                }
                 parsedArmors.push_back(std::move(item));
                 break;
             case 2:
                 parsedConsumablesRaritySum += item.getRarityValue();
+                if (std::find(parsedConsumableTypes.cbegin(), parsedConsumableTypes.cend(), item_type_string) == parsedConsumableTypes.cend()) {
+                    parsedConsumableTypes.emplace_back(item_type_string);
+                }
                 parsedConsumables.push_back(std::move(item));
                 break;
             default:

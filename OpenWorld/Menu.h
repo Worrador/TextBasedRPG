@@ -57,9 +57,9 @@ public:
 
 	Player playerCreationMenu();
 	int travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints);
-	void shopMenu(Player& player, std::vector<Item>& shopItems);
+	void shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions);
 	void buyMenu(Player& player, std::vector<Item>& shopItems);
-	std::vector<Item> sellMenu(Player& player);
+	std::vector<Item> sellMenu(Player& player, const std::vector<std::string>& sellingOptions);
 	int restMenu(Player& player, Place& currentPlace);
 	void playerSheetMenu(Player& player);
 	int quitMenu();

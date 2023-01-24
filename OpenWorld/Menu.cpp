@@ -274,7 +274,7 @@ int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints
     return selectedMenuPoint;
 }
 
-void Menu::shopMenu(Player& player, std::vector<Item>& shopItems)
+void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions)
 {
     int selectedMenuPoint = 0;
 
@@ -299,7 +299,7 @@ void Menu::shopMenu(Player& player, std::vector<Item>& shopItems)
             buyMenu(player, shopItems);
             break;
         case 1:
-            for (auto& item : sellMenu(player)) {
+            for (auto& item : sellMenu(player, sellingOptions)) {
                 shopItems.emplace_back(std::move(item));
             }
             break;
@@ -386,12 +386,13 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 }
 
 // Returns items that the player sold
-std::vector<Item> Menu::sellMenu(Player& player)
+std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>& sellingOptions)
 {
     int selectedMenuPoint = 0;
-    // Generate items this should be in the location constructor
     auto& inventroy = player.getInventory();
 
+    // Copy only items that can be sold at this shop
+    std::vector<int> sellInventoryIds;
     std::vector<Item> soldItems;
 
     while (1) {
@@ -401,13 +402,23 @@ std::vector<Item> Menu::sellMenu(Player& player)
         };
         std::vector <std::string> dynamicMenuPoints;
 
-        for (auto& option : inventroy) {
-            dynamicMenuPoints.push_back(option.getName());
+        sellInventoryIds.clear();
+        for (auto id = 0; id < (int)inventroy.size(); id++) {
+            if (std::find_if(sellingOptions.cbegin(), sellingOptions.cend(), [&](const auto& option) { return(option == inventroy[id].getItemType()); }) != sellingOptions.cend()) {
+                sellInventoryIds.emplace_back(id);
+            }
         }
 
-        auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
+        for (auto& id : sellInventoryIds) {
+            dynamicMenuPoints.push_back(inventroy[id].getName());
+        }
+
+        auto getStaticPlayerGold = [&player, &dynamicMenuPoints](std::stringstream& ss) ->void {
             // Build string stream object
             ss << std::endl << "Gold: " << player.getGold() << std::endl;
+            if (dynamicMenuPoints.size() == 0) {
+                ss << std::endl << "You don't have anything to sell here." << std::endl;
+            }
         };
 
         auto getDynamicItemStats = [&inventroy](std::stringstream& ss, const int selectedMenuPoint) ->void {
@@ -423,6 +434,7 @@ std::vector<Item> Menu::sellMenu(Player& player)
 
             for (auto roleName : roles) {
                 ss << roleName;
+                //TODO: wtf is this
                 if (roleName == roles[roles.size() - 1]) {
                     break;
                 }
@@ -446,9 +458,10 @@ std::vector<Item> Menu::sellMenu(Player& player)
             return soldItems;
         }
 
-        player.setGold(player.getGold() + inventroy[selectedMenuPoint].getSellGold());
-        soldItems.emplace_back(std::move(inventroy[selectedMenuPoint]));
-        inventroy.erase(inventroy.begin() + selectedMenuPoint);
+        player.setGold(player.getGold() + inventroy[sellInventoryIds[selectedMenuPoint]].getSellGold());
+        soldItems.emplace_back(std::move(inventroy[sellInventoryIds[selectedMenuPoint]]));
+        inventroy.erase(inventroy.begin() + sellInventoryIds[selectedMenuPoint]);
+        sellInventoryIds.erase(sellInventoryIds.cbegin() + selectedMenuPoint);
     }
 }
 

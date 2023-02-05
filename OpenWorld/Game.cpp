@@ -425,7 +425,7 @@ void Game::gameLoop()
 			travel(menu.travelMenu(player, options));
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_MAP) {
-			std::cout << "Not yet implemented" << std::endl;
+			menu.mapMenu(player);
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_REST) {
 			rest(menu.restMenu(player, *worldMap[currentPoint].first));

@@ -624,6 +624,62 @@ void Menu::playerSheetMenu(Player& player)
     }
 }
 
+void Menu::mapMenu(Player& player)
+{
+    int selectedMenuPoint = 0;
+
+    while (1) {
+
+        // List of menu points
+        std::vector <std::string> staticMenuLines = {
+            "Which settlement would you like to know the way to?",
+            "",
+            MENU_DIVIDER_STRING,
+            "",
+            "Known settlements:",
+            ""
+        };
+
+        // List the eqipped items
+        std::vector <std::string> dynamicMenuPoints = {
+        };
+
+        auto& map = player.getMap();
+        for (const auto& [settlement, paths] : map) {
+            dynamicMenuPoints.emplace_back(settlement);
+        }
+
+        auto getDynamicPaths = [&map](std::stringstream& ss, const int selectedMenuPoint) ->void {
+            // Build string stream object
+            if (selectedMenuPoint < 0) {
+                return;
+            }
+
+            // Get the iterator to the selectedMenuPoint element
+            auto it = std::next(map.begin(), selectedMenuPoint);
+
+            if (it != map.end()) {
+                const auto& [settlement, paths] = *it;
+                for (auto& path : paths)
+                {
+                    for (auto& step : path)
+                    {
+                        ss << step << " -> " << std::endl;
+                    }
+                }
+            }
+        };
+
+
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicPaths);
+
+        if (selectedMenuPoint == ESCAPE) {
+            return;
+        }
+    }
+
+}
+
 int Menu::quitMenu()
 {
     int selectedMenuPoint = 0;

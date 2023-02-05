@@ -2,6 +2,11 @@
 #include "Character.h"
 #include <thread>   // for std::this_thread::sleep_for
 #include <chrono>   // for std::chrono::seconds
+#include <map>
+
+
+
+using playerMap = std::map<std::string_view, std::vector<std::vector<std::string_view>>>;
 
 class Player : public Character
 {
@@ -32,6 +37,7 @@ public:
 	inline const int& getExpNext() const { return expNext; };
 	inline std::vector<Item>& getInventory() { return Inventory; };
 	inline const std::vector<Item>& getEquipment() const { return Equipment; };
+	inline const playerMap& getMap() const { return map; };
 
 	// Stat Modifiers
 	inline void setExp(int exp) { this->exp = exp; };
@@ -48,6 +54,6 @@ private:
 	// Inventory
 	std::vector<Item> Equipment;
 	std::vector<Item> Inventory;
-
+	playerMap map;
 };
 

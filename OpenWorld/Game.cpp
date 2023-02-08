@@ -128,6 +128,10 @@ void Game::generateWorldMap() {
 	// Add to world map
 	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
 
+	// Set this settlement to discovered, first one is the currenPoint
+	worldMap[currentPoint].first->setToDiscovered();
+	player.addToMap(worldMap[currentPoint].first->getName());
+
 	// Pop from settlements list
 	settlements.erase(settlements.begin() + selected_settlement_index);
 
@@ -224,6 +228,13 @@ void Game::travel(int travelOption)
 		std::cout << "You have arrived to your destination." << std::endl; 
 		previousPoint = currentPoint;
 		currentPoint = worldMap[currentPoint].second[travelOption];
+		worldMap[currentPoint].first->setToDiscovered();
+
+		if (auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get()) != nullptr) {
+			player.addToMap(worldMap[currentPoint].first->getName());
+		}
+
+
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
 	}

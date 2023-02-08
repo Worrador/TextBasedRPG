@@ -2,23 +2,21 @@
 #include "Character.h"
 #include <thread>   // for std::this_thread::sleep_for
 #include <chrono>   // for std::chrono::seconds
-#include <map>
 
 
 
-using playerMap = std::map<std::string_view, std::vector<std::vector<std::string_view>>>;
+using playerMap = std::vector<std::string_view>;
 
 class Player : public Character
 {
 public:
 	// Constructors
 	Player(const std::string& name, bool isMale, int hpMax, int dmgMax, int dmgMin, int defence, int staminaMax, const Role& role) :
-		Character(name, hpMax, dmgMax, dmgMin, defence, staminaMax), isMale(isMale), level(1), exp(0), expNext(50), role(role) {};
+		Character(name, hpMax, dmgMax, dmgMin, defence, staminaMax), isMale(isMale), level(1), exp(0), role(role), expNext(50) {};
 
 	Player(const std::string& name, bool isMale, const Role& role) :
-		role(role), isMale(isMale), 
-		Character(name, role.getStartingHpMax(), role.getStartingDmgMax(), (int)std::floor(role.getStartingDmgMax() / 2), role.getStartingDef(), role.getStartingStaminaMax()) {};
-
+		Character(name, role.getStartingHpMax(), role.getStartingDmgMax(), (int)std::floor(role.getStartingDmgMax() / 2), role.getStartingDef(), role.getStartingStaminaMax()), 
+		role(role), isMale(isMale){};
 	// Operators
 	Player& operator+=(const Item& item);
 	Player& operator-=(const Item& item);
@@ -36,18 +34,19 @@ public:
 	inline const int& getExp() const { return exp; };
 	inline const int& getExpNext() const { return expNext; };
 	inline std::vector<Item>& getInventory() { return Inventory; };
-	inline const std::vector<Item>& getEquipment() const { return Equipment; };
-	inline const playerMap& getMap() const { return map; };
+	inline const std::vector<Item>& getEquipment() const { return Equipment; };	
+	inline void addToMap(const std::string_view& settlement) { map.emplace_back(settlement); };
 
 	// Stat Modifiers
 	inline void setExp(int exp) { this->exp = exp; };
 	inline void setExpNext(int expNext) { this->expNext = expNext; };
 	inline void setLevel(int level) { this->level = level; };
+	inline const playerMap& getMap() const { return map; };
 
 
 private:
-	const bool isMale;
 	const Role role;
+	const bool isMale;
 	int level = 1;
 	int exp = 0;
 	int expNext = 50;

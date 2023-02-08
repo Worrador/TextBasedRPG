@@ -628,6 +628,8 @@ void Menu::mapMenu(Player& player)
 {
     int selectedMenuPoint = 0;
 
+    //TODO: path to previous settlement
+
     while (1) {
 
         // List of menu points
@@ -645,7 +647,7 @@ void Menu::mapMenu(Player& player)
         };
 
         auto& map = player.getMap();
-        for (const auto& [settlement, paths] : map) {
+        for (const auto& settlement : map) {
             dynamicMenuPoints.emplace_back(settlement);
         }
 
@@ -659,14 +661,15 @@ void Menu::mapMenu(Player& player)
             auto it = std::next(map.begin(), selectedMenuPoint);
 
             if (it != map.end()) {
-                const auto& [settlement, paths] = *it;
+                const auto& settlement = *it;
+                /* calc paths and print them
                 for (auto& path : paths)
                 {
                     for (auto& step : path)
                     {
                         ss << step << " -> " << std::endl;
                     }
-                }
+                }*/
             }
         };
 

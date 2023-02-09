@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<analyzerinfo hash="7268949016170963801">
-  <FileInfo check="CheckUnusedFunctions">
-    <functioncall functionName="followingTerrainNames"/>
-    <functioncall functionName="name"/>
-    <functioncall functionName="previousTerrainName"/>
-    <functioncall functionName="string"/>
-  </FileInfo>
-</analyzerinfo>

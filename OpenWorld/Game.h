@@ -39,22 +39,23 @@ public:
 	Game& operator=(const Game&) = delete;
 	Game& operator=(Game&&) = delete;
 
-	// Functions
-	void addConnections(int point, int additionalNumberOfConnections);
-	bool isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex);
-	void generateWorldMap();
-
-	void playMusic();
-
 	// Static method to return a reference to the single instance
 	static Game& getInstance()
 	{
 		static Game instance;
 		return instance;
 	}
+	void gameLoop();
+
+private:
+
+	// Functions
+	void addConnections(int point, int additionalNumberOfConnections);
+	bool isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex);
+	void generateWorldMap();
+	void playMusic();
 
 	Enemy spawnEnemy();
-	void gameLoop();
 
 	void rest( int restOption );
 
@@ -67,8 +68,6 @@ public:
 	// Accessors
 
 	// Modifiers
-
-private:
 	int mainMenuChoice;
 	bool playing;
 	Menu menu;

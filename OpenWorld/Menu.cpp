@@ -624,11 +624,9 @@ void Menu::playerSheetMenu(Player& player)
     }
 }
 
-void Menu::mapMenu(Player& player)
+void Menu::mapMenu(Player& player, const std::function <std::vector<std::vector<int>>(const std::string_view&)>& pathFinderFn)
 {
     int selectedMenuPoint = 0;
-
-    //TODO: path to previous settlement
 
     while (1) {
 
@@ -651,25 +649,19 @@ void Menu::mapMenu(Player& player)
             dynamicMenuPoints.emplace_back(settlement);
         }
 
-        auto getDynamicPaths = [&map](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicPaths = [&map, &pathFinderFn](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             if (selectedMenuPoint < 0) {
                 return;
             }
 
-            // Get the iterator to the selectedMenuPoint element
-            auto it = std::next(map.begin(), selectedMenuPoint);
-
-            if (it != map.end()) {
-                const auto& settlement = *it;
-                /* calc paths and print them
-                for (auto& path : paths)
+            auto paths = pathFinderFn(map[selectedMenuPoint]);
+            for (auto& path : paths)
+            {
+                for (auto& step : path)
                 {
-                    for (auto& step : path)
-                    {
-                        ss << step << " -> " << std::endl;
-                    }
-                }*/
+                    ss << step << " -> " << std::endl;
+                }
             }
         };
 

@@ -184,7 +184,7 @@ void dramaticPause()
 void Game::travel(int travelOption)
 {
 	if (travelOption == ESCAPE) {
-		// Give back stamina >.<
+		//TODO: Give back stamina >.<
 		player.setStamina(player.getStamina() + 1);
 		return;
 	}
@@ -231,9 +231,9 @@ void Game::travel(int travelOption)
 		worldMap[currentPoint].first->setToDiscovered();
 
 		if (auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get()) != nullptr) {
+			//TODO: only if not already present
 			player.addToMap(worldMap[currentPoint].first->getName());
 		}
-
 
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
@@ -396,6 +396,12 @@ void Game::rest(int restOption)
 	_getch();
 }
 
+const auto findPath = [](const std::string_view& locationName) -> std::vector<std::vector<int>> {
+	std::vector<std::vector<int>> asd;
+
+	return asd;
+};
+
 
 // Controls the playthrough stages
 void Game::gameLoop()
@@ -436,7 +442,7 @@ void Game::gameLoop()
 			travel(menu.travelMenu(player, options));
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_MAP) {
-			menu.mapMenu(player);
+			menu.mapMenu(player, findPath);
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_REST) {
 			rest(menu.restMenu(player, *worldMap[currentPoint].first));

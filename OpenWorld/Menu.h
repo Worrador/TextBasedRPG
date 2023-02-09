@@ -62,7 +62,7 @@ public:
 	std::vector<Item> sellMenu(Player& player, const std::vector<std::string>& sellingOptions);
 	int restMenu(Player& player, Place& currentPlace);
 	void playerSheetMenu(Player& player);
-	void mapMenu(Player& player);
+	void mapMenu(Player& player, const std::function <std::vector<std::vector<int>>(const std::string_view&)>& pathFinderFn);
 	int quitMenu();
 
 

@@ -624,7 +624,8 @@ void Menu::playerSheetMenu(Player& player)
     }
 }
 
-void Menu::mapMenu(Player& player, const std::function <std::vector<std::vector<int>>(const std::string_view&)>& pathFinderFn)
+
+void Menu::mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap)
 {
     int selectedMenuPoint = 0;
 
@@ -634,35 +635,68 @@ void Menu::mapMenu(Player& player, const std::function <std::vector<std::vector<
         std::vector <std::string> staticMenuLines = {
             "Which settlement would you like to know the way to?",
             "",
-            MENU_DIVIDER_STRING,
-            "",
             "Known settlements:",
-            ""
         };
 
         // List the eqipped items
         std::vector <std::string> dynamicMenuPoints = {
         };
 
+        auto& knownSettlements = player.getKnownSettlements();
         auto& map = player.getMap();
-        for (const auto& settlement : map) {
-            dynamicMenuPoints.emplace_back(settlement);
+
+        for (const auto& settlementId : knownSettlements) {
+            dynamicMenuPoints.emplace_back(worldMap[settlementId].first->getName());
         }
 
-        auto getDynamicPaths = [&map, &pathFinderFn](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        const auto findPath = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {
+            std::vector<int> path;
+            std::unordered_set<int> visited;
+            const auto& knownIds = player.getMap();
+            std::queue<int> q;
+            q.push(startLocationId);
+            while (!q.empty()) {
+                auto currId = q.front();
+                q.pop();
+                if (currId == endLocationId) {
+                    path.erase(path.cbegin());
+                    return path;
+                }
+                if (visited.count(currId) ||
+                    std::find(knownIds.begin(), knownIds.end(), currId) == knownIds.end()) {
+                    continue;
+                }
+                visited.insert(currId);
+                path.push_back(currId);
+                for (auto nextId : worldMap[currId].second) {
+                    q.push(nextId);
+                }
+            }
+            path.clear();
+            return path;
+        };
+
+
+
+
+        auto getDynamicPaths = [&knownSettlements, &findPath, &worldMap,&currentPointId](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             if (selectedMenuPoint < 0) {
                 return;
             }
 
-            auto paths = pathFinderFn(map[selectedMenuPoint]);
-            for (auto& path : paths)
-            {
-                for (auto& step : path)
-                {
-                    ss << step << " -> " << std::endl;
-                }
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl << std::endl;
+
+            if (currentPointId == knownSettlements[selectedMenuPoint]) {
+                ss << "You are there.";
+                return;
             }
+
+            for (auto& stepId : findPath(currentPointId, knownSettlements[selectedMenuPoint], worldMap))
+            {
+                ss << " -> " << worldMap[stepId].first->getTravelName();
+            }
+            ss << " -> " << worldMap[knownSettlements[selectedMenuPoint]].first->getTravelName();
         };
 
 

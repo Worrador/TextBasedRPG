@@ -5,7 +5,7 @@
 
 
 
-using playerMap = std::vector<std::string_view>;
+using playerMap = std::vector<int>;
 
 class Player : public Character
 {
@@ -35,16 +35,21 @@ public:
 	inline const int& getExpNext() const { return expNext; };
 	inline std::vector<Item>& getInventory() { return Inventory; };
 	inline const std::vector<Item>& getEquipment() const { return Equipment; };	
-	inline void addToMap(const std::string_view& settlement) { map.emplace_back(settlement); };
+	inline void addToKnownSettlements(const int& settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
+	inline void addToKnownTerrains(const int& terrainId) { map.emplace_back(terrainId); };
 
 	// Stat Modifiers
 	inline void setExp(int exp) { this->exp = exp; };
 	inline void setExpNext(int expNext) { this->expNext = expNext; };
 	inline void setLevel(int level) { this->level = level; };
 	inline const playerMap& getMap() const { return map; };
+	inline const playerMap& getKnownSettlements() const { return knownSettlements; };
 
 
 private:
+
+	inline void addToMap(const int& discoveredId) { map.emplace_back(discoveredId); };
+
 	const Role role;
 	const bool isMale;
 	int level = 1;
@@ -54,5 +59,6 @@ private:
 	std::vector<Item> Equipment;
 	std::vector<Item> Inventory;
 	playerMap map;
+	playerMap knownSettlements;
 };
 

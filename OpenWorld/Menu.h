@@ -1,13 +1,15 @@
 #pragma once
 #include "Player.h"
 #include "Place.h"
+#include "RoleParser.h"
+#include "Settlement.h"
 #include <conio.h>
 #include <sstream>
 #include <functional> 
-#include "RoleParser.h"
-#include "Settlement.h"
 #include <windows.h>
 #include <fstream>
+#include <unordered_set>
+#include <queue>
 
 // Constants for menus
 constexpr auto KEY_UP = 72;
@@ -32,6 +34,10 @@ enum class menuState {
 	Rest,
 	PlayerSheet
 };
+
+// Pointer for the place, and a vector for the next places
+using mapPoint = std::pair<std::shared_ptr<Place>, std::vector<int>>;
+
 
 // Player can manipulate everything through this object
 class Menu
@@ -62,9 +68,8 @@ public:
 	std::vector<Item> sellMenu(Player& player, const std::vector<std::string>& sellingOptions);
 	int restMenu(Player& player, Place& currentPlace);
 	void playerSheetMenu(Player& player);
-	void mapMenu(Player& player, const std::function <std::vector<std::vector<int>>(const std::string_view&)>& pathFinderFn);
+	void mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap);
 	int quitMenu();
-
 
 	void equipItems(Player& player);
 	void unequipItems(Player& player);

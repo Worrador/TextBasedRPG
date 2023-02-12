@@ -85,7 +85,7 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 		worldMapIndex++;
 
 		// Choose a random settlement or terrain to add to the map
-		std::unique_ptr<Place> newPlace;
+		std::shared_ptr<Place> newPlace;
 		if (getRandomBetween(0, 6) || (settlements.empty())) {
 			int selectedTerrainIndex = 0;
 
@@ -94,11 +94,11 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 				selectedTerrainIndex = getRandomBetween(0, (int)terrains.size() - 1);
 			} while (!isValidTerrainChoice(selectedTerrainIndex, currentPlaceIndex));
 
-			newPlace = std::make_unique<Terrain>(terrains[selectedTerrainIndex]);
+			newPlace = std::make_shared<Terrain>(terrains[selectedTerrainIndex]);
 		}
 		else {
 			int selectedSettlementIndex = getRandomBetween(0, (int)settlements.size() - 1);
-			newPlace = std::make_unique<Settlement>(settlements[selectedSettlementIndex]);
+			newPlace = std::make_shared<Settlement>(settlements[selectedSettlementIndex]);
 			settlements.erase(settlements.begin() + selectedSettlementIndex);
 		}
 
@@ -126,11 +126,10 @@ void Game::generateWorldMap() {
 	auto selected_settlement_index = getRandomBetween(0, (int)settlements.size() - 1);
 
 	// Add to world map
-	worldMap.emplace_back(std::make_unique<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
+	worldMap.emplace_back(std::make_shared<Settlement>(settlements[selected_settlement_index]), std::vector<int>{});
 
-	// Set this settlement to discovered, first one is the currenPoint
-	worldMap[currentPoint].first->setToDiscovered();
-	player.addToMap(worldMap[currentPoint].first->getName());
+	// Add to player's map
+	player.addToKnownSettlements(currentPoint);
 
 	// Pop from settlements list
 	settlements.erase(settlements.begin() + selected_settlement_index);
@@ -228,11 +227,13 @@ void Game::travel(int travelOption)
 		std::cout << "You have arrived to your destination." << std::endl; 
 		previousPoint = currentPoint;
 		currentPoint = worldMap[currentPoint].second[travelOption];
-		worldMap[currentPoint].first->setToDiscovered();
 
 		if (auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get()) != nullptr) {
 			//TODO: only if not already present
-			player.addToMap(worldMap[currentPoint].first->getName());
+			player.addToKnownSettlements(currentPoint);
+		}
+		else {
+			player.addToKnownTerrains(currentPoint);
 		}
 
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
@@ -396,13 +397,6 @@ void Game::rest(int restOption)
 	_getch();
 }
 
-const auto findPath = [](const std::string_view& locationName) -> std::vector<std::vector<int>> {
-	std::vector<std::vector<int>> asd;
-
-	return asd;
-};
-
-
 // Controls the playthrough stages
 void Game::gameLoop()
 {
@@ -442,7 +436,7 @@ void Game::gameLoop()
 			travel(menu.travelMenu(player, options));
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_MAP) {
-			menu.mapMenu(player, findPath);
+			menu.mapMenu(player, currentPoint ,worldMap);
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_REST) {
 			rest(menu.restMenu(player, *worldMap[currentPoint].first));

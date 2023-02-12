@@ -8,10 +8,6 @@
 #include <numeric>
 #include <queue>
 
-
-// Pointer for the place, and a vector for the next places
-using mapPoint = std::pair<std::unique_ptr<Place>, std::vector<int>>;
-
 // Constants for main menu options
 constexpr auto MENU_TYPE_TRAVEL				= "Travel";
 constexpr auto MENU_TYPE_MAP				= "Map";

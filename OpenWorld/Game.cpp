@@ -86,7 +86,7 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
 		// Choose a random settlement or terrain to add to the map
 		std::shared_ptr<Place> newPlace;
-		if (getRandomBetween(0, 6) || (settlements.empty())) {
+		if (!getRandomWithChance(SETTLEMENT_TERRAIN_RATIO) || (settlements.empty())) {
 			int selectedTerrainIndex = 0;
 
 			// Keep generating a new random number until it fits the requirements
@@ -187,12 +187,9 @@ void Game::travel(int travelOption)
 		player.setStamina(player.getStamina() + 1);
 		return;
 	}
-	int chance = 0;
 
-	// Chance for an encounter
-	chance = getRandomBetween(0, 4);
 	dramaticPause();
-	if (chance > ENCOUNTER_CHANCE) {
+	if (getRandomWithChance(CHANCE_ENCOUNTER)) {
 		Enemy enemy = spawnEnemy() * player.getLevel();
 
 		std::vector <std::string> staticLines = {
@@ -256,7 +253,7 @@ void Game::makeAttack(Character& attacker, Character& defender)
 	}
 	else {
 		std::cout << attacker.getName() << " rests for one round and regains some stamina." << std::endl;
-		attacker.setStamina(min(3, attacker.getStaminaMax()));
+		attacker.setStamina(min(FIGHT_REST_STAMINA_INCREMENT, attacker.getStaminaMax()));
 	}
 	//std::this_thread::sleep_for(std::chrono::milliseconds(750)); //or continue on button press?
 	_getch();
@@ -331,8 +328,8 @@ void Game::wait(Enemy& enemy)
 {
 	// The enemy might not attack you and you can continue your journey, 
 	// this could depend on your level difference, difficulty, terrain and a lot of other things.
-	int chance = getRandomBetween(1, 4);
-	if (chance > 3) {
+	// Lets go with agressivity of attacker
+	if (getRandomWithChance((double)enemy.getAggressivity() / (double)MAX_ENEMY_AGGRESSIVITY)) {
 		std::vector <std::string> staticLines = {
 			"The " + enemy.getName() + " does not look to attack you. You can continue your journey if you wish to."
 		};
@@ -365,14 +362,12 @@ void Game::rest(int restOption)
 	if (restOption == ESCAPE) {
 		return;
 	}
-	int chance = 0;
 	dramaticPause();
 	switch (restOption)
 	{
 	case 0: // Chance to get Attacked, if survived then increment health and stamina?
 		// Chance for an encounter
-		chance = getRandomBetween(0, 4);
-		if (chance > 0) {
+		if (getRandomWithChance(CHANCE_ENCOUNTER)) {
 
 			Enemy enemy = spawnEnemy() * player.getLevel();
 			std::cout << "You wake up to a noise of a(n) " + enemy.getName() << std::endl;
@@ -384,9 +379,8 @@ void Game::rest(int restOption)
 		}
 		break;
 	case 1:
-		chance = getRandomBetween(0, 4);
-		if (chance > 0) {
-			player.setGold(player.getGold() - chance);
+		if (getRandomWithChance(CHANCE_REST_MUGGING)) {
+			player.setGold((int)std::floor(player.getGold() * (1 - CHANCE_REST_MUGGING)));
 			std::cout << "You wake somewhat rested. But as you touch your pockets you notice that you have been mugged." << std::endl;
 		}
 		else {

@@ -4,6 +4,7 @@
 inline std::mt19937 randomNumberGenerator(std::random_device{}());
 
 // Game constants
+constexpr auto FIGHT_REST_STAMINA_INCREMENT = 3;
 
 // Item rarities
 constexpr auto RARITY_LEVEL_6 = "Mythic";
@@ -26,7 +27,11 @@ constexpr auto RARITY_ENEMY_TRESHOLD_3 = 2000;
 constexpr auto RARITY_ENEMY_TRESHOLD_2 = 3000;
 
 // Chances
-constexpr auto ENCOUNTER_CHANCE = 2;
+constexpr auto CHANCE_ENCOUNTER = 0.5;
+constexpr auto CHANCE_WAIT_NO_ATTACK_BASE = 0.25;
+constexpr auto CHANCE_REST_MUGGING = 0.33;
+constexpr auto SETTLEMENT_TERRAIN_RATIO = 0.15;
+constexpr auto CHANCE_LOOT = 0.5;
 
 
 constexpr auto MAX_CONNECTION_SIZE_TERRAIN = 3;
@@ -36,10 +41,24 @@ constexpr auto REST_PRIVATE_ROOM_PRICE_CHEAP = 6;
 constexpr auto REST_PRIVATE_ROOM_PRICE_EXPENSIVE = 8;
 constexpr auto REST_EXPENSIVE_INN_SETTLEMENT_SIZE_TRESHOLD = 5;
 
+constexpr auto MAX_ENEMY_AGGRESSIVITY = 10;
+
 
 inline int getRandomBetween(int lower, int higher)
 {
 	std::uniform_int_distribution<> lin_dist(lower, higher);
 
 	return lin_dist(randomNumberGenerator);
+}
+
+inline int getRandomWithChance(double chance)
+{
+	std::uniform_real_distribution<> real_dist(0, 1);
+
+	double randomNumber = real_dist(randomNumberGenerator);
+
+	if (randomNumber < chance)
+		return 1;
+	else
+		return 0;
 }

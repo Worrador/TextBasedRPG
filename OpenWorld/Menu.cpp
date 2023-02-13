@@ -206,6 +206,7 @@ Player Menu::playerCreationMenu()
 
     bool isMale = true;
 
+    //TODO: rules?
     //TODO: maybe get sex later
     /*{
         // List of menu points
@@ -421,16 +422,16 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
             }
         };
 
-        auto getDynamicItemStats = [&inventroy](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicItemStats = [&inventroy, &sellInventoryIds](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             if (selectedMenuPoint < 0) {
                 return;
             }
 
             ss << std::endl << MENU_DIVIDER_STRING << std::endl;
-            ss << std::endl << "Sells for: " << inventroy[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
+            ss << std::endl << "Sells for: " << inventroy[sellInventoryIds[selectedMenuPoint]].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<roleName> roles = inventroy[selectedMenuPoint].getRoles();
+            std::vector<roleName> roles = inventroy[sellInventoryIds[selectedMenuPoint]].getRoles();
 
             for (auto roleName : roles) {
                 ss << roleName;
@@ -694,9 +695,9 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
 
             for (auto& stepId : findPath(currentPointId, knownSettlements[selectedMenuPoint], worldMap))
             {
-                ss << " -> " << worldMap[stepId].first->getTravelName();
+                ss << " \x10 " << worldMap[stepId].first->getTravelName();
             }
-            ss << " -> " << worldMap[knownSettlements[selectedMenuPoint]].first->getTravelName();
+            ss << " \x10 " << worldMap[knownSettlements[selectedMenuPoint]].first->getTravelName();
         };
 
 

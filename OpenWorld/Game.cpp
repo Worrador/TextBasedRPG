@@ -192,7 +192,7 @@ void Game::travel(int travelOption)
 	// Chance for an encounter
 	chance = getRandomBetween(0, 4);
 	dramaticPause();
-	if (chance > 2) {
+	if (chance > ENCOUNTER_CHANCE) {
 		Enemy enemy = spawnEnemy() * player.getLevel();
 
 		std::vector <std::string> staticLines = {
@@ -281,8 +281,12 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 	}
 
 	std::cout << player.getName() << " has won the battle.";
-	if (player.getStamina() >= 2) {
-		player.setStamina(player.getStamina() - 1);
+
+	// Searching costs stamina, the more items you have, the more it costs
+	int staminaNeeded = (int)std::floor(player.getEquipment().size() / 2);
+
+	if (player.getStamina() >= staminaNeeded) {
+		player.setStamina(player.getStamina() - (int)std::floor(staminaNeeded / 2));
 		std::cout << std::endl << std::endl << "By carefully searching the area " << player.getName() << " stumbles upon the following items: " << std::endl;
 		std::cout << "  \x10 " << enemy.getGold() << " gold" << std::endl;
 		player.setGold(player.getGold() + enemy.getGold());

@@ -38,6 +38,7 @@ Enemy& Enemy::operator*(const int& scaleToLevel)
 
 Item Enemy::getRandomItem(const itemRarity& rarityName) {
 
+	//TODO: potions
 	std::vector<Item> parsedItems = ItemParser::getInstance().getParsedArmors();
 	std::vector<Item> parsedItems2 = ItemParser::getInstance().getParsedWeapons();
 	parsedItems.insert(parsedItems.cbegin() + parsedItems.size() - 1, parsedItems2.begin(), parsedItems2.end());

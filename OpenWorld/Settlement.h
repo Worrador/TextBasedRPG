@@ -5,12 +5,6 @@
 
 using settlementSizeType = std::string;
 
-constexpr auto MAXSETTLEMENTSIZE = 7;
-constexpr auto REST_SHARED_ROOM_PRICE_CHEAP = 4;
-constexpr auto REST_PRIVATE_ROOM_PRICE_CHEAP = 6;
-constexpr auto REST_EXPENSIVE_INN_SETTLEMENT_SIZE_TRESHOLD = 5;
-constexpr auto REST_PRIVATE_ROOM_PRICE_EXPENSIVE = 8;
-
 class Settlement : public Place
 {
 public:

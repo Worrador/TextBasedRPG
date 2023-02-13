@@ -10,8 +10,8 @@ Terrain::Terrain(const std::string& name, const std::string& travelName, const s
 {
 
 	// Without a map 2 destination max is plenty
-	if ( (followingTerrainNames[0] == "") || followingTerrainNames.size() > 2){
-		maxConnectionSize = 2;
+	if ( (followingTerrainNames[0] == "") || followingTerrainNames.size() > MAX_CONNECTION_SIZE_TERRAIN){
+		maxConnectionSize = MAX_CONNECTION_SIZE_TERRAIN;
 	}
 	else {
 		maxConnectionSize = (int)followingTerrainNames.size();

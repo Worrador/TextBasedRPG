@@ -4,7 +4,7 @@ Settlement::Settlement(const std::string& name, const settlementSizeType& settle
 	: Place(name, ""), settlementSize(settlementSize)
 {
 	// Error handling in case something goes wrong, settlement size can only be MAXSETTLEMENTSIZE at max
-	this->maxConnectionSize = (maxConnectionSize > MAXSETTLEMENTSIZE) ? MAXSETTLEMENTSIZE : maxConnectionSize;
+	this->maxConnectionSize = (maxConnectionSize > MAX_CONNECTION_SIZE_SETTLEMENT) ? MAX_CONNECTION_SIZE_SETTLEMENT : maxConnectionSize;
 
 	// Possible types of shops
 	std::vector<shopType> shopTypes = { SHOP_TYPE_ARMOR, SHOP_TYPE_WEAPON, SHOP_TYPE_CONSUMABLE };

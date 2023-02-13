@@ -41,7 +41,9 @@ Item Enemy::getRandomItem(const itemRarity& rarityName) {
 	//TODO: potions
 	std::vector<Item> parsedItems = ItemParser::getInstance().getParsedArmors();
 	std::vector<Item> parsedItems2 = ItemParser::getInstance().getParsedWeapons();
+	std::vector<Item> parsedItems3 = ItemParser::getInstance().getParsedConsumables();
 	parsedItems.insert(parsedItems.cbegin() + parsedItems.size() - 1, parsedItems2.begin(), parsedItems2.end());
+	parsedItems.insert(parsedItems.cbegin() + parsedItems.size() - 1, parsedItems3.begin(), parsedItems3.end());
 
 	// shuffle parseditems vector while we do not get an item that is good in rarity
 	int randomItemNum;

@@ -5,6 +5,7 @@
 #include <codecvt>
 #include <functional>
 #include "Item.h"
+#include "RoleParser.h"
 
 class ItemParser
 {
@@ -46,7 +47,9 @@ private:
     // String converter object
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 
-    void parseItems();
+    void parseArmors();
+    void parseConsumables();
+    void parseWeapons();
 
     std::vector<Role> parsedRoles;
 

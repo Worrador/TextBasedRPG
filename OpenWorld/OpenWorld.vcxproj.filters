@@ -144,13 +144,19 @@
     <None Include="Resources\Enemies.xlsx">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Resources\Items.xlsx">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Resources\Locations.xlsx">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="libxl.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Armors.xlsx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Consumables.xlsx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Weapons.xlsx">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

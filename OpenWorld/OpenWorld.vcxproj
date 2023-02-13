@@ -194,9 +194,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="libxl.dll" />
+    <None Include="Resources\Armors.xlsx" />
+    <None Include="Resources\Consumables.xlsx" />
     <None Include="Resources\Enemies.xlsx" />
-    <None Include="Resources\Items.xlsx" />
     <None Include="Resources\Locations.xlsx" />
+    <None Include="Resources\Weapons.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenWorld.rc" />

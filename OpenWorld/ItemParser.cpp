@@ -2,7 +2,9 @@
 
 ItemParser::ItemParser()
 {
-    this->parseItems();
+    this->parseArmors();
+    this->parseConsumables();
+    this->parseWeapons();
 }
 
 // Maybe first look for source files then start the game..?
@@ -12,84 +14,174 @@ ItemParser::~ItemParser()
     //RAII?
 }
 
-void ItemParser::parseItems()
+void ItemParser::parseArmors()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
     libxl::Book* book = xlCreateXMLBook();
-    if (!book->load(L"Resources\\Items.xlsx")) {
+    if (!book->load(L"Resources\\Armors.xlsx")) {
         book->release();
         resourceError = 1;
         return;
     }
 
-    for (int sheet_index = 0; sheet_index < 3; ++sheet_index)
+    libxl::Sheet* sheet = book->getSheet(0);
+    if (!sheet) {
+        return;
+    }
+
+    // Iterate rows, we don't need the first one as it only contains the names of columns
+    for (int row = 1;; ++row)
     {
-        libxl::Sheet* sheet = book->getSheet(sheet_index);
-        if (!sheet) {
-            continue;
+        // Get name of item and convert it to string
+        auto name = sheet->readStr(row, 0);
+        if (name == nullptr) {
+            break;
+        }
+        const auto& name_string = converter.to_bytes(name);
+
+        // Get roles of item and convert it to string
+        const auto role_names_string = converter.to_bytes(sheet->readStr(row, 1));
+
+        // Separate roles by ',' and create roles vector
+        std::istringstream iss(role_names_string);
+        std::vector<roleName> roles;
+        std::string str;
+        while (std::getline(iss, str, ',')) {
+            roles.emplace_back(str);
         }
 
-        // Iterate rows, we don't need the first one as it only contains the names of columns
-        for (int row = 1;; ++row)
-        {
-            // Get name of item and convert it to string
-            auto name = sheet->readStr(row, 0);
-            if (name == nullptr) {
-                break;
-            }
-            const auto& name_string = converter.to_bytes(name);
+        // Get type of item and convert it to string
+        const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
 
-            // Get roles of item and convert it to string
-            const auto role_names_string = converter.to_bytes(sheet->readStr(row, 1));
+        // Create item and add it to list
+        Item item(
+            name_string,
+            roles,
+            item_type_string,
+            static_cast<int>(sheet->readNum(row, 3)),
+            static_cast<int>(sheet->readNum(row, 4)),
+            static_cast<int>(sheet->readNum(row, 5)),
+            static_cast<int>(sheet->readNum(row, 6)));
 
-            // Separate roles by ',' and create roles vector
-            std::istringstream iss(role_names_string);
-            std::vector<roleName> roles;
-            std::string str;
-            while (std::getline(iss, str, ',')) {
-                roles.emplace_back(str);
-            }
-
-            // Get type of item and convert it to string
-            const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
-
-            // Create item and add it to list
-            Item item(
-                name_string,
-                roles,
-                item_type_string,
-                static_cast<int>(sheet->readNum(row, 3)),
-                static_cast<int>(sheet->readNum(row, 4)),
-                static_cast<int>(sheet->readNum(row, 5)),
-                static_cast<int>(sheet->readNum(row, 6)));
-
-            switch (sheet_index) {
-            case 0:
-                parsedWeaponsRaritySum += item.getRarityValue();
-                if (std::find(parsedWeaponTypes.cbegin(), parsedWeaponTypes.cend(), item_type_string) == parsedWeaponTypes.cend()) {
-                    parsedWeaponTypes.emplace_back(item_type_string);
-                }
-                parsedWeapons.push_back(std::move(item));
-                break;
-            case 1:
-                parsedArmorsRaritySum += item.getRarityValue();
-                if (std::find(parsedArmorTypes.cbegin(), parsedArmorTypes.cend(), item_type_string) == parsedArmorTypes.cend()) {
-                    parsedArmorTypes.emplace_back(item_type_string);
-                }
-                parsedArmors.push_back(std::move(item));
-                break;
-            case 2:
-                parsedConsumablesRaritySum += item.getRarityValue();
-                if (std::find(parsedConsumableTypes.cbegin(), parsedConsumableTypes.cend(), item_type_string) == parsedConsumableTypes.cend()) {
-                    parsedConsumableTypes.emplace_back(item_type_string);
-                }
-                parsedConsumables.push_back(std::move(item));
-                break;
-            default:
-                break;
-            }
+        parsedArmorsRaritySum += item.getRarityValue();
+        if (std::find(parsedArmorTypes.cbegin(), parsedArmorTypes.cend(), item_type_string) == parsedArmorTypes.cend()) {
+            parsedArmorTypes.emplace_back(item_type_string);
         }
+        parsedArmors.push_back(std::move(item));
+    }
+    book->release();
+}
+
+void ItemParser::parseConsumables()
+{
+    // Somehow it cannot be handled with unique ptr: 
+    // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    libxl::Book* book = xlCreateXMLBook();
+    if (!book->load(L"Resources\\Consumables.xlsx")) {
+        book->release();
+        resourceError = 1;
+        return;
+    }
+
+    libxl::Sheet* sheet = book->getSheet(0);
+    if (!sheet) {
+        return;
+    }
+
+    // Iterate rows, we don't need the first one as it only contains the names of columns
+    for (int row = 1;; ++row)
+    {
+        // Get name of item and convert it to string
+        auto name = sheet->readStr(row, 0);
+        if (name == nullptr) {
+            break;
+        }
+        const auto& name_string = converter.to_bytes(name);
+
+        std::vector<roleName> roles;
+
+        const auto& allRoles = RoleParser::getInstance().getParsedRoles();
+        for (const auto& role : allRoles) {
+            roles.emplace_back(role.getRoleName());
+        }
+        // Get type of item and convert it to string
+        const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 1));
+
+        // Create item and add it to list
+        Item item(
+            name_string,
+            roles,
+            item_type_string,
+            static_cast<int>(sheet->readNum(row, 2)),
+            static_cast<int>(sheet->readNum(row, 3)),
+            static_cast<int>(sheet->readNum(row, 4)),
+            static_cast<int>(sheet->readNum(row, 5)));
+
+        parsedConsumablesRaritySum += item.getRarityValue();
+        if (std::find(parsedConsumableTypes.cbegin(), parsedConsumableTypes.cend(), item_type_string) == parsedConsumableTypes.cend()) {
+            parsedConsumableTypes.emplace_back(item_type_string);
+        }
+        parsedConsumables.push_back(std::move(item));
+    }
+    book->release();
+}
+
+
+void ItemParser::parseWeapons()
+{
+    // Somehow it cannot be handled with unique ptr: 
+    // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
+    libxl::Book* book = xlCreateXMLBook();
+    if (!book->load(L"Resources\\Weapons.xlsx")) {
+        book->release();
+        resourceError = 1;
+        return;
+    }
+
+    libxl::Sheet* sheet = book->getSheet(0);
+    if (!sheet) {
+        return;
+    }
+
+    // Iterate rows, we don't need the first one as it only contains the names of columns
+    for (int row = 1;; ++row)
+    {
+        // Get name of item and convert it to string
+        auto name = sheet->readStr(row, 0);
+        if (name == nullptr) {
+            break;
+        }
+        const auto& name_string = converter.to_bytes(name);
+
+        // Get roles of item and convert it to string
+        const auto role_names_string = converter.to_bytes(sheet->readStr(row, 1));
+
+        // Separate roles by ',' and create roles vector
+        std::istringstream iss(role_names_string);
+        std::vector<roleName> roles;
+        std::string str;
+        while (std::getline(iss, str, ',')) {
+            roles.emplace_back(str);
+        }
+
+        // Get type of item and convert it to string
+        const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
+
+        // Create item and add it to list
+        Item item(
+            name_string,
+            roles,
+            item_type_string,
+            static_cast<int>(sheet->readNum(row, 3)),
+            static_cast<int>(sheet->readNum(row, 4)),
+            static_cast<int>(sheet->readNum(row, 5)),
+            static_cast<int>(sheet->readNum(row, 6)));
+        parsedWeaponsRaritySum += item.getRarityValue();
+        if (std::find(parsedWeaponTypes.cbegin(), parsedWeaponTypes.cend(), item_type_string) == parsedWeaponTypes.cend()) {
+            parsedWeaponTypes.emplace_back(item_type_string);
+        }
+        parsedWeapons.push_back(std::move(item));
     }
     book->release();
 }

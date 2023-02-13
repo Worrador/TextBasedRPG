@@ -644,8 +644,6 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
         };
 
         auto& knownSettlements = player.getKnownSettlements();
-        auto& map = player.getMap();
-
         for (const auto& settlementId : knownSettlements) {
             dynamicMenuPoints.emplace_back(worldMap[settlementId].first->getName());
         }
@@ -781,6 +779,7 @@ void Menu::equipItems(Player& player)
             }
             ss << std::endl;
             ss << "Item type: " << itemList[selectedMenuPoint].getItemType() << std::endl;
+            ss << "Rarity: " << itemList[selectedMenuPoint].getRarityName() << std::endl;
             ss << "Max HP: " << itemList[selectedMenuPoint].getHpMax() << std::endl;
             ss << "Max damage: " << itemList[selectedMenuPoint].getDamageMax() << std::endl;
             ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;
@@ -847,6 +846,7 @@ void Menu::unequipItems(Player& player)
             }
             ss << std::endl;
             ss << "Item type: " << itemList[selectedMenuPoint].getItemType() << std::endl;
+            ss << "Rarity: " << itemList[selectedMenuPoint].getRarityName() << std::endl;
             ss << "Max HP: " << itemList[selectedMenuPoint].getHpMax() << std::endl;
             ss << "Max damage: " << itemList[selectedMenuPoint].getDamageMax() << std::endl;
             ss << "Defence: " << itemList[selectedMenuPoint].getDefence() << std::endl;

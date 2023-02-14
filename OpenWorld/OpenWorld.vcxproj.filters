@@ -136,11 +136,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="1.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Enemies.xlsx">
       <Filter>Resource Files</Filter>
     </None>
@@ -186,5 +181,25 @@
     <Text Include="Resources\nature_art.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Acolyte.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Mage.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Ranger.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Rouge.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Slayer.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Warrior.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

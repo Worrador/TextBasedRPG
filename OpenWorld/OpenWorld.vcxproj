@@ -190,9 +190,6 @@
     <ClInclude Include="TerrainParser.h" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="1.wav" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="libxl.dll" />
     <None Include="Resources\Armors.xlsx" />
     <None Include="Resources\Consumables.xlsx" />
@@ -212,6 +209,14 @@
   <ItemGroup>
     <Text Include="Resources\nature_art.txt" />
     <Text Include="Resources\settlement_art.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Acolyte.wav" />
+    <Media Include="Resources\Mage.wav" />
+    <Media Include="Resources\Ranger.wav" />
+    <Media Include="Resources\Rouge.wav" />
+    <Media Include="Resources\Slayer.wav" />
+    <Media Include="Resources\Warrior.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

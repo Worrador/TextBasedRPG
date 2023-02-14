@@ -155,8 +155,11 @@ void Game::generateWorldMap() {
 
 void Game::playMusic()
 {
-	// Start playing music
-	PlaySound(L"1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	std::wstringstream wss;
+	wss << L"Resources\\" << player.getRoleName().c_str() << ".wav";
+
+
+	PlaySound(wss.str().c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	DWORD leftVolume = 2000;
 	DWORD rightVolume = 2000;
 	waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);

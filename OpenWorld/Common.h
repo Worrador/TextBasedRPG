@@ -30,9 +30,11 @@ constexpr auto RARITY_ENEMY_TRESHOLD_2 = 3000;
 constexpr auto CHANCE_ENCOUNTER = 0.5;
 constexpr auto CHANCE_WAIT_NO_ATTACK_BASE = 0.25;
 constexpr auto CHANCE_REST_MUGGING = 0.33;
-constexpr auto SETTLEMENT_TERRAIN_RATIO = 0.15;
-constexpr auto CHANCE_LOOT = 0.5;
+constexpr auto SETTLEMENT_TERRAIN_RATIO = 0.1;
+constexpr auto CHANCE_LOOT = 0.2;
 
+
+constexpr auto MAX_WORLD_MAP_SIZE = 150;
 
 constexpr auto MAX_CONNECTION_SIZE_TERRAIN = 3;
 constexpr auto MAX_CONNECTION_SIZE_SETTLEMENT = 5;

@@ -22,7 +22,14 @@ public:
 
 	// Accessors
 	inline const std::string& getShopName() const { return shopName; };
-	inline std::vector<Item>& getShopItems() { return shopItems; };
+	inline std::vector<Item>& getShopItems() { 
+		// Reorder items based on name
+		std::sort(shopItems.begin(), shopItems.end(), [](const auto& itemA, const auto& itemB) {
+			return itemA.getName() < itemB.getName();
+			});
+
+		return shopItems; 
+	};
 
 
 private:

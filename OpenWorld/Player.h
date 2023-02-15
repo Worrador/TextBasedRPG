@@ -33,8 +33,22 @@ public:
 	inline const roleName& getRoleName() const { return role.getRoleName(); };
 	inline const int& getExp() const { return exp; };
 	inline const int& getExpNext() const { return expNext; };
-	inline std::vector<Item>& getInventory() { return Inventory; };
-	inline const std::vector<Item>& getEquipment() const { return Equipment; };	
+	inline std::vector<Item>& getInventory() { 
+		// Reorder items based on name
+		std::sort(Inventory.begin(), Inventory.end(), [](const auto& itemA, const auto& itemB) {
+			return itemA.getName() < itemB.getName();
+			});
+
+		return Inventory; 
+	};
+	inline const std::vector<Item>& getEquipment() { 
+		// Reorder items based on name
+		std::sort(Equipment.begin(), Equipment.end(), [](const auto& itemA, const auto& itemB) {
+			return itemA.getName() < itemB.getName();
+			});
+
+		return Equipment; 
+	};	
 	inline void addToKnownSettlements(const int& settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
 	inline void addToKnownTerrains(const int& terrainId) { map.emplace_back(terrainId); };
 

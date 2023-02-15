@@ -77,6 +77,10 @@ bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex)
 
 void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 
+	if (worldMap.size() >= MAX_WORLD_MAP_SIZE) {
+		return;
+	}
+
 	// Calculate the number of connections that need to be added
 	int connectionsToAdd = getRandomBetween(0, maxConnections - (int)worldMap[currentPlaceIndex].second.size());
 
@@ -143,9 +147,15 @@ void Game::generateWorldMap() {
 		auto reqNoFollowingAvailable = true, reqSizeLimitReached = true;
 
 		while (reqNoFollowingAvailable || reqSizeLimitReached){
+			if (worldMap.size() >= MAX_WORLD_MAP_SIZE) {
+				return;
+			}
 			random_ind = getRandomBetween(0, (int)worldMap.size() - 1);
 			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
-				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.cbegin(), worldMap[random_ind].second.cend(), [&](const auto& mapInd) {return worldMap[mapInd].first->getName() == followingName; }) != worldMap[random_ind].second.cend());
+				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.cbegin(), worldMap[random_ind].second.cend(), 
+					[&](const auto& mapInd) {
+						return worldMap[mapInd].first->getName() == followingName; 
+					}) != worldMap[random_ind].second.cend());
 			}
 			reqSizeLimitReached = ((worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
 		}

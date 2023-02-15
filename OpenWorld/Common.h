@@ -35,13 +35,15 @@ constexpr auto CHANCE_LOOT = 0.5;
 
 
 constexpr auto MAX_CONNECTION_SIZE_TERRAIN = 3;
-constexpr auto MAX_CONNECTION_SIZE_SETTLEMENT = 7;
+constexpr auto MAX_CONNECTION_SIZE_SETTLEMENT = 5;
 constexpr auto REST_SHARED_ROOM_PRICE_CHEAP = 4;
 constexpr auto REST_PRIVATE_ROOM_PRICE_CHEAP = 6;
 constexpr auto REST_PRIVATE_ROOM_PRICE_EXPENSIVE = 8;
 constexpr auto REST_EXPENSIVE_INN_SETTLEMENT_SIZE_TRESHOLD = 5;
 
 constexpr auto MAX_ENEMY_AGGRESSIVITY = 10;
+
+constexpr auto SHOP_SIZE_MULTIPLIER = 2;
 
 
 inline int getRandomBetween(int lower, int higher)

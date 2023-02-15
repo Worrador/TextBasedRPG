@@ -3,23 +3,21 @@
 Settlement::Settlement(const std::string& name, const settlementSizeType& settlementSize, const int& maxConnectionSize)
 	: Place(name, ""), settlementSize(settlementSize)
 {
-	// Error handling in case something goes wrong, settlement size can only be MAXSETTLEMENTSIZE at max
-	this->maxConnectionSize = (maxConnectionSize > MAX_CONNECTION_SIZE_SETTLEMENT) ? MAX_CONNECTION_SIZE_SETTLEMENT : maxConnectionSize;
-
 	// Possible types of shops
 	std::vector<shopType> shopTypes = { SHOP_TYPE_ARMOR, SHOP_TYPE_WEAPON, SHOP_TYPE_CONSUMABLE };
-	
+
 	// Shuffle shoptypes then resize according to settlement size then sort it
 	std::shuffle(shopTypes.begin(), shopTypes.end(), randomNumberGenerator);
-	shopTypes.resize((int)(maxConnectionSize / 2));
+	shopTypes.resize(std::min((int)(maxConnectionSize / 2), NUMBER_OF_SHOP_TYPES));
 	std::sort(shopTypes.begin(), shopTypes.end());
 
 	// Add shops accordingly to this settlement
+	// TODO: Mabye have general goods merchant available in every settlement?
 	for (auto& shopType : shopTypes)
-	{	
+	{
 		// Create items for the given shoptype
 		std::vector<Item> shopItems;
-		for (auto count = 0; count < maxConnectionSize; count++) {
+		for (auto count = 0; count < SHOP_SIZE_MULTIPLIER * maxConnectionSize; count++) {
 			addRandomShopItem(shopItems, shopType);
 		}
 		settlementShops.emplace_back(shopType, std::move(shopItems));
@@ -34,6 +32,9 @@ Settlement::Settlement(const std::string& name, const settlementSizeType& settle
 	{
 		restOptions.emplace_back("Sleep in a private room at an expensive Inn.", REST_PRIVATE_ROOM_PRICE_EXPENSIVE);
 	}
+
+	// Error handling in case something goes wrong, settlement size can only be MAXSETTLEMENTSIZE at max
+	this->maxConnectionSize = (maxConnectionSize > MAX_CONNECTION_SIZE_SETTLEMENT) ? MAX_CONNECTION_SIZE_SETTLEMENT : maxConnectionSize;
 }
 
 void Settlement::addRandomShopItem(std::vector<Item>& shopItems, shopType type)

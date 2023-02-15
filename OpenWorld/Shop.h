@@ -6,7 +6,8 @@ using shopType = std::string;
 
 constexpr auto SHOP_TYPE_ARMOR = "Armor smith";
 constexpr auto SHOP_TYPE_WEAPON = "Weapon smith";
-constexpr auto SHOP_TYPE_CONSUMABLE = "Potion brewer";
+constexpr auto SHOP_TYPE_CONSUMABLE = "General goods merchant";
+constexpr auto NUMBER_OF_SHOP_TYPES = 3;
 
 class Shop
 {

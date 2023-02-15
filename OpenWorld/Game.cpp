@@ -147,7 +147,7 @@ void Game::generateWorldMap() {
 			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
 				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.cbegin(), worldMap[random_ind].second.cend(), [&](const auto& mapInd) {return worldMap[mapInd].first->getName() == followingName; }) != worldMap[random_ind].second.cend());
 			}
-			reqSizeLimitReached = ( (worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
+			reqSizeLimitReached = ((worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
 		}
 		addConnections(random_ind, worldMap[random_ind].first->getMaxConnectionSize());
 	}

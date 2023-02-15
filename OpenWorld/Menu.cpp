@@ -342,9 +342,9 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
             ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "Costs: " << shopItems[selectedMenuPoint].getBuyGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<roleName> roles = shopItems[selectedMenuPoint].getRoles();
+            const auto& roles = shopItems[selectedMenuPoint].getRoles();
 
-            for (auto roleName: roles) {
+            for (const auto& roleName: roles) {
                 ss << roleName;
                 if (roleName == roles[roles.size() - 1]) {
                     break;
@@ -768,7 +768,7 @@ void Menu::equipItems(Player& player)
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for: " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<roleName> roles = itemList[selectedMenuPoint].getRoles();
+            const auto& roles = itemList[selectedMenuPoint].getRoles();
 
             for (auto& roleName : roles) {
                 ss << roleName;

@@ -123,3 +123,22 @@ void Player::unequipItem(const int& itemPos)
 	Inventory.emplace_back(std::move(Equipment[itemPos]));
 	Equipment.erase(Equipment.begin() + itemPos);
 }
+
+std::vector<Item>& Player::getInventory()
+{
+	// Reorder items based on name
+	std::sort(Inventory.begin(), Inventory.end(), [](const auto& itemA, const auto& itemB) {
+		return itemA.getName() < itemB.getName();
+		});
+
+	return Inventory;
+}
+std::vector<Item>& Player::getEquipment()
+{
+	// Reorder items based on name
+	std::sort(Equipment.begin(), Equipment.end(), [](const auto& itemA, const auto& itemB) {
+		return itemA.getName() < itemB.getName();
+		});
+
+	return Equipment;
+}

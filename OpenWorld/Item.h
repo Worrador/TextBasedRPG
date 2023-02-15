@@ -25,18 +25,18 @@ public:
 	// Functions
 
 	// Accessors
-	inline std::string getName() const { return name; };
-	inline std::vector<roleName> getRoles() const { return roles; };
-	inline int getLevel() const { return level; };
-	inline int getBuyGold() const { return buyGold; };
-	inline int getSellGold() const { return sellGold; };
-	inline int getHpMax()	const { return hpMax; };
-	inline int getDamageMax() const { return damageMax; };
-	inline int getDefence() const { return defence; };
-	inline int getStaminaMax() const { return staminaMax; };
-	inline itemType getItemType() const { return type; };
-	inline int getRarityValue() const { return rarity; };
-	inline itemRarity getRarityName() const { return rarityName; };
+	inline const std::string& getName() const { return name; };
+	inline const std::vector<roleName>& getRoles() const { return roles; };
+	inline const int getLevel() const { return level; };
+	inline const int getBuyGold() const { return buyGold; };
+	inline const int getSellGold() const { return sellGold; };
+	inline const int getHpMax()	const { return hpMax; };
+	inline const int getDamageMax() const { return damageMax; };
+	inline const int getDefence() const { return defence; };
+	inline const int getStaminaMax() const { return staminaMax; };
+	inline const itemType& getItemType() const { return type; };
+	inline const int getRarityValue() const { return rarity; };
+	inline const itemRarity getRarityName() const { return rarityName; };
 
 	// Modifiers
 

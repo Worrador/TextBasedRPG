@@ -45,5 +45,13 @@ void RoleParser::parseRoles()
                 static_cast<int>(sheet->readNum(row, 8)));
         }
     }
+
+    // Reorder roles based on name
+    std::sort(parsedRoles.begin(), parsedRoles.end(), [](const auto& roleA, const auto& roleB) {
+            return roleA.getRoleName() < roleB.getRoleName();
+        });
+
+
+
     book->release();
 }

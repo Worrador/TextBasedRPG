@@ -51,9 +51,9 @@ void ItemParser::parseArmors()
             roles.emplace_back(str);
         }
 
-        // Reorder items based on name
-        std::sort(roles.begin(), roles.end(), [](const auto& itemA, const auto& itemB) {
-            return itemA < itemB;
+        // Reorder roles based on name
+        std::sort(roles.begin(), roles.end(), [](const auto& roleA, const auto& roleB) {
+            return roleA < roleB;
             });
 
         // Get type of item and convert it to string
@@ -169,6 +169,11 @@ void ItemParser::parseWeapons()
         while (std::getline(iss, str, ',')) {
             roles.emplace_back(str);
         }
+
+        // Reorder roles based on name
+        std::sort(roles.begin(), roles.end(), [](const auto& roleA, const auto& roleB) {
+            return roleA < roleB;
+            });
 
         // Get type of item and convert it to string
         const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));

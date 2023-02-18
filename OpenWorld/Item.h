@@ -1,7 +1,6 @@
 #pragma once
 #include "Role.h"
 #include "Common.h"
-#include <algorithm>
 #include <vector>
 #include <array>
 

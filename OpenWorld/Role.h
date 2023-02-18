@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <algorithm>
 
 using roleName = std::string;
 
@@ -10,15 +11,6 @@ public:
 		const int& startingStaminaMax, const int& hpIncr, const int& dmgIncr, const int& defIncr, const int& staminaIncr) :
 		roleName(roleName), startingHpMax(startingHpMax), startingDmgMax(startingDmgMax), startingDef(startingDef), 
 		startingStaminaMax(startingStaminaMax), hpIncr(hpIncr), dmgIncr(dmgIncr), defIncr(defIncr), staminaIncr(staminaIncr) {};
-
-	/*
-	// Delete copy and move constructor to prevent copying or moving
-	Role(const Role&) = delete;
-	Role(Role&&) = delete;
-
-	// Operators, delete assignment and move operator to prevent copying or moving
-	Role& operator=(const Role&) = delete;
-	Role& operator=(Role&&) = delete;*/
 
 	// Functions
 
@@ -34,17 +26,18 @@ public:
 	inline const int& getStaminaIncr() const { return staminaIncr; };
 
 protected:
-	const roleName roleName;
-	const int hpIncr;
-	const int dmgIncr;
-	const int defIncr;
-	const int staminaIncr;
+	roleName roleName;
+	int hpIncr;
+	int dmgIncr;
+	int defIncr;
+	int staminaIncr;
 
 private:
-	const int startingHpMax;
-	const int startingDmgMax;
-	const int startingDef;
-	const int startingStaminaMax;
+	int startingHpMax;
+	int startingDmgMax;
+	int startingDef;
+	int startingStaminaMax;
+	
 };
 
 

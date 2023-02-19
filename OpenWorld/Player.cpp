@@ -50,8 +50,7 @@ void Player::addItem(Item item)
 	//Sort items based on name?
 }
 
-//TODO: raneme to useItem
-void Player::equipItem(const int& itemPos)
+void Player::useItem(const int& itemPos)
 {
 	//TODO: temporary consumable
 	if (Inventory[itemPos].getItemType() == "consumable") {

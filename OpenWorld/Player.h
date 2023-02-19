@@ -24,7 +24,7 @@ public:
 	// Functions
 	void levelUp();
 	void addItem( Item item );
-	void equipItem( const int& item );
+	void useItem( const int& item );
 	void unequipItem( const int& item );
 
 	// Accessors

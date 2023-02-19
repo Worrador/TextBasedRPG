@@ -71,7 +71,7 @@ public:
 	void mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap);
 	int quitMenu();
 
-	void equipItems(Player& player);
+	void useItems(Player& player);
 	void unequipItems(Player& player);
 	void levelUp(Player& player);
 

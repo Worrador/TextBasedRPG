@@ -192,47 +192,66 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
 Player Menu::playerCreationMenu()
 {
     std::cout << "\033c";
-    std::cout << "Welcome player!" << std::endl << std::endl << "This is a command line RPG game which you can play using only your keyboard." <<
-        std::endl << "You can select between your options using the keyboard arrows and the Enter key." << std::endl << "If you want to step out of the current menu, use the ESC key." << std::endl << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    std::cout << "Let's create your character!" << std::endl << std::endl;
+    std::cout << "Welcome player!" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    bool isMale = true;
+
+    {
+        std::vector <std::string> staticMenuLines = {
+            "Are you interested in the rules of the game?"
+        };
+        std::vector <std::string> dynamicMenuPoints = {
+            "Yes",
+            "No"
+        };
+
+        int selectedMenuPoint = 0;
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
+        if (selectedMenuPoint == 0) {
+            std::cout << "\033c";
+            std::cout << " \x10 " << "This is a command line RPG game which you can play using only your keyboard." << std::endl;
+            std::cout << " \x10 " << "To progress this guide, press any button." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "When playing the game you can select between your options by using the keyboard arrows and the Enter key." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "If you want to step out of the current menu, use the ESC key." << std::endl;
+            if (ESCAPE == _getch())
+            {
+                std::cout << "   " << "No, this one can't be escaped. But nice try." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            }
+            std::cout << " \x10 " << "In the game you can: travel, rest, look at your map (which is empty at first), use/equip/unequip or buy/sell items in the appropriate shops." << std::endl;
+            if (ESCAPE == _getch())
+            {
+                std::cout << "   " << "Stop trying." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            }
+            std::cout << " \x10 " << "Not every shop or rest option is available in every settlment. But the larger a settlment is the more options you have regarding both." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "When traveling, you can encounter enemies. The type of encountered enemies will depend on your level, the place that you are visiting and the places near that." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "The harder you fight, the more you can gain. And not just in terms of loot but in experince as well." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "You can check your experience on your player sheet, and when the time comes, you can level yourself up there." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "As you trevel across the land you can find other settlments. After you visit them they will be added to your map, and wherever you go you will be able to check the shortest known path back to them." << std::endl;
+            _getch();
+            std::cout << " \x10 " << "This is the Alpha version of the game, hopefully ore content will come later. But until that, good luck and have fun!" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            // Get user input to progress the game
+            _getch();
+        }
+    }
+
+    std::cout << "\033c";
+    std::cout << "Now let's create your character!" << std::endl << std::endl;
 
     std::string name;
     std::cout << "Please enter your name!" << std::endl;
     // Clear the buffer to prevent interference from previously entered data
     FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
     std::getline(std::cin, name, '\n');
-
-
-    bool isMale = true;
-
-    //TODO: rules?
-    //TODO: maybe get sex later
-    /*{
-        // List of menu points
-
-        std::vector <std::string> staticMenuLines = {
-            "What is your gender?"
-        };
-        std::vector <std::string> dynamicMenuPoints = {
-            "Male",
-            "Female"
-        };
-
-        int selectedMenuPoint = 0;
-        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
-        switch (selectedMenuPoint) {
-        case 0:
-            isMale = true;
-            break;
-        case 1:
-            isMale = false;
-            break;
-        default:
-            isMale = true;
-            break;
-        }
-    }*/
 
     {
         std::vector <std::string> staticMenuLines = {
@@ -431,11 +450,10 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
             ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "Sells for: " << inventroy[sellInventoryIds[selectedMenuPoint]].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by: ";
-            std::vector<roleName> roles = inventroy[sellInventoryIds[selectedMenuPoint]].getRoles();
+            const auto& roles = inventroy[sellInventoryIds[selectedMenuPoint]].getRoles();
 
-            for (auto roleName : roles) {
+            for (const auto& roleName : roles) {
                 ss << roleName;
-                //TODO: wtf is this
                 if (roleName == roles[roles.size() - 1]) {
                     break;
                 }
@@ -609,7 +627,7 @@ void Menu::playerSheetMenu(Player& player)
 
         switch (selectedMenuPoint) {
         case 0:
-            equipItems(player);
+            useItems(player);
             break;
         case 1:
             unequipItems(player);
@@ -750,7 +768,7 @@ int Menu::quitMenu()
     return selectedMenuPoint;
 }
 
-void Menu::equipItems(Player& player)
+void Menu::useItems(Player& player)
 {
     int selectedMenuPoint = 0;
 
@@ -816,7 +834,7 @@ void Menu::equipItems(Player& player)
         if (selectedMenuPoint == ESCAPE){
             return;
         }
-        player.equipItem(selectedMenuPoint);
+        player.useItem(selectedMenuPoint);
         selectedMenuPoint = 0;
         std::cout << std::endl;
     }

@@ -239,11 +239,18 @@ void Game::travel(int travelOption)
 		currentPoint = worldMap[currentPoint].second[travelOption];
 
 		if (auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get()) != nullptr) {
-			//TODO: only if not already present
-			player.addToKnownSettlements(currentPoint);
+			// Add settlement id if not already present
+			const auto& knownSettlements = player.getKnownSettlements();
+			if (find(knownSettlements.cbegin(), knownSettlements.cend(), currentPoint) == knownSettlements.cend()) {
+				player.addToKnownSettlements(currentPoint);
+			}
 		}
 		else {
-			player.addToKnownTerrains(currentPoint);
+			// Add terrain id if not already present
+			const auto& knownTerrain = player.getMap(); // Terrains are not stored in themselves
+			if (find(knownTerrain.cbegin(), knownTerrain.cend(), currentPoint) == knownTerrain.cend()) {
+				player.addToKnownTerrains(currentPoint);
+			}
 		}
 
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));

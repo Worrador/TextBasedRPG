@@ -664,6 +664,7 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
                 if (currId == endLocationId) { // if the current location is the destination, return the path
                     //path.erase(path.cbegin()); // remove the starting location ID from the path
                     // Retrace path and pop not used elements
+                    path.push_back(endLocationId); // add the current location to the path
                     bool errorFound = false;
                     do{
                         errorFound = false;
@@ -713,11 +714,11 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
                 return;
             }
 
-            for (auto& stepId : findPath(currentPointId, knownSettlements[selectedMenuPoint], worldMap))
+            const auto& path = findPath(currentPointId, knownSettlements[selectedMenuPoint], worldMap);
+            for (auto& stepId : path)
             {
                 ss << " \x10 " << worldMap[stepId].first->getTravelName();
             }
-            ss << " \x10 " << worldMap[knownSettlements[selectedMenuPoint]].first->getTravelName();
         };
 
 

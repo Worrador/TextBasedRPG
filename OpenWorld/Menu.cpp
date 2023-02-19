@@ -648,31 +648,53 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
             dynamicMenuPoints.emplace_back(worldMap[settlementId].first->getName());
         }
 
+        // This lambda function finds a path between two locations using a breadth-first search algorithm
+        // The function takes in the starting and ending location IDs, and the world map
+        // It returns a vector of integers representing the path between the two locations
         const auto findPath = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {
             std::vector<int> path;
             std::unordered_set<int> visited;
             const auto& knownIds = player.getMap();
             std::queue<int> q;
             q.push(startLocationId);
+
             while (!q.empty()) {
-                auto currId = q.front();
-                q.pop();
-                if (currId == endLocationId) {
-                    path.erase(path.cbegin());
+                auto currId = q.front(); // get the next location ID from the queue
+                q.pop(); // remove the location ID from the queue
+                if (currId == endLocationId) { // if the current location is the destination, return the path
+                    //path.erase(path.cbegin()); // remove the starting location ID from the path
+                    // Retrace path and pop not used elements
+                    bool errorFound = false;
+                    do{
+                        errorFound = false;
+                        for (auto stepInd = path.size() - 1; stepInd > 0; stepInd--) {
+                            // If previous step did not include current step then previous step was a bad one
+                            if (find(worldMap[path[stepInd - 1]].second.cbegin(), worldMap[path[stepInd - 1]].second.cend(), path[stepInd]) == worldMap[path[stepInd - 1]].second.cend()) {
+                                path.erase(path.cbegin() + stepInd - 1);
+                                errorFound = true;
+                            }
+                        }
+                    } while (errorFound);
+
+                    path.erase(path.cbegin()); // remove the starting location ID from the path
+
                     return path;
                 }
-                if (visited.count(currId) ||
-                    std::find(knownIds.begin(), knownIds.end(), currId) == knownIds.end()) {
+                if (visited.count(currId) || std::find(knownIds.begin(), knownIds.end(), currId) == knownIds.end()) {
+                    // if the location has been visited or is unknown, continue with the next location
                     continue;
                 }
-                visited.insert(currId);
-                path.push_back(currId);
-                for (auto nextId : worldMap[currId].second) {
+                // if location is known and has not been visited then insert it
+                visited.insert(currId); // mark the current location as visited
+                path.push_back(currId); // add the current location to the path
+                for (auto nextId : worldMap[currId].second) { // add the neighboring locations to the queue
                     q.push(nextId);
                 }
             }
-            path.clear();
+            path.clear(); // clear the path if the destination cannot be reached
             return path;
+
+            //Porbelm is not useful locations stay in the path variable as well.
         };
 
 

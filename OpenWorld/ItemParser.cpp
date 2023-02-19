@@ -173,7 +173,7 @@ void ItemParser::parseWeapons()
         // Reorder roles based on name
         std::sort(roles.begin(), roles.end(), [](const auto& roleA, const auto& roleB) {
             return roleA < roleB;
-            });
+        });
 
         // Get type of item and convert it to string
         const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
@@ -187,6 +187,7 @@ void ItemParser::parseWeapons()
             static_cast<int>(sheet->readNum(row, 4)),
             static_cast<int>(sheet->readNum(row, 5)),
             static_cast<int>(sheet->readNum(row, 6)));
+
         parsedWeaponsRaritySum += item.getRarityValue();
         if (std::find(parsedWeaponTypes.cbegin(), parsedWeaponTypes.cend(), item_type_string) == parsedWeaponTypes.cend()) {
             parsedWeaponTypes.emplace_back(item_type_string);

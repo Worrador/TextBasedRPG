@@ -18,7 +18,7 @@ Enemy Game::spawnEnemy()
 				[&](const auto& enemy) {
 					return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(),
 					[&](const auto& enemyName) {
-							return("Bandit" == enemy.getName());
+							return("Bandit" == enemyName);
 						}) != currentEnemyNames.cend());
 				});
 			return currentEnemies[0];

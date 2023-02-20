@@ -53,10 +53,48 @@ void Player::addItem(Item item)
 void Player::useItem(const int& itemPos)
 {
 	//TODO: temporary consumable
-	if (Inventory[itemPos].getItemType() == "consumable") {
-		this->hp = this->hpMax;
+	const auto& itemtype = Inventory[itemPos].getItemType();
+	if (itemtype == "healing") {
+		this->setHp(std::min(this->getHp() + Inventory[itemPos].getHpMax(), this->getHpMax()));
+		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
+	else if (itemtype == "stamina regeneration") {
+		this->setStamina(std::min(this->getStamina() + Inventory[itemPos].getStaminaMax(), this->getStaminaMax()));
+		Inventory.erase(Inventory.begin() + itemPos);
+		return;
+	}
+	else if (itemtype == "strength") {
+		this->setDamage(this->getDamageMax() + Inventory[itemPos].getDamageMax());
+		Inventory.erase(Inventory.begin() + itemPos);
+		return;
+	}
+	else if (itemtype == "defence") {
+		this->setDefence(this->getDefence() + Inventory[itemPos].getDefence());
+		Inventory.erase(Inventory.begin() + itemPos);
+		return;
+	}
+	else if (itemtype == "health") {
+		this->setHpMax(this->getHpMax() + Inventory[itemPos].getHpMax());
+		Inventory.erase(Inventory.begin() + itemPos);
+		return;
+	}
+	else if (itemtype == "stamina") {
+		this->setStaminaMax(this->getStaminaMax() + Inventory[itemPos].getStaminaMax());
+		Inventory.erase(Inventory.begin() + itemPos);
+		return;
+	}
+	else if (itemtype == "food") {
+		this->setHp(std::min(this->getHp() + Inventory[itemPos].getHpMax(), this->getHpMax()));
+		this->setStamina(std::min(this->getStamina() + Inventory[itemPos].getStaminaMax(), this->getStaminaMax()));
+		this->setHpMax(this->getHpMax() + Inventory[itemPos].getHpMax());
+		this->setStaminaMax(this->getStaminaMax() + Inventory[itemPos].getStaminaMax());
+		Inventory.erase(Inventory.begin() + itemPos);
+		return;
+	}
+	//TODO: make these effects temporary: for example 1 day
+	//TODO: different stats for consumables
+	
 	// Check if player can equip item. 
 	std::vector<roleName> itemRoles = Inventory[itemPos].getRoles();
 

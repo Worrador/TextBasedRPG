@@ -5,15 +5,28 @@ Enemy Game::spawnEnemy()
 	// Get list of enemies of current place
 	auto currentEnemyNames = worldMap[currentPoint].first->getEnemiesNight();
 
-	// If ther are no enemies for some reason, then get enemies from neighboring places
-	while (currentEnemyNames.empty()) {
-		//TODO: In case of a settlement only beeing close to other settlments we some error handling is needed
-		currentEnemyNames = worldMap[worldMap[currentPoint].second[getRandomBetween(0, (int)worldMap[currentPoint].second.size() - 1)]].first->getEnemiesNight();
-	}
-
 	// Get enemies that match criteria
 	auto parsedEnemies = EnemyParser::getInstance().getParsedEnemies();
 	std::vector<Enemy> currentEnemies;
+
+
+	// If ther are no enemies for some reason, then get enemies from neighboring places
+	for (auto ctr = 0; currentEnemyNames.empty(); ctr++) {
+		currentEnemyNames = worldMap[worldMap[currentPoint].second[getRandomBetween(0, (int)worldMap[currentPoint].second.size() - 1)]].first->getEnemiesNight();
+		if (ctr == 10) {
+			std::copy_if(parsedEnemies.cbegin(), parsedEnemies.cend(), std::back_inserter(currentEnemies),
+				[&](const auto& enemy) {
+					return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(),
+					[&](const auto& enemyName) {
+							return("Bandit" == enemy.getName());
+						}) != currentEnemyNames.cend());
+				});
+			return currentEnemies[0];
+			break;
+		}
+	}
+
+
 	std::copy_if(parsedEnemies.cbegin(), parsedEnemies.cend(), std::back_inserter(currentEnemies),
 		[&](const auto& enemy) {
 			return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(), 

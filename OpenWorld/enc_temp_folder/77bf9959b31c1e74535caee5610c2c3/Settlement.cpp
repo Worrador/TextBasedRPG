@@ -12,6 +12,7 @@ Settlement::Settlement(const std::string& name, const settlementSizeType& settle
 	std::sort(shopTypes.begin(), shopTypes.end());
 
 	// Add shops accordingly to this settlement
+	// TODO: Mabye have general goods merchant available in every settlement?
 	for (auto& shopType : shopTypes)
 	{
 		// Create items for the given shoptype

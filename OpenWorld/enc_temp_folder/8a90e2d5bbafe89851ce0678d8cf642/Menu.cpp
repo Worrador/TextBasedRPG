@@ -237,7 +237,7 @@ Player Menu::playerCreationMenu()
             _getch();
             std::cout << " \x10 " << "As you travel across the land you can find other settlments. After you visit them they will be added to your map, " << std::endl << "   and wherever you go you will be able to check the shortest known path back to them." << std::endl << std::endl;
             _getch();
-            std::cout << " \x10 " << "This is the Alpha version of the game, hopefully more content will come later. But until that, good luck and have fun!" << std::endl;
+            std::cout << " \x10 " << "This is the Alpha version of the game, hopefully ore content will come later. But until that, good luck and have fun!" << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             // Get user input to progress the game
             _getch();

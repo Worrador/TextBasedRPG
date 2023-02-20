@@ -196,8 +196,6 @@ void dramaticPause()
 void Game::travel(int travelOption)
 {
 	if (travelOption == ESCAPE) {
-		//TODO: Give back stamina >.<
-		player.setStamina(player.getStamina() + 1);
 		return;
 	}
 

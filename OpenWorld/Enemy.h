@@ -35,7 +35,6 @@ private:
 	int expDrop;
 	int aggressivity;
 
-	//TODO: rarity function that can be used for items and enemies maybe even places too
 	int rarity;
 	enemyRarity rarityName;
 	std::vector<Item> lootItems;

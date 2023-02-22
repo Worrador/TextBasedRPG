@@ -10,6 +10,7 @@
 #include <fstream>
 #include <unordered_set>
 #include <queue>
+#include <stack>
 
 // Constants for menus
 constexpr auto KEY_UP = 72;

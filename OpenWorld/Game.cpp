@@ -16,10 +16,7 @@ Enemy Game::spawnEnemy()
 		if (ctr == 10) {
 			std::copy_if(parsedEnemies.cbegin(), parsedEnemies.cend(), std::back_inserter(currentEnemies),
 				[&](const auto& enemy) {
-					return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(),
-					[&](const auto& enemyName) {
-							return("Bandit" == enemyName);
-						}) != currentEnemyNames.cend());
+					return("Bandit" == enemy.getName());
 				});
 			return currentEnemies[0];
 			break;

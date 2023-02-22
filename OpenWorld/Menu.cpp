@@ -669,7 +669,7 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
         // This lambda function finds a path between two locations using a breadth-first search algorithm
         // The function takes in the starting and ending location IDs, and the world map
         // It returns a vector of integers representing the path between the two locations
-        const auto findPath = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {
+        const auto findPath2 = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {
             std::vector<int> path;
             std::unordered_set<int> visited;
             const auto& knownIds = player.getMap();
@@ -715,6 +715,58 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
 
             //Porbelm is not useful locations stay in the path variable as well.
         };
+
+
+        // This lambda function finds a path between two locations using a breadth-first search algorithm
+        // The function takes in the starting and ending location IDs, and the world map
+        // It returns a vector of integers representing the path between the two locations
+        const auto findPath = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {     
+
+            // Get known IDs
+            const auto& knownIds = player.getMap();
+
+            // Stack to store nodes to be visited with the paths do them
+            std::queue<std::pair<int, std::vector<int>>> q;
+
+            // Set to store visited noded
+            std::unordered_set<int> visited;
+
+            // Init stack, TODO: needs review how to init
+            q.push(std::make_pair(startLocationId, std::vector<int>{startLocationId}));
+
+            // While there are nodes to be visited
+            while (!q.empty()) {
+
+                // Get last entered node and path to it.
+                auto [currId, currPath] = q.front();
+                q.pop();
+
+                // If it matches the search condition, return with path
+                if (currId == endLocationId) {
+                    // Delete first location as it is the current location
+                    currPath.erase(currPath.cbegin());
+                    return currPath;
+                }
+                if (visited.find(currId) == visited.end()) {
+                    // Add to visited, TODO: review addition
+                    visited.insert(currId);
+
+                    // Add every neighbor to the stack with their path if they are known to the player
+                    for (auto neighborId : worldMap[currId].second) {
+                        if (find(visited.cbegin(), visited.cend(), neighborId) == visited.cend() && find(knownIds.cbegin(), knownIds.cend(), neighborId) != knownIds.cend()) {
+                            auto neighborPath = currPath;
+                            neighborPath.emplace_back(neighborId);
+                            q.push(std::make_pair(neighborId, neighborPath));
+                        }
+                    }
+                }
+            }
+            return std::vector<int>();
+
+
+        };
+
+
 
 
 

@@ -201,5 +201,8 @@
     <Media Include="Resources\Warrior.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="Resources\Settlement.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

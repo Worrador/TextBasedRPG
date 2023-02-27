@@ -173,12 +173,19 @@ void Game::generateWorldMap() {
 	}
 }
 
-void Game::playMusic()
+void Game::playMusic(bool isSettlement = true)
 {
 	std::wstringstream wss;
-	wss << L"Resources\\" << player.getRoleName().c_str() << ".wav";
-
-
+	static bool nowSettlementPlaying = false;
+	if (isSettlement && !nowSettlementPlaying) {
+		wss << L"Resources\\Settlement.wav";
+		nowSettlementPlaying = true;
+	}
+	else if(nowSettlementPlaying) {
+		wss << L"Resources\\" << player.getRoleName().c_str() << ".wav";
+		nowSettlementPlaying = false;
+	}
+	
 	PlaySound(wss.str().c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	DWORD leftVolume = 2000;
 	DWORD rightVolume = 2000;
@@ -208,7 +215,7 @@ void Game::travel(int travelOption)
 	if (travelOption == ESCAPE) {
 		return;
 	}
-
+	playMusic(false);
 	dramaticPause();
 	if (getRandomWithChance(CHANCE_ENCOUNTER)) {
 		Enemy enemy = spawnEnemy() * player.getLevel();
@@ -237,7 +244,7 @@ void Game::travel(int travelOption)
 		default:
 			break;
 		}
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		std::cout << std::endl;
 	}
 
@@ -245,8 +252,10 @@ void Game::travel(int travelOption)
 		std::cout << "You have arrived to your destination." << std::endl; 
 		previousPoint = currentPoint;
 		currentPoint = worldMap[currentPoint].second[travelOption];
+		bool isSettelment = false;
 
 		if (auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get()) != nullptr) {
+			isSettelment = true;
 			// Add settlement id if not already present
 			const auto& knownSettlements = player.getKnownSettlements();
 			if (find(knownSettlements.cbegin(), knownSettlements.cend(), currentPoint) == knownSettlements.cend()) {
@@ -254,6 +263,7 @@ void Game::travel(int travelOption)
 			}
 		}
 		else {
+			isSettelment = false;
 			// Add terrain id if not already present
 			const auto& knownTerrain = player.getMap(); // Terrains are not stored in themselves
 			if (find(knownTerrain.cbegin(), knownTerrain.cend(), currentPoint) == knownTerrain.cend()) {
@@ -263,6 +273,9 @@ void Game::travel(int travelOption)
 
 		FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
 		_getch();
+
+		// Set music
+		playMusic(isSettelment);
 	}
 }
 
@@ -283,7 +296,6 @@ void Game::makeAttack(Character& attacker, Character& defender)
 		std::cout << attacker.getName() << " rests for one round and regains some stamina." << std::endl;
 		attacker.setStamina(min(FIGHT_REST_STAMINA_INCREMENT, attacker.getStaminaMax()));
 	}
-	//std::this_thread::sleep_for(std::chrono::milliseconds(750)); //or continue on button press?
 	_getch();
 }
 
@@ -341,11 +353,9 @@ void Game::run(Enemy& enemy)
 	if (player.getStamina() >= staminaNeeded) {
 		player.setStamina(player.getStamina() - staminaNeeded);
 		std::cout << player.getName() << " has run away from battle." << std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
 	else {
 		std::cout << player.getName() << " is too tired to run, so rests for a while to regain some stamina." << std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		player.setStamina(min(player.getRole().getStaminaIncr(), player.getStaminaMax()));
 		wait(enemy);
 	}

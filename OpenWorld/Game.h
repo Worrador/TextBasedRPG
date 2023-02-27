@@ -49,7 +49,7 @@ private:
 	void addConnections(int point, int additionalNumberOfConnections);
 	bool isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex);
 	void generateWorldMap();
-	void playMusic();
+	void playMusic(bool isSettlement);
 
 	Enemy spawnEnemy();
 

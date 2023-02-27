@@ -215,6 +215,7 @@
     <Media Include="Resources\Mage.wav" />
     <Media Include="Resources\Ranger.wav" />
     <Media Include="Resources\Rouge.wav" />
+    <Media Include="Resources\Settlement.wav" />
     <Media Include="Resources\Slayer.wav" />
     <Media Include="Resources\Warrior.wav" />
   </ItemGroup>

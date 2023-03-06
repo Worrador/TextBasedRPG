@@ -4,7 +4,7 @@ Enemy::Enemy(const std::string& name, int hpMax, int dmgMax, int defence, int st
 	Character(name, hpMax, dmgMax, (int)std::floor(dmgMax / 2), defence, staminaMax, (int)std::floor(std::max(dmgMax, hpMax) / 5)), expDrop(dmgMax + hpMax),
 	aggressivity(aggressivity)
 {
-	rarity = ((int)std::floor(10000 / (hpMax + defence + dmgMax) * (1 + staminaMax / staminaMax)));
+	rarity = ((int)std::floor(10000 / (hpMax + defence + dmgMax) * (1 + staminaMax / 1 + staminaMax)));
 	// Start with common, then see where it goes
 	this->rarityName = RARITY_LEVEL_1;
 	for (const auto& [rarityName, treshold] : enemyRarityThresholds) {

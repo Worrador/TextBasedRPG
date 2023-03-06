@@ -356,6 +356,7 @@ void Game::run(Enemy& enemy)
 	}
 	else {
 		std::cout << player.getName() << " is too tired to run, so rests for a while to regain some stamina." << std::endl;
+		_getch();
 		player.setStamina(min(player.getRole().getStaminaIncr(), player.getStaminaMax()));
 		wait(enemy);
 	}

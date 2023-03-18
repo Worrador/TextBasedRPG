@@ -33,6 +33,13 @@ public:
 	inline const roleName& getRoleName() const { return role.getRoleName(); };
 	inline const int& getExp() const { return exp; };
 	inline const int& getExpNext() const { return expNext; };
+
+	inline const int& getBuffHpMax() const { return buff_hpMax; };
+	inline const int& getBuffDamageMax() const { return buff_damageMax; };
+	inline const int& getBuffDefence() const { return buff_defence; };
+	inline const int& getBuffStaminaMax() const { return buff_staminaMax; };
+
+
 	std::vector<Item>& getInventory();
 	std::vector<Item>& getEquipment();
 	inline void addToKnownSettlements(const int& settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
@@ -55,6 +62,12 @@ private:
 	int level = 1;
 	int exp = 0;
 	int expNext = 50;
+
+	int buff_hpMax = 0;
+	int buff_damageMax = 0;
+	int buff_defence = 0;
+	int buff_staminaMax = 0;
+
 	// Inventory
 	std::vector<Item> Equipment;
 	std::vector<Item> Inventory;

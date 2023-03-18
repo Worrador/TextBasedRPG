@@ -347,12 +347,12 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
             dynamicMenuPoints.push_back(option.getName());
         }
 
-        auto getStaticPlayerGold = [player](std::stringstream& ss) ->void {
+        auto getStaticPlayerGold = [&player](std::stringstream& ss) ->void {
             // Build string stream object
             ss << std::endl << "Gold: " << player.getGold() << std::endl;
         };
 
-        auto getDynamicItemStats = [shopItems](std::stringstream& ss, const int selectedMenuPoint) ->void {
+        auto getDynamicItemStats = [&shopItems](std::stringstream& ss, const int selectedMenuPoint) ->void {
             // Build string stream object
             if (selectedMenuPoint < 0) {
                 return;
@@ -371,12 +371,31 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
                 ss << ", ";
             }
             ss << std::endl;
-            ss << "Item type: " << shopItems[selectedMenuPoint].getItemType() << std::endl;
+            const auto& itemType = shopItems[selectedMenuPoint].getItemType();
+            const auto& consumableTypes = ItemParser::getInstance().getParsedConsumableTypes();
+            ss << "Item type: " << itemType << std::endl;
             ss << "Rarity: " << shopItems[selectedMenuPoint].getRarityName() << std::endl;
-            ss << "Max HP: " << shopItems[selectedMenuPoint].getHpMax() << std::endl;
-            ss << "Max damage: " << shopItems[selectedMenuPoint].getDamageMax() << std::endl;
-            ss << "Defence: " << shopItems[selectedMenuPoint].getDefence() << std::endl;
-            ss << "Max stamina: " << shopItems[selectedMenuPoint].getStaminaMax() << std::endl;
+            if (std::find(consumableTypes.cbegin(), consumableTypes.cend(), itemType) != consumableTypes.cend()) {
+                if (itemType == "food" || itemType == "healing" || itemType == "stamina regeneration") {
+                    ss << "Restore HP: " << shopItems[selectedMenuPoint].getHpMax() << std::endl;
+                    ss << "Temporal Max damage modifier: " << shopItems[selectedMenuPoint].getDamageMax() << std::endl;
+                    ss << "Temporal Defence modifier: " << shopItems[selectedMenuPoint].getDefence() << std::endl;
+                    ss << "Restore stamina: " << shopItems[selectedMenuPoint].getStaminaMax() << std::endl;
+                }
+                else {
+                    ss << "Temporal Max HP modifier: " << shopItems[selectedMenuPoint].getHpMax() << std::endl;
+                    ss << "Temporal Max damage modifier: " << shopItems[selectedMenuPoint].getDamageMax() << std::endl;
+                    ss << "Temporal Defence modifier: " << shopItems[selectedMenuPoint].getDefence() << std::endl;
+                    ss << "Temporal Max stamina modifier: " << shopItems[selectedMenuPoint].getStaminaMax() << std::endl;
+                }
+            }
+            else {
+                ss << "Max HP: " << shopItems[selectedMenuPoint].getHpMax() << std::endl;
+                ss << "Max damage: " << shopItems[selectedMenuPoint].getDamageMax() << std::endl;
+                ss << "Defence: " << shopItems[selectedMenuPoint].getDefence() << std::endl;
+                ss << "Max stamina: " << shopItems[selectedMenuPoint].getStaminaMax() << std::endl;
+            }
+
         };
         if ((int)dynamicMenuPoints.size() == 0) {
             selectedMenuPoint = -1; // indicating error for menugenerator

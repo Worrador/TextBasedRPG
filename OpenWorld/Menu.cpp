@@ -631,9 +631,30 @@ void Menu::playerSheetMenu(Player& player)
             else {
                 ss << "HP:       " << player.getHp() << "/" << player.getHpMax() << " (+" << buff_hpMax << ")" << std::endl;
             }
-            ss << "Stamina:  " << player.getStamina() << "/" << player.getStaminaMax() << std::endl;
-            ss << "Attack:   " << player.getDamageMax() << std::endl;
-            ss << "Defence:  " << player.getDefence() << std::endl << std::endl;
+
+            auto buff_staminaMax = player.getBuffStaminaMax();
+            if (buff_hpMax < 0) {
+                ss << "Stamina:  " << player.getStamina() << "/" << player.getStaminaMax() << " (" << buff_staminaMax << ")" << std::endl;
+            }
+            else {
+                ss << "Stamina:  " << player.getStamina() << "/" << player.getStaminaMax() << " (+" << buff_staminaMax << ")" << std::endl;
+            }
+
+            auto buff_attackMax = player.getBuffHpMax();
+            if (buff_attackMax < 0) {
+                ss << "Attack:   " << player.getDamageMax() << " (" << buff_attackMax << ")" << std::endl;
+            }
+            else {
+                ss << "Attack:   " << player.getDamageMax() << " (+" << buff_attackMax << ")" << std::endl;
+            }
+
+            auto buff_defMax = player.getBuffDefence();
+            if (buff_hpMax < 0) {
+                ss << "Defence:  " << player.getDefence()  << " (" << buff_defMax << ")" << std::endl;
+            }
+            else {
+                ss << "Defence:  " << player.getDefence() << " (+" << buff_defMax << ")" << std::endl;
+            }
 
             ss << MENU_DIVIDER_STRING << std::endl << std::endl;
 

@@ -56,39 +56,53 @@ void Player::useItem(const int& itemPos)
 	const auto& itemtype = Inventory[itemPos].getItemType();
 	if (itemtype == "healing") {
 		this->setHp(std::min(this->getHp() + Inventory[itemPos].getHpMax(), this->getHpMax()));
+		
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "stamina regeneration") {
 		this->setStamina(std::min(this->getStamina() + Inventory[itemPos].getStaminaMax(), this->getStaminaMax()));
+		
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "strength") {
 		this->setDamage(this->getDamageMax() + Inventory[itemPos].getDamageMax());
+		setBuffDamageMax(getBuffDamageMax() + Inventory[itemPos].getDamageMax());
+
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "defence") {
 		this->setDefence(this->getDefence() + Inventory[itemPos].getDefence());
+		setBuffDefence(getBuffDefence() + Inventory[itemPos].getDefence());
+
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "health") {
 		this->setHpMax(this->getHpMax() + Inventory[itemPos].getHpMax());
+		setBuffHpMax(getBuffHpMax() + Inventory[itemPos].getHpMax());
+
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "stamina") {
 		this->setStaminaMax(this->getStaminaMax() + Inventory[itemPos].getStaminaMax());
+		setBuffStaminaMax(getBuffStaminaMax() + Inventory[itemPos].getStaminaMax());
+
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "food") {
 		this->setHp(std::min(this->getHp() + Inventory[itemPos].getHpMax(), this->getHpMax()));
 		this->setStamina(std::min(this->getStamina() + Inventory[itemPos].getStaminaMax(), this->getStaminaMax()));
-		this->setHpMax(this->getHpMax() + Inventory[itemPos].getHpMax());
-		this->setStaminaMax(this->getStaminaMax() + Inventory[itemPos].getStaminaMax());
+		this->setDamage(this->getDamageMax() + Inventory[itemPos].getDamageMax());
+		this->setDefence(this->getDefence() + Inventory[itemPos].getDefence());
+
+		setBuffDamageMax(getBuffDamageMax() + Inventory[itemPos].getDamageMax());
+		setBuffDefence(getBuffDefence() + Inventory[itemPos].getDefence());
+
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}

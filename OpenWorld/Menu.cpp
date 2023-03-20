@@ -611,6 +611,10 @@ int Menu::restMenu(Player& player, Place& currentPlace)
     }
 }
 
+static std::string addCustomString(const std::string& color, const std::string& str) {
+    return color + str + COLOR_END;
+}
+
 void Menu::playerSheetMenu(Player& player)
 {
     int selectedMenuPoint = 0;
@@ -624,37 +628,40 @@ void Menu::playerSheetMenu(Player& player)
             ss << "Class:    " << player.getRoleName() << std::endl;
             ss << "Level:    " << player.getLevel() << std::endl;
             ss << "Exp:      " << player.getExp() << "/" << player.getExpNext() << std::endl;
-            auto buff_hpMax = player.getBuffHpMax();
-            if (buff_hpMax < 0) {
-                ss << "HP:       " << player.getHp() << "/" << player.getHpMax() << " (" << buff_hpMax << ")" << std::endl;
-            }
-            else {
-                ss << "HP:       " << player.getHp() << "/" << player.getHpMax() << " (+" << buff_hpMax << ")" << std::endl;
-            }
 
-            auto buff_staminaMax = player.getBuffStaminaMax();
-            if (buff_hpMax < 0) {
-                ss << "Stamina:  " << player.getStamina() << "/" << player.getStaminaMax() << " (" << buff_staminaMax << ")" << std::endl;
-            }
-            else {
-                ss << "Stamina:  " << player.getStamina() << "/" << player.getStaminaMax() << " (+" << buff_staminaMax << ")" << std::endl;
-            }
+            auto buffPrinterMax = [&](auto stat, auto buff, auto current, int max) -> void {
+                std::string asd = " (" + std::to_string(buff) + ")";
+                if (buff < 0) {
+                    ss << stat << addCustomString(COLOR_RED, std::to_string(current) + "/" + std::to_string(max) + " (" + std::to_string(buff) + ")") << std::endl;
+                }
+                else if (buff == 0) {
+                    ss << stat << current << "/" << max << std::endl;
+                }
+                else {
+                    ss << stat << addCustomString(COLOR_GREEN, std::to_string(current) + "/" + std::to_string(max) + " (+" + std::to_string(buff) + ")") << std::endl;
+                }
 
-            auto buff_attackMax = player.getBuffHpMax();
-            if (buff_attackMax < 0) {
-                ss << "Attack:   " << player.getDamageMax() << " (" << buff_attackMax << ")" << std::endl;
-            }
-            else {
-                ss << "Attack:   " << player.getDamageMax() << " (+" << buff_attackMax << ")" << std::endl;
-            }
+            };
 
-            auto buff_defMax = player.getBuffDefence();
-            if (buff_hpMax < 0) {
-                ss << "Defence:  " << player.getDefence()  << " (" << buff_defMax << ")" << std::endl;
-            }
-            else {
-                ss << "Defence:  " << player.getDefence() << " (+" << buff_defMax << ")" << std::endl;
-            }
+            auto buffPrinter = [&](auto stat, auto buff, auto current) -> void {
+                std::string asd = " (" + std::to_string(buff) + ")";
+                if (buff < 0) {
+                    ss << stat  << addCustomString(COLOR_RED, std::to_string(current) + " (" + std::to_string(buff) + ")") << std::endl;
+                }
+                else if (buff == 0) {
+                    ss << stat << current << std::endl;
+                }
+                else {
+                    ss << stat << addCustomString(COLOR_GREEN, std::to_string(current) + " (+" + std::to_string(buff) + ")") << std::endl;
+                }
+
+            };
+
+            buffPrinterMax("HP:       ", player.getBuffHpMax(), player.getHp(), player.getHpMax());
+            buffPrinterMax("Stamina:  ", player.getBuffStaminaMax(), player.getStamina(), player.getStaminaMax());
+            buffPrinter("Attack:   ", player.getBuffDamageMax(), player.getDamageMax());
+            buffPrinter("Defence:  ", player.getBuffDefence(), player.getDefence());
+
 
             ss << MENU_DIVIDER_STRING << std::endl << std::endl;
 

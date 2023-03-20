@@ -39,18 +39,24 @@ public:
 	inline const int& getBuffDefence() const { return buff_defence; };
 	inline const int& getBuffStaminaMax() const { return buff_staminaMax; };
 
-
 	std::vector<Item>& getInventory();
 	std::vector<Item>& getEquipment();
-	inline void addToKnownSettlements(const int& settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
-	inline void addToKnownTerrains(const int& terrainId) { map.emplace_back(terrainId); };
+
+	inline const playerMap& getMap() const { return map; };
+	inline const playerMap& getKnownSettlements() const { return knownSettlements; };
 
 	// Stat Modifiers
 	inline void setExp(int exp) { this->exp = exp; };
 	inline void setExpNext(int expNext) { this->expNext = expNext; };
 	inline void setLevel(int level) { this->level = level; };
-	inline const playerMap& getMap() const { return map; };
-	inline const playerMap& getKnownSettlements() const { return knownSettlements; };
+
+	inline void addToKnownSettlements(const int& settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
+	inline void addToKnownTerrains(const int& terrainId) { map.emplace_back(terrainId); };
+
+	inline void setBuffHpMax(int stat) { buff_hpMax = stat; };
+	inline void setBuffDamageMax(int stat) { buff_damageMax = stat; };
+	inline void setBuffDefence(int stat) { buff_defence = stat; };
+	inline void setBuffStaminaMax(int stat) { buff_staminaMax = stat; };
 
 
 private:

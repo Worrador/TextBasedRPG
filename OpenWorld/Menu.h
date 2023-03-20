@@ -25,6 +25,16 @@ constexpr auto MENU_POINT_INDENT = 4;
 constexpr auto MENU_INDEXER_SIZE = 2;
 constexpr auto MENU_INDEXER_INDENT = MENU_POINT_INDENT + MENU_INDEXER_SIZE;
 constexpr auto MENU_DIVIDER_STRING = "\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4";
+// Colors
+constexpr auto COLOR_DEFAULT	= "[90m";
+constexpr auto COLOR_RED		= "[91m";
+constexpr auto COLOR_GREEN		= "[92m";
+constexpr auto COLOR_YELLOW		= "[93m";
+constexpr auto COLOR_BLUE		= "[94m";
+constexpr auto COLOR_MAGENTA	= "[95m";
+constexpr auto COLOR_CYAN		= "[96m";
+constexpr auto COLOR_WHITE		= "[97m";
+constexpr auto COLOR_END		= "[0m";
 
 enum class menuState {
 	Main = 0,

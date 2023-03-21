@@ -43,7 +43,4 @@ private:
 	int enemiesNightRaritySum = 0;
 
 	std::string travelName;
-
-	//Maybe item vector for questing and stuff later?
-	//std::vector<Item>
 };

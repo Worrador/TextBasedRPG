@@ -43,8 +43,8 @@ protected:
 	const std::string name;
 	int hp;
 	int hpMax;
-	int damageMin;
 	int damageMax;
+	int damageMin;
 	int defence;
 	int stamina;
 	int staminaMax;

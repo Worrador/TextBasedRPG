@@ -38,7 +38,5 @@ private:
 	int rarity;
 	enemyRarity rarityName;
 	std::vector<Item> lootItems;
-
-	//std::vector<ItemDrop>
 };
 

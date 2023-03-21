@@ -37,7 +37,6 @@ private:
 	int startingDmgMax;
 	int startingDef;
 	int startingStaminaMax;
-	
 };
 
 

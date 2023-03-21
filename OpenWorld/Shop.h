@@ -18,7 +18,6 @@ public:
 	// Operators
 
 	// Functions
-	void addRandomItem();
 
 	// Accessors
 	inline const std::string& getShopName() const { return shopName; };
@@ -36,6 +35,3 @@ private:
 	shopType shopName;	// Armor smith, Weapon smith, Potion brewer
 	std::vector<Item> shopItems;
 };
-
-// Vectors to store items
-// Separate shops for armor wepaon and consumables

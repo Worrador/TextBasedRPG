@@ -38,9 +38,5 @@ protected:
 	std::string name;
 	std::string previousTerrainName;
 	std::vector<std::string> followingTerrainNames;
-
-
-	//Mabye place* vector
-	// how to allocate deallocate?
 };
 

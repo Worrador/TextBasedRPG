@@ -82,7 +82,6 @@ public:
 	void playerSheetMenu(Player& player);
 	void mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap);
 	int quitMenu();
-
 	void useItems(Player& player);
 	void unequipItems(Player& player);
 	void levelUp(Player& player);
@@ -93,5 +92,4 @@ public:
 
 private:
 	menuState menuState;
-	//std::vector<ItemDrop>
 };

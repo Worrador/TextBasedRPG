@@ -9,7 +9,7 @@ EnemyParser::EnemyParser()
 
 EnemyParser::~EnemyParser()
 {
-    //RAII?
+    //RAII? -> create book with constructor and release with destructor, but this objects lifetime is longer than that
 }
 
 void EnemyParser::parseEnemies()

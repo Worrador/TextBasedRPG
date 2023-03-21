@@ -18,13 +18,13 @@ public:
 	// Accessors
 	inline std::string getName() const { return name; };
 	inline int getHp() const { return hp; };
-	inline int getHpMax() const { return hpMax; };
-	inline int getDamageMin() const { return damageMin; };
-	inline int getDamageMax() const { return damageMax; };
-	inline int getDefence() const { return defence; };
+	virtual inline int getHpMax() const { return hpMax; };
+	virtual inline int getDamageMin() const { return damageMin; };
+	virtual inline int getDamageMax() const { return damageMax; };
+	virtual inline int getDefence() const { return defence; };
 	inline int getGold() const { return gold; };
 	inline int getStamina() const { return stamina; };
-	inline int getStaminaMax() const { return staminaMax; };
+	virtual inline int getStaminaMax() const { return staminaMax; };
 
 	// Modifiers
 	inline void setHp(int hp) { this->hp = hp; };

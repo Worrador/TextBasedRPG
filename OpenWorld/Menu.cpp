@@ -564,7 +564,7 @@ int Menu::restMenu(Player& player, Place& currentPlace)
             ss << "Restores your hp and stamina to full.";
             break;
         case 4:
-            ss << "Restores your hp and stamina to full. Enchances some stats for the next few fights.";
+            ss << "Restores your hp and stamina to full. Enchances some stats until the next rest.";
             break;
         }
     };
@@ -579,6 +579,12 @@ int Menu::restMenu(Player& player, Place& currentPlace)
 
             // Remove gold
             player.setGold(player.getGold() - optionPrices[selectedMenuPoint]);
+
+            // Reset buffs
+            player.setBuffHpMax(0);
+            player.setBuffDamageMax(0);
+            player.setBuffDefence(0);
+            player.setBuffStaminaMax(0);
 
             // Do action according to the selected option
             switch (selectedMenuPoint) {
@@ -598,6 +604,22 @@ int Menu::restMenu(Player& player, Place& currentPlace)
             case 4:
                 player.setHp(player.getHpMax());
                 player.setStamina(player.getStaminaMax());
+                switch (getRandomBetween(1, 4)) {
+                    case 1:
+                        player.setBuffHpMax(min(1, player.getHpMax() / 2));
+                        break;
+                    case 2:
+                        player.setBuffDamageMax(min(1, player.getDamageMin() / 2));
+                        break;
+                    case 3:
+                        player.setBuffDefence(min(1, player.getDefence() / 2));
+                        break;
+                    case 4:
+                        player.setBuffStaminaMax(min(1, player.getStaminaMax() / 2));
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 return -1;

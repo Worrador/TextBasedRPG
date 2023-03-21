@@ -28,6 +28,13 @@ public:
 	void unequipItem( const int& item );
 
 	// Accessors
+	inline int getHpMax() const override { return hpMax + buff_hpMax; };
+	inline int getDamageMin() const override { return getDamageMax() / 2; };
+	inline int getDamageMax() const override { return damageMax + buff_damageMax; };
+	inline int getDefence() const override { return defence + buff_defence; };
+	inline int getStaminaMax() const override { return staminaMax + buff_staminaMax; };
+
+
 	inline const int & getLevel() const { return level; };
 	inline const Role& getRole() const { return role; };
 	inline const roleName& getRoleName() const { return role.getRoleName(); };

@@ -71,28 +71,24 @@ void Player::useItem(const int& itemPos)
 		return;
 	}
 	else if (itemtype == "strength") {
-		this->setDamage(this->getDamageMax() + Inventory[itemPos].getDamageMax());
 		setBuffDamageMax(getBuffDamageMax() + Inventory[itemPos].getDamageMax());
 
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "defence") {
-		this->setDefence(this->getDefence() + Inventory[itemPos].getDefence());
 		setBuffDefence(getBuffDefence() + Inventory[itemPos].getDefence());
 
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "health") {
-		this->setHpMax(this->getHpMax() + Inventory[itemPos].getHpMax());
 		setBuffHpMax(getBuffHpMax() + Inventory[itemPos].getHpMax());
 
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
 	else if (itemtype == "stamina") {
-		this->setStaminaMax(this->getStaminaMax() + Inventory[itemPos].getStaminaMax());
 		setBuffStaminaMax(getBuffStaminaMax() + Inventory[itemPos].getStaminaMax());
 
 		Inventory.erase(Inventory.begin() + itemPos);
@@ -101,8 +97,6 @@ void Player::useItem(const int& itemPos)
 	else if (itemtype == "food") {
 		this->setHp(std::min(this->getHp() + Inventory[itemPos].getHpMax(), this->getHpMax()));
 		this->setStamina(std::min(this->getStamina() + Inventory[itemPos].getStaminaMax(), this->getStaminaMax()));
-		this->setDamage(this->getDamageMax() + Inventory[itemPos].getDamageMax());
-		this->setDefence(this->getDefence() + Inventory[itemPos].getDefence());
 
 		setBuffDamageMax(getBuffDamageMax() + Inventory[itemPos].getDamageMax());
 		setBuffDefence(getBuffDefence() + Inventory[itemPos].getDefence());
@@ -110,7 +104,6 @@ void Player::useItem(const int& itemPos)
 		Inventory.erase(Inventory.begin() + itemPos);
 		return;
 	}
-	//TODO: make these effects temporary: for example 1 day
 	//TODO: different stats for consumables
 	
 	// Check if player can equip item. 

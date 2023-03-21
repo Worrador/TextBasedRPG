@@ -27,7 +27,7 @@ Settlement::Settlement(const std::string& name, const settlementSizeType& settle
 	restOptions.emplace_back("Sleep on the streets.", 0);			// Second is mugging
 	restOptions.emplace_back("Sleep in a shared room at a cheap Inn.", REST_SHARED_ROOM_PRICE_CHEAP);
 	restOptions.emplace_back("Sleep in a private room at a cheap Inn.", REST_PRIVATE_ROOM_PRICE_CHEAP);
-	if (this->maxConnectionSize >= REST_EXPENSIVE_INN_SETTLEMENT_SIZE_TRESHOLD)
+	if (maxConnectionSize >= REST_EXPENSIVE_INN_SETTLEMENT_SIZE_TRESHOLD)
 	{
 		restOptions.emplace_back("Sleep in a private room at an expensive Inn.", REST_PRIVATE_ROOM_PRICE_EXPENSIVE);
 	}

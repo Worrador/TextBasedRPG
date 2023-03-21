@@ -606,16 +606,16 @@ int Menu::restMenu(Player& player, Place& currentPlace)
                 player.setStamina(player.getStaminaMax());
                 switch (getRandomBetween(1, 4)) {
                     case 1:
-                        player.setBuffHpMax(min(1, player.getHpMax() / 2));
+                        player.setBuffHpMax(max(1, player.getHpMax() / 2));
                         break;
                     case 2:
-                        player.setBuffDamageMax(min(1, player.getDamageMin() / 2));
+                        player.setBuffDamageMax(max(1, player.getDamageMin() / 2));
                         break;
                     case 3:
-                        player.setBuffDefence(min(1, player.getDefence() / 2));
+                        player.setBuffDefence(max(1, player.getDefence() / 2));
                         break;
                     case 4:
-                        player.setBuffStaminaMax(min(1, player.getStaminaMax() / 2));
+                        player.setBuffStaminaMax(max(1, player.getStaminaMax() / 2));
                         break;
                     default:
                         break;

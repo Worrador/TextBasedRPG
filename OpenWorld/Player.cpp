@@ -2,12 +2,12 @@
 
 Player& Player::operator+=(const Item& item)
 {
-	this->setHpMax(this->getHpMax() + item.getHpMax());
+	this->setHpMax(this->getRawHpMax() + item.getHpMax());
 	this->setHp(std::min(this->getHp(), this->getHpMax()));
-	this->setDamage(this->getDamageMax() + item.getDamageMax());
-	this->setDefence( this->getDefence() + item.getDefence());
+	this->setDamage(this->getRawDamageMax() + item.getDamageMax());
+	this->setDefence( this->getRawDefence() + item.getDefence());
 
-	this->setStaminaMax(this->getStaminaMax() + item.getStaminaMax());
+	this->setStaminaMax(this->getRawStaminaMax() + item.getStaminaMax());
 	this->setStamina(std::min(this->getStamina(), this->getStaminaMax()));
 
 	return *this;
@@ -15,12 +15,12 @@ Player& Player::operator+=(const Item& item)
 
 Player& Player::operator-=(const Item& item)
 {
-	this->setHpMax(this->getHpMax() - item.getHpMax());
+	this->setHpMax(this->getRawHpMax() - item.getHpMax());
 	this->setHp(std::min(this->getHp(), this->getHpMax()));
-	this->setDamage(this->getDamageMax() - item.getDamageMax());
-	this->setDefence(this->getDefence() - item.getDefence());
+	this->setDamage(this->getRawDamageMax() - item.getDamageMax());
+	this->setDefence(this->getRawDefence() - item.getDefence());
 
-	this->setStaminaMax(this->getStaminaMax() - item.getStaminaMax());
+	this->setStaminaMax(this->getRawStaminaMax() - item.getStaminaMax());
 	this->setStamina(std::min(this->getStamina(), this->getStaminaMax()));
 
 	return *this;

@@ -34,6 +34,12 @@ public:
 	inline int getDefence() const override { return defence + buff_defence; };
 	inline int getStaminaMax() const override { return staminaMax + buff_staminaMax; };
 
+	inline int getRawHpMax() const { return hpMax; };
+	inline int getRawDamageMin() const { return getDamageMax() / 2; };
+	inline int getRawDamageMax() const { return damageMax; };
+	inline int getRawDefence() const { return defence; };
+	inline int getRawStaminaMax() const { return staminaMax; };
+
 
 	inline const int & getLevel() const { return level; };
 	inline const Role& getRole() const { return role; };

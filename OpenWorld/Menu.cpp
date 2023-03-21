@@ -427,7 +427,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>& sellingOptions)
 {
     int selectedMenuPoint = 0;
-    auto& inventory = player.getInventory();
+    const auto& inventory = player.getInventory();
 
     // Copy only items that can be sold at this shop
     std::vector<int> sellInventoryIds;
@@ -448,7 +448,7 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
         }
 
         for (auto& id : sellInventoryIds) {
-            dynamicMenuPoints.push_back(inventory[id].getName());
+            dynamicMenuPoints.emplace_back(inventory[id].getName());
         }
 
         auto getStaticPlayerGold = [&player, &dynamicMenuPoints](std::stringstream& ss) ->void {
@@ -514,7 +514,7 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
 
         player.setGold(player.getGold() + inventory[sellInventoryIds[selectedMenuPoint]].getSellGold());
         soldItems.emplace_back(std::move(inventory[sellInventoryIds[selectedMenuPoint]]));
-        inventory.erase(inventory.begin() + sellInventoryIds[selectedMenuPoint]);
+        player.popFromInv(sellInventoryIds[selectedMenuPoint]);
         sellInventoryIds.erase(sellInventoryIds.cbegin() + selectedMenuPoint);
     }
 }
@@ -621,7 +621,8 @@ void Menu::playerSheetMenu(Player& player)
 
     while (1) {
 
-        auto getStaticPlayerInfo = [&player](std::stringstream& ss) ->void {
+        // std::as_const returns a constant reference to the object
+        auto getStaticPlayerInfo = [&player = std::as_const(player)](std::stringstream& ss) ->void {
             // Build string stream object
             ss << std::endl;
             ss << "Name:     " << player.getName() << std::endl;
@@ -629,36 +630,33 @@ void Menu::playerSheetMenu(Player& player)
             ss << "Level:    " << player.getLevel() << std::endl;
             ss << "Exp:      " << player.getExp() << "/" << player.getExpNext() << std::endl;
 
-            auto buffPrinterMax = [&](auto stat, auto buff, auto current, int max) -> void {
-                std::string asd = " (" + std::to_string(buff) + ")";
-                if (buff < 0) {
-                    ss << stat << addCustomString(COLOR_RED, std::to_string(current) + "/" + std::to_string(max) + " (" + std::to_string(buff) + ")") << std::endl;
-                }
-                else if (buff == 0) {
-                    ss << stat << current << "/" << max << std::endl;
-                }
-                else {
-                    ss << stat << addCustomString(COLOR_GREEN, std::to_string(current) + "/" + std::to_string(max) + " (+" + std::to_string(buff) + ")") << std::endl;
-                }
-
-            };
-
-            auto buffPrinter = [&](auto stat, auto buff, auto current) -> void {
-                std::string asd = " (" + std::to_string(buff) + ")";
-                if (buff < 0) {
-                    ss << stat  << addCustomString(COLOR_RED, std::to_string(current) + " (" + std::to_string(buff) + ")") << std::endl;
-                }
-                else if (buff == 0) {
-                    ss << stat << current << std::endl;
+            auto buffPrinter = [&ss](const std::string& stat, int buff, int current, std::optional<int> max = std::nullopt) {
+                if (max) {
+                    if (buff < 0) {
+                        ss << stat << addCustomString(COLOR_RED, std::to_string(current) + "/" + std::to_string(*max) + " (" + std::to_string(buff) + ")") << std::endl;
+                    }
+                    else if (buff == 0) {
+                        ss << stat << current << "/" << *max << std::endl;
+                    }
+                    else {
+                        ss << stat << addCustomString(COLOR_GREEN, std::to_string(current) + "/" + std::to_string(*max) + " (+" + std::to_string(buff) + ")") << std::endl;
+                    }
                 }
                 else {
-                    ss << stat << addCustomString(COLOR_GREEN, std::to_string(current) + " (+" + std::to_string(buff) + ")") << std::endl;
+                    if (buff < 0) {
+                        ss << stat << addCustomString(COLOR_RED, std::to_string(current) + " (" + std::to_string(buff) + ")") << std::endl;
+                    }
+                    else if (buff == 0) {
+                        ss << stat << current << std::endl;
+                    }
+                    else {
+                        ss << stat << addCustomString(COLOR_GREEN, std::to_string(current) + " (+" + std::to_string(buff) + ")") << std::endl;
+                    }
                 }
-
             };
 
-            buffPrinterMax("HP:       ", player.getBuffHpMax(), player.getHp(), player.getHpMax());
-            buffPrinterMax("Stamina:  ", player.getBuffStaminaMax(), player.getStamina(), player.getStaminaMax());
+            buffPrinter("HP:       ", player.getBuffHpMax(), player.getHp(), player.getHpMax());
+            buffPrinter("Stamina:  ", player.getBuffStaminaMax(), player.getStamina(), player.getStaminaMax());
             buffPrinter("Attack:   ", player.getBuffDamageMax(), player.getDamageMax());
             buffPrinter("Defence:  ", player.getBuffDefence(), player.getDefence());
 

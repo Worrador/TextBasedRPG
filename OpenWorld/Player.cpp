@@ -47,7 +47,11 @@ void Player::levelUp()
 void Player::addItem(Item item)
 {
 	Inventory.push_back(std::move(item));
-	//Sort items based on name?
+
+	// Reorder items based on name
+	std::sort(Inventory.begin(), Inventory.end(), [](const auto& itemA, const auto& itemB) {
+		return itemA.getName() < itemB.getName();
+		});
 }
 
 void Player::useItem(const int& itemPos)
@@ -154,6 +158,11 @@ void Player::useItem(const int& itemPos)
 			*this += Inventory[itemPos];
 
 			Equipment.emplace_back(std::move(Inventory[itemPos]));
+			// Reorder items based on name
+			std::sort(Equipment.begin(), Equipment.end(), [](const auto& itemA, const auto& itemB) {
+				return itemA.getName() < itemB.getName();
+				});
+
 			Inventory.erase(Inventory.begin() + itemPos);
 
 			return;
@@ -172,24 +181,10 @@ void Player::unequipItem(const int& itemPos)
 	*this -= Equipment[itemPos];
 
 	Inventory.emplace_back(std::move(Equipment[itemPos]));
-	Equipment.erase(Equipment.begin() + itemPos);
-}
-
-std::vector<Item>& Player::getInventory()
-{
 	// Reorder items based on name
 	std::sort(Inventory.begin(), Inventory.end(), [](const auto& itemA, const auto& itemB) {
 		return itemA.getName() < itemB.getName();
 		});
 
-	return Inventory;
-}
-std::vector<Item>& Player::getEquipment()
-{
-	// Reorder items based on name
-	std::sort(Equipment.begin(), Equipment.end(), [](const auto& itemA, const auto& itemB) {
-		return itemA.getName() < itemB.getName();
-		});
-
-	return Equipment;
+	Equipment.erase(Equipment.begin() + itemPos);
 }

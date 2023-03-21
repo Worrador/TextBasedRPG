@@ -39,8 +39,8 @@ public:
 	inline const int& getBuffDefence() const { return buff_defence; };
 	inline const int& getBuffStaminaMax() const { return buff_staminaMax; };
 
-	std::vector<Item>& getInventory();
-	std::vector<Item>& getEquipment();
+	inline const std::vector<Item>& getInventory() const { return Inventory; };
+	inline const std::vector<Item>& getEquipment() const { return Equipment; };
 
 	inline const playerMap& getMap() const { return map; };
 	inline const playerMap& getKnownSettlements() const { return knownSettlements; };
@@ -57,6 +57,9 @@ public:
 	inline void setBuffDamageMax(int stat) { buff_damageMax = stat; };
 	inline void setBuffDefence(int stat) { buff_defence = stat; };
 	inline void setBuffStaminaMax(int stat) { buff_staminaMax = stat; };
+
+	// Provide way for sell menu to modify inventory, which is always returned as const ref by the getter
+	inline void popFromInv(int pos) { Inventory.erase(Inventory.cbegin() + pos); };
 
 
 private:

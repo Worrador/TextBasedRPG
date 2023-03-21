@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <queue>
 #include <stack>
+#include <optional>
 
 // Constants for menus
 constexpr auto KEY_UP = 72;
@@ -26,7 +27,7 @@ constexpr auto MENU_INDEXER_SIZE = 2;
 constexpr auto MENU_INDEXER_INDENT = MENU_POINT_INDENT + MENU_INDEXER_SIZE;
 constexpr auto MENU_DIVIDER_STRING = "\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4";
 // Colors
-constexpr auto COLOR_DEFAULT	= "[90m";
+constexpr auto COLOR_GREY		= "[90m";
 constexpr auto COLOR_RED		= "[91m";
 constexpr auto COLOR_GREEN		= "[92m";
 constexpr auto COLOR_YELLOW		= "[93m";

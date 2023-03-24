@@ -319,7 +319,7 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 
 	std::cout << player.getName() << " has won the battle.";
 
-	if (enemy.getName() == "Wolf" || enemy.getName() == "Fox") {
+	if (enemy.getName() == "Dragon" || enemy.getName() == "The Krakken") {
 		result = gameResult::Win;
 		return;
 	}

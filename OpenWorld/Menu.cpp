@@ -221,12 +221,21 @@ Player Menu::playerCreationMenu()
                 std::cout << "   " << "No, this one can't be escaped. But nice try." << std::endl;
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
-            std::cout << std::endl << " \x10 " << "In the game you can: travel, rest, look at your map (which is empty at first) " << std::endl << "   or use / equip / unequip or buy / sell items in the appropriate shops." << std::endl;
+            std::cout << std::endl << " \x10 " << "The goal of the game is to defeat a dragon or the Krakken." << std::endl;
             if (ESCAPE == _getch())
             {
                 std::cout << "   " << "Stop trying." << std::endl;
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
+
+            std::cout << std::endl << " \x10 " << "To to that, you need to gather items, level yourself up and travel across the land to meet enemies." << std::endl;
+            if (ESCAPE == _getch())
+            {
+                std::cout << "   " << "Stop trying, really." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            }
+            std::cout << std::endl << " \x10 " << "In the game you can also: rest, look at your map (which is empty at first) " << std::endl << "   or use / equip / unequip or buy / sell items in the appropriate shops." << std::endl;
+            _getch();
             std::cout << std::endl << " \x10 " << "Not every shop or rest option is available in every settlment. But the larger a settlment is" << std::endl << "   the more options you have regarding both." << std::endl << std::endl;
             _getch();
             std::cout << " \x10 " << "When traveling, you can encounter enemies. The type of encountered enemies will depend on your level, " << std::endl << "   the place that you are visiting and the places near that." << std::endl << std::endl;
@@ -235,9 +244,9 @@ Player Menu::playerCreationMenu()
             _getch();
             std::cout << " \x10 " << "You can check your experience on your player sheet, and when the time comes, you can level yourself up there." << std::endl << std::endl;
             _getch();
-            std::cout << " \x10 " << "As you travel across the land you can find other settlments. After you visit them they will be added to your map, " << std::endl << "   and wherever you go you will be able to check the shortest known path back to them." << std::endl << std::endl;
+            std::cout << " \x10 " << "As you travel across the land you can find other settlements. After you visit them they will be added to your map, " << std::endl << "   and wherever you go you will be able to check the shortest known path back to them." << std::endl << std::endl;
             _getch();
-            std::cout << " \x10 " << "This is the Alpha version of the game, hopefully more content will come later. But until that, good luck and have fun!" << std::endl;
+            std::cout << " \x10 " << "This is the second version of the game, hopefully more content will come later. " << std::endl << "   But until that, good luck and have fun!" << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             // Get user input to progress the game
             _getch();

@@ -29,4 +29,25 @@ int main()
     Game& game = Game::getInstance();
     // If playing is true, then loop the game
     game.gameLoop();
+
+    std::cout << "\033c";
+
+    std::string line = "";
+    std::ifstream inFile;
+    std::stringstream ss;
+
+    if (game.getResult() == gameResult::Lose) {
+        inFile.open("Resources\\lose_art.txt");
+    }
+    else {
+        inFile.open("Resources\\win_art.txt");
+    }
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            ss << line << std::endl;
+        }
+    }
+    inFile.close();
+    std::cout << ss.str();
+    _getch();
 }

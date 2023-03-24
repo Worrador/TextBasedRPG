@@ -19,6 +19,13 @@ constexpr auto MENU_TYPE_SHOP_CONSUMABLE	= SHOP_TYPE_CONSUMABLE;
 constexpr auto MENU_TYPE_QUIT				= "Quit";
 
 
+enum class gameResult {
+	Lose = -1,
+	stillPlaying = 0,
+	Win = 1
+};
+
+
 // Player is manipulated manipulated through this object
 class Game
 {
@@ -43,6 +50,8 @@ public:
 	}
 	void gameLoop();
 
+	inline const gameResult& getResult() { return result; };
+
 private:
 
 	// Functions
@@ -65,7 +74,7 @@ private:
 
 	// Modifiers
 	int mainMenuChoice;
-	bool playing;
+	gameResult result = gameResult::stillPlaying;
 	Menu menu;
 	Player player;
 	int currentPoint = 0;

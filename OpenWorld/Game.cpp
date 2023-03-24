@@ -192,7 +192,7 @@ void Game::playMusic(bool isSettlement = true)
 	waveOutSetVolume(NULL, (leftVolume << 16) | rightVolume);
 };
 
-Game::Game() : mainMenuChoice(0), playing(true), player(menu.playerCreationMenu())
+Game::Game() : mainMenuChoice(0), result(gameResult::stillPlaying), player(menu.playerCreationMenu())
 {
 	playMusic();
 	generateWorldMap();
@@ -248,7 +248,7 @@ void Game::travel(int travelOption)
 		std::cout << std::endl;
 	}
 
-	if (playing) {
+	if (result == gameResult::stillPlaying) {
 		std::cout << "You have arrived to your destination." << std::endl; 
 		previousPoint = currentPoint;
 		currentPoint = worldMap[currentPoint].second[travelOption];
@@ -310,7 +310,7 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 		makeAttack(enemy, player);
 		if (player.getHp() <= 0) {
 			std::cout << player.getName() << " has died." << std::endl;
-			playing = false;
+			result = gameResult::Lose;
 			return;
 		}
 
@@ -318,6 +318,11 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 	}
 
 	std::cout << player.getName() << " has won the battle.";
+
+	if (enemy.getName() == "Wolf" || enemy.getName() == "Fox") {
+		result = gameResult::Win;
+		return;
+	}
 
 	// Searching costs stamina, the more items you have, the more it costs
 	int staminaNeeded = (int)std::floor(player.getEquipment().size() / 2);
@@ -438,7 +443,7 @@ void Game::rest(int restOption)
 void Game::gameLoop()
 {
 	int selectedMenuPoint = 0;
-	while (playing) {
+	while (result == gameResult::stillPlaying) {
 		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName(), worldMap[currentPoint].first->isSettlement()) };
 		// List of menu points
 		std::vector <std::string> dynamicMenuPoints = {

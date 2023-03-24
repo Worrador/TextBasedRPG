@@ -156,9 +156,6 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     std::stringstream ss;
     auto banner_width = title.length() + 2;
     const std::string banner = "\xB4 " + title + " \xC3";
-    //ss << "\t   \xDA" << std::string(banner_width, '\xC4') << "\xBF" << std::endl;
-    //ss << banner << std::endl;
-    //ss << "\t   \xC0" << std::string(banner_width, '\xC4') << "\xD9" << std::endl;
 
     std::string line = "";
     std::ifstream inFile;

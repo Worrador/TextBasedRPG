@@ -1,4 +1,4 @@
-# OpenWorld
+# Text-based RPG, find your own adventure
 
 This project for me served the purpose of using modern c++ features in-depth and implementing the best coding practises. The game is a command-line based RPG, which the player can play using only the keyboard.
 The game parses the data stored in different excel files (for ease of modification) and generates a random world.

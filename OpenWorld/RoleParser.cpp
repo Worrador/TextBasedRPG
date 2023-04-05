@@ -33,16 +33,22 @@ void RoleParser::parseRoles()
 
             const auto& roleName = converter.to_bytes((sheet->readStr(row, 0)));
 
-            parsedRoles.emplace_back(
-                roleName,
-                static_cast<int>(sheet->readNum(row, 1)),
-                static_cast<int>(sheet->readNum(row, 2)),
-                static_cast<int>(sheet->readNum(row, 3)),
-                static_cast<int>(sheet->readNum(row, 4)),
-                static_cast<int>(sheet->readNum(row, 5)),
-                static_cast<int>(sheet->readNum(row, 6)),
-                static_cast<int>(sheet->readNum(row, 7)),
-                static_cast<int>(sheet->readNum(row, 8)));
+            try {
+                parsedRoles.emplace_back(
+                    roleName,
+                    static_cast<int>(sheet->readNum(row, 1)),
+                    static_cast<int>(sheet->readNum(row, 2)),
+                    static_cast<int>(sheet->readNum(row, 3)),
+                    static_cast<int>(sheet->readNum(row, 4)),
+                    static_cast<int>(sheet->readNum(row, 5)),
+                    static_cast<int>(sheet->readNum(row, 6)),
+                    static_cast<int>(sheet->readNum(row, 7)),
+                    static_cast<int>(sheet->readNum(row, 8)));
+            }
+            catch (...) {
+                std::cerr << "Error occurred while parsing roles." << std::endl;
+            }
+
         }
     }
 

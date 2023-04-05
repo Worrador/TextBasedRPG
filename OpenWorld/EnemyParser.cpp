@@ -32,13 +32,18 @@ void EnemyParser::parseEnemies()
             // Get name of enemy and convert it to string
             const auto& enemyName = converter.to_bytes((sheet->readStr(row, 0)));
 
-            parsedEnemies.emplace_back(
-                enemyName,
-                static_cast<int>(sheet->readNum(row, 1)),
-                static_cast<int>(sheet->readNum(row, 2)),
-                static_cast<int>(sheet->readNum(row, 3)),
-                static_cast<int>(sheet->readNum(row, 4)),
-                static_cast<int>(sheet->readNum(row, 5)));
+            try{
+                parsedEnemies.emplace_back(
+                    enemyName,
+                    static_cast<int>(sheet->readNum(row, 1)),
+                    static_cast<int>(sheet->readNum(row, 2)),
+                    static_cast<int>(sheet->readNum(row, 3)),
+                    static_cast<int>(sheet->readNum(row, 4)),
+                    static_cast<int>(sheet->readNum(row, 5)));
+            }
+            catch (...) {
+                std::cerr << "Error occurred while parsing roles: " << std::endl;
+            }
         }
     }
     book->release();

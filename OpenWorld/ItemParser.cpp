@@ -59,21 +59,26 @@ void ItemParser::parseArmors()
         // Get type of item and convert it to string
         const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
 
-        // Create item and add it to list
-        Item item(
-            name_string,
-            roles,
-            item_type_string,
-            static_cast<int>(sheet->readNum(row, 3)),
-            static_cast<int>(sheet->readNum(row, 4)),
-            static_cast<int>(sheet->readNum(row, 5)),
-            static_cast<int>(sheet->readNum(row, 6)));
+        try{
+            // Create item and add it to list
+            Item item(
+                name_string,
+                roles,
+                item_type_string,
+                static_cast<int>(sheet->readNum(row, 3)),
+                static_cast<int>(sheet->readNum(row, 4)),
+                static_cast<int>(sheet->readNum(row, 5)),
+                static_cast<int>(sheet->readNum(row, 6)));
 
-        parsedArmorsRaritySum += item.getRarityValue();
-        if (std::find(parsedArmorTypes.cbegin(), parsedArmorTypes.cend(), item_type_string) == parsedArmorTypes.cend()) {
-            parsedArmorTypes.emplace_back(item_type_string);
+            parsedArmorsRaritySum += item.getRarityValue();
+            if (std::find(parsedArmorTypes.cbegin(), parsedArmorTypes.cend(), item_type_string) == parsedArmorTypes.cend()) {
+                parsedArmorTypes.emplace_back(item_type_string);
+            }
+            parsedArmors.push_back(std::move(item));
         }
-        parsedArmors.push_back(std::move(item));
+        catch (...) {
+            std::cerr << "Error occurred while parsing armors." << std::endl;
+        }
     }
     book->release();
 }
@@ -113,21 +118,26 @@ void ItemParser::parseConsumables()
         // Get type of item and convert it to string
         const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 1));
 
-        // Create item and add it to list
-        Item item(
-            name_string,
-            roles,
-            item_type_string,
-            static_cast<int>(sheet->readNum(row, 2)),
-            static_cast<int>(sheet->readNum(row, 3)),
-            static_cast<int>(sheet->readNum(row, 4)),
-            static_cast<int>(sheet->readNum(row, 5)));
+        try{
+            // Create item and add it to list
+            Item item(
+                name_string,
+                roles,
+                item_type_string,
+                static_cast<int>(sheet->readNum(row, 2)),
+                static_cast<int>(sheet->readNum(row, 3)),
+                static_cast<int>(sheet->readNum(row, 4)),
+                static_cast<int>(sheet->readNum(row, 5)));
 
-        parsedConsumablesRaritySum += item.getRarityValue();
-        if (std::find(parsedConsumableTypes.cbegin(), parsedConsumableTypes.cend(), item_type_string) == parsedConsumableTypes.cend()) {
-            parsedConsumableTypes.emplace_back(item_type_string);
+            parsedConsumablesRaritySum += item.getRarityValue();
+            if (std::find(parsedConsumableTypes.cbegin(), parsedConsumableTypes.cend(), item_type_string) == parsedConsumableTypes.cend()) {
+                parsedConsumableTypes.emplace_back(item_type_string);
+            }
+            parsedConsumables.push_back(std::move(item));
         }
-        parsedConsumables.push_back(std::move(item));
+        catch (...) {
+            std::cerr << "Error occurred while parsing consumables." << std::endl;
+        }
     }
     book->release();
 }
@@ -178,21 +188,26 @@ void ItemParser::parseWeapons()
         // Get type of item and convert it to string
         const auto& item_type_string = converter.to_bytes(sheet->readStr(row, 2));
 
-        // Create item and add it to list
-        Item item(
-            name_string,
-            roles,
-            item_type_string,
-            static_cast<int>(sheet->readNum(row, 3)),
-            static_cast<int>(sheet->readNum(row, 4)),
-            static_cast<int>(sheet->readNum(row, 5)),
-            static_cast<int>(sheet->readNum(row, 6)));
+        try{
+            // Create item and add it to list
+            Item item(
+                name_string,
+                roles,
+                item_type_string,
+                static_cast<int>(sheet->readNum(row, 3)),
+                static_cast<int>(sheet->readNum(row, 4)),
+                static_cast<int>(sheet->readNum(row, 5)),
+                static_cast<int>(sheet->readNum(row, 6)));
 
-        parsedWeaponsRaritySum += item.getRarityValue();
-        if (std::find(parsedWeaponTypes.cbegin(), parsedWeaponTypes.cend(), item_type_string) == parsedWeaponTypes.cend()) {
-            parsedWeaponTypes.emplace_back(item_type_string);
+            parsedWeaponsRaritySum += item.getRarityValue();
+            if (std::find(parsedWeaponTypes.cbegin(), parsedWeaponTypes.cend(), item_type_string) == parsedWeaponTypes.cend()) {
+                parsedWeaponTypes.emplace_back(item_type_string);
+            }
+            parsedWeapons.push_back(std::move(item));
         }
-        parsedWeapons.push_back(std::move(item));
+        catch (...) {
+            std::cerr << "Error occurred while parsing weapons." << std::endl;
+        }
     }
     book->release();
 }

@@ -767,13 +767,13 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
             // Get known IDs
             const auto& knownIds = player.getMap();
 
-            // Stack to store nodes to be visited with the paths do them
+            // Queue to store nodes to be visited with the paths do them
             std::queue<std::pair<int, std::vector<int>>> q;
 
             // Set to store visited noded
             std::unordered_set<int> visited;
 
-            // Init stack, TODO: needs review how to init
+            // Init queue
             q.push(std::make_pair(startLocationId, std::vector<int>{startLocationId}));
 
             // While there are nodes to be visited
@@ -790,7 +790,7 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
                     return currPath;
                 }
                 if (visited.find(currId) == visited.end()) {
-                    // Add to visited, TODO: review addition
+                    // Add to visited
                     visited.insert(currId);
 
                     // Add every neighbor to the stack with their path if they are known to the player
@@ -804,8 +804,6 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
                 }
             }
             return std::vector<int>();
-
-
         };
 
         auto getDynamicPaths = [&knownSettlements, &findPath, &worldMap,&currentPointId](std::stringstream& ss, const int selectedMenuPoint) ->void {

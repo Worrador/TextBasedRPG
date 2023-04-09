@@ -26,7 +26,7 @@ Enemy Game::spawnEnemy()
 
 	std::copy_if(parsedEnemies.cbegin(), parsedEnemies.cend(), std::back_inserter(currentEnemies),
 		[&](const auto& enemy) {
-			return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(), 
+			return(std::find_if(currentEnemyNames.cbegin(), currentEnemyNames.cend(),
 				[&](const auto& enemyName) {
 					return(enemyName == enemy.getName());
 				}) != currentEnemyNames.cend());
@@ -108,6 +108,12 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 				selectedTerrainIndex = getRandomBetween(0, (int)terrains.size() - 1);
 			} while (!isValidTerrainChoice(selectedTerrainIndex, currentPlaceIndex));
 
+			// LESSON: Use make_shared whenever it is possible to create shared objects
+			// In case of exceptions if it was called in a function like:
+			// processWidget(std::shared_ptr<Widget>(new Widget), computePriority());
+			// Then cumputePritority might throw after new but before shared_ptr constructor
+			// And its to constructor, not one (but hey, using make shared can cause virtua leakage)
+			// When a weakpointer still points to the object table, the object space remains still alocated
 			newPlace = std::make_shared<Terrain>(terrains[selectedTerrainIndex]);
 		}
 		else {
@@ -117,6 +123,8 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 		}
 
 		// Add the new place to the world map
+		// LESSON: Emplace back is better for sure when we pass objects that are different from the container
+		// Since this way no temporary needs to be created during insertion
 		worldMap.emplace_back(std::move(newPlace), std::vector<int>{currentPlaceIndex});
 
 		// Add connection to current node
@@ -162,9 +170,9 @@ void Game::generateWorldMap() {
 			}
 			random_ind = getRandomBetween(0, (int)worldMap.size() - 1);
 			for (auto& followingName: worldMap[random_ind].first->getFollowingTerrainNames()) {
-				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.cbegin(), worldMap[random_ind].second.cend(), 
+				reqNoFollowingAvailable &= (std::find_if(worldMap[random_ind].second.cbegin(), worldMap[random_ind].second.cend(),
 					[&](const auto& mapInd) {
-						return worldMap[mapInd].first->getName() == followingName; 
+						return worldMap[mapInd].first->getName() == followingName;
 					}) != worldMap[random_ind].second.cend());
 			}
 			reqSizeLimitReached = ((worldMap[random_ind].first->getMaxConnectionSize() <= worldMap[random_ind].second.size()));
@@ -185,7 +193,7 @@ void Game::playMusic(bool isSettlement = true)
 		wss << L"Resources\\" << player.getRoleName().c_str() << ".wav";
 		nowSettlementPlaying = false;
 	}
-	
+
 	PlaySound(wss.str().c_str(), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	DWORD leftVolume = 2000;
 	DWORD rightVolume = 2000;
@@ -249,7 +257,7 @@ void Game::travel(int travelOption)
 	}
 
 	if (result == gameResult::stillPlaying) {
-		std::cout << "You have arrived to your destination." << std::endl; 
+		std::cout << "You have arrived to your destination." << std::endl;
 		previousPoint = currentPoint;
 		currentPoint = worldMap[currentPoint].second[travelOption];
 		bool isSettelment = false;
@@ -345,7 +353,7 @@ void Game::fight(Enemy& enemy, bool playerInitialize)
 		player.setGold(player.getGold() + enemy.getGold());
 	}
 
-	
+
 	player.setExp(player.getExp() + enemy.getExpDrop());
 	return;
 }
@@ -365,12 +373,12 @@ void Game::run(Enemy& enemy)
 		player.setStamina(min(player.getRole().getStaminaIncr(), player.getStaminaMax()));
 		wait(enemy);
 	}
-	
+
 }
 
 void Game::wait(Enemy& enemy)
 {
-	// The enemy might not attack you and you can continue your journey, 
+	// The enemy might not attack you and you can continue your journey,
 	// this could depend on your level difference, difficulty, terrain and a lot of other things.
 	// Lets go with agressivity of attacker
 	if (getRandomWithChance((double)enemy.getAggressivity() / (double)MAX_ENEMY_AGGRESSIVITY)) {
@@ -456,7 +464,7 @@ void Game::gameLoop()
 
 		// Add additional menu points before the quit option
 		std::vector <std::string> placeMenuOptions = worldMap[currentPoint].first->getMenuOptions();
-		dynamicMenuPoints.insert(dynamicMenuPoints.cbegin() + dynamicMenuPoints.size() - 1, 
+		dynamicMenuPoints.insert(dynamicMenuPoints.cbegin() + dynamicMenuPoints.size() - 1,
 			placeMenuOptions.cbegin(), placeMenuOptions.cend());
 
 		std::vector<std::string> options = {};

@@ -106,7 +106,7 @@ void Menu::mainMenuGenerator(int& selectedMenuPoint, const std::vector<std::stri
                 ss << dynamicMenuPoints[index];
                 ss << std::string(ASCII_ART_LENGTH - (MENU_INDEXER_INDENT + 2) - dynamicMenuPoints[index].length(), ' ') << '\xB3' << std::endl;
             }
-            
+
         }
         ss << std::string(ASCII_ART_LENGTH, ' ') << '\xB3' << std::endl;
 
@@ -173,7 +173,7 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     inFile.close();
     int divider_length1 = (int)std::floor((ASCII_ART_LENGTH - banner.length()) / 2);
     int divider_length2 = ASCII_ART_LENGTH - (int)banner.length() - divider_length1;
-    
+
 
     auto myString = "\xDA" + std::string(banner_width, '\xC4') + "\xBF";
     std::string s = ss.str();
@@ -271,9 +271,17 @@ Player Menu::playerCreationMenu()
             dynamicMenuPoints.emplace_back(role.getRoleName());
         }
 
-        // Move so we dont have to copy
+        // LESSON: Do not move dynamicMenuPoints here as we accept it as lvalue reference
+        // Accepting it as rvalue reference and moving would also work as we dont need it anymore nor her
+        // nor in the other code.
+        // This way only one binding is made (that has no cost basically)
+        // If we were to take this parameter in menuGenerator by value, then it would either mean a copy
+        // or a move, depending on how we pass it in (that is more)
+        // Consider passing by value for parameters that are always copied (no changing minds inside the function)
+        // and cheap to move. This way we dont have to implement two functions (taking lvalues and rvalues)
+        // Nor a template function that accepts universal references which are then forwarded correctly (if used like that)
         int selectedMenuPoint = 0;
-        menuGenerator(selectedMenuPoint, staticMenuLines, std::move(dynamicMenuPoints), false);
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
         return Player(name, isMale, roles[selectedMenuPoint]);
     }
     // Do not return with std::move as it prohibits copy elision.
@@ -341,7 +349,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 {
     int selectedMenuPoint = 0;
     // Generate items this should be in the location constructor
-    
+
     while (1) {
         // List of menu points
         std::vector <std::string> staticMenuLines = {
@@ -762,7 +770,7 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
         // This lambda function finds a path between two locations using a breadth-first search algorithm
         // The function takes in the starting and ending location IDs, and the world map
         // It returns a vector of integers representing the path between the two locations
-        const auto findPath = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {     
+        const auto findPath = [&player](auto const& startLocationId, auto const& endLocationId, auto worldMap) -> std::vector<int> {
 
             // Get known IDs
             const auto& knownIds = player.getMap();
@@ -877,7 +885,7 @@ void Menu::useItems(Player& player)
                 ss << std::endl << "You don't have anything to equip." << std::endl;
                 return;
             }
-            
+
         };
 
         // List the eqipped items

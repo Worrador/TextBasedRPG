@@ -37,17 +37,29 @@ int main()
     std::stringstream ss;
 
     if (game.getResult() == gameResult::Lose) {
-        inFile.open("Resources\\lose_art.txt");
+        try {
+            inFile.open("Resources\\lose_art.txt");
+        }
+        catch (const std::ifstream::failure& e) {
+            std::cout << "YOU LOSE";
+        }
     }
     else {
-        inFile.open("Resources\\win_art.txt");
+        try {
+            inFile.open("Resources\\win_art.txt");
+        }
+        catch (const std::ifstream::failure& e) {
+            std::cout << "YOU WIN";
+        }
+
     }
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
             ss << line << std::endl;
         }
+        inFile.close();
     }
-    inFile.close();
+
     std::cout << ss.str();
     _getch();
 }

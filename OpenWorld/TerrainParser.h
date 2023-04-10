@@ -1,13 +1,13 @@
 #pragma once
-#include "libxl.h"
 #include <sstream>
 #include <vector>
-#include <codecvt>
 #include <functional>
 #include "Terrain.h"
 #include "EnemyParser.h"
+#include "IResourceParser.h"
+#include "ExcelHandler.h"
 
-class TerrainParser
+class TerrainParser : public IResourceParser
 {
 public:
     // Delete copy and move constructor and assignment operator to prevent copying

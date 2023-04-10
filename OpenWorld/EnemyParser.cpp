@@ -16,12 +16,10 @@ void EnemyParser::parseEnemies()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
-    libxl::Book* book = xlCreateXMLBook();
-    if (!book->load(L"Resources\\Enemies.xlsx")) {
-        book->release();
-        resourceError = 1;
-        return;
-    }
+
+    auto eHandler = ExcelHandler(L"Resources\\Enemies.xlsx");
+    const auto& book = eHandler.getBook();
+
     // Get the enemies
     libxl::Sheet* sheet = book->getSheet(0);
     if (sheet)
@@ -46,5 +44,4 @@ void EnemyParser::parseEnemies()
             }
         }
     }
-    book->release();
 }

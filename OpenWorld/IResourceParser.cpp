@@ -1,0 +1,1 @@
+#include "IResourceParser.h"

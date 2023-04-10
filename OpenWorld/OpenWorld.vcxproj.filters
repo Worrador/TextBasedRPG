@@ -78,6 +78,12 @@
     <ClCompile Include="EnemyParser.cpp">
       <Filter>Source Files\ResourceParsers</Filter>
     </ClCompile>
+    <ClCompile Include="IResourceParser.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
+    <ClCompile Include="ExcelHandler.cpp">
+      <Filter>Source Files\ResourceParsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -132,6 +138,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IResourceParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExcelHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

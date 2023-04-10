@@ -1,12 +1,12 @@
 #pragma once
-#include "libxl.h"
 #include <sstream>
 #include <vector>
-#include <codecvt>
 #include <functional>
 #include "Settlement.h"
+#include "IResourceParser.h"
+#include "ExcelHandler.h"
 
-class SettlementParser
+class SettlementParser : public IResourceParser
 {
 public:
     // Delete copy and move constructor and assignment operator to prevent copying

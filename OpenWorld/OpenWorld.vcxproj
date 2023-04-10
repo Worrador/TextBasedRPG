@@ -154,7 +154,9 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyParser.cpp" />
+    <ClCompile Include="ExcelHandler.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IResourceParser.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemParser.cpp" />
     <ClCompile Include="Place.cpp" />
@@ -174,7 +176,9 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyParser.h" />
+    <ClInclude Include="ExcelHandler.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="IResourceParser.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemParser.h" />
     <ClInclude Include="Place.h" />

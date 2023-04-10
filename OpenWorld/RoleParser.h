@@ -1,12 +1,12 @@
 #pragma once
-#include "libxl.h"
 #include <sstream>
 #include <vector>
-#include <codecvt>
 #include <functional>
 #include "Role.h"
+#include "IResourceParser.h"
+#include "ExcelHandler.h"
 
-class RoleParser
+class RoleParser : public IResourceParser
 {
 public:
     // Delete copy and move constructor and assignment operator to prevent copying
@@ -25,18 +25,12 @@ public:
     }
 
     // Method to access the parsedItems vector
-    inline const int& getResourceError() { return resourceError; }
     inline std::vector<Role>& getParsedRoles() { return parsedRoles; }
 
 private:
     // Private constructor to prevent direct instantiation
     RoleParser();
     ~RoleParser();
-
-    int resourceError = 0;
-
-    // String converter object
-    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 
     void parseRoles();
 

@@ -18,7 +18,8 @@ void ItemParser::parseArmors()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
-    libxl::Book* book = xlCreateXMLBook();
+    auto eHandler = ExcelHandler(L"Resources\\Enemies.xlsx");
+    const auto& book = eHandler.getBook();
     if (!book->load(L"Resources\\Armors.xlsx")) {
         book->release();
         resourceError = 1;
@@ -80,14 +81,14 @@ void ItemParser::parseArmors()
             std::cerr << "Error occurred while parsing armors." << std::endl;
         }
     }
-    book->release();
 }
 
 void ItemParser::parseConsumables()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
-    libxl::Book* book = xlCreateXMLBook();
+    auto eHandler = ExcelHandler(L"Resources\\Enemies.xlsx");
+    const auto& book = eHandler.getBook();
     if (!book->load(L"Resources\\Consumables.xlsx")) {
         book->release();
         resourceError = 1;
@@ -139,7 +140,6 @@ void ItemParser::parseConsumables()
             std::cerr << "Error occurred while parsing consumables." << std::endl;
         }
     }
-    book->release();
 }
 
 
@@ -147,7 +147,8 @@ void ItemParser::parseWeapons()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
-    libxl::Book* book = xlCreateXMLBook();
+    auto eHandler = ExcelHandler(L"Resources\\Enemies.xlsx");
+    const auto& book = eHandler.getBook();
     if (!book->load(L"Resources\\Weapons.xlsx")) {
         book->release();
         resourceError = 1;
@@ -209,5 +210,4 @@ void ItemParser::parseWeapons()
             std::cerr << "Error occurred while parsing weapons." << std::endl;
         }
     }
-    book->release();
 }

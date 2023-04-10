@@ -16,12 +16,9 @@ void SettlementParser::parseSettlements()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
-    libxl::Book* book = xlCreateXMLBook();
-    if (!book->load(L"Resources\\Settlements.xlsx")) {
-        book->release();
-        resourceError = 1;
-        return;
-    }
+    auto eHandler = ExcelHandler(L"Resources\\Settlements.xlsx");
+    const auto& book = eHandler.getBook();
+
     // Get the Settlements
     libxl::Sheet* sheet = book->getSheet(0);
     if (sheet)
@@ -37,5 +34,4 @@ void SettlementParser::parseSettlements()
             }
         }
     }
-    book->release();
 }

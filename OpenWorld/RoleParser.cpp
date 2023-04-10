@@ -16,12 +16,9 @@ void RoleParser::parseRoles()
 {
     // Somehow it cannot be handled with unique ptr: 
     // std::unique_ptr <libxl::Book, std::function<void(libxl::Book*)>> book{ xlCreateXMLBook(), [](libxl::Book* book) { book->release(); } };
-    libxl::Book* book = xlCreateXMLBook();
-    if (!book->load(L"Resources\\Roles.xlsx")) {
-        book->release();
-        resourceError = 1;
-        return;
-    }
+    auto eHandler = ExcelHandler(L"Resources\\Roles.xlsx");
+    const auto& book = eHandler.getBook();
+
     // Get the roles
     libxl::Sheet* sheet = book->getSheet(0);
     if (sheet)
@@ -56,8 +53,4 @@ void RoleParser::parseRoles()
     std::sort(parsedRoles.begin(), parsedRoles.end(), [](const auto& roleA, const auto& roleB) {
             return roleA.getRoleName() < roleB.getRoleName();
         });
-
-
-
-    book->release();
 }

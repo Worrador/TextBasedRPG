@@ -26,15 +26,15 @@ public:
     }
 
     // Method to access the parsedItems vector
-    inline std::vector<Item>& getParsedWeapons() { return parsedWeapons; }
-    inline std::vector<Item>& getParsedArmors() { return parsedArmors; }
-    inline std::vector<Item>& getParsedConsumables() { return parsedConsumables; }
+    inline std::vector<Item> getParsedWeapons() { return parsedWeapons; }
+    inline std::vector<Item> getParsedArmors() { return parsedArmors; }
+    inline std::vector<Item> getParsedConsumables() { return parsedConsumables; }
     inline std::vector<std::string>& getParsedWeaponTypes() { return parsedWeaponTypes; }
     inline std::vector<std::string>& getParsedArmorTypes() { return parsedArmorTypes; }
     inline std::vector<std::string>& getParsedConsumableTypes() { return parsedConsumableTypes; }
-    inline const int& getWeaponsRaritySum() { return parsedWeaponsRaritySum; }
-    inline const int& getArmorsRaritySum() { return parsedArmorsRaritySum; }
-    inline const int& getConsumablesRaritySum() { return parsedConsumablesRaritySum; }
+    inline int getWeaponsRaritySum() { return parsedWeaponsRaritySum; }
+    inline int getArmorsRaritySum() { return parsedArmorsRaritySum; }
+    inline int getConsumablesRaritySum() { return parsedConsumablesRaritySum; }
 
 private:
     // Private constructor to prevent direct instantiation

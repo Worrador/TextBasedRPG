@@ -19,9 +19,13 @@ class Item
 public:
 	Item(const std::string& name, const std::vector<roleName>& roles, const itemType& itemType, int hpMax, int damageMax, int defence, int staminaMax);
 
+	//LESSON: lets use the copy and swap idom for construction strong exception safe copies of objects
 	// Operators
+	Item& operator=(const Item& other) noexcept;
+
 
 	// Functions
+	friend void swap(Item& lhs, Item& rhs) noexcept;
 
 	// Accessors
 	inline const std::string& getName() const { return name; };

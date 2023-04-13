@@ -183,6 +183,7 @@ std::string Menu::createBanner(const std::string& title, bool isSettlement)
     s += std::string(divider_length1, ' ') + "\xC0" + std::string(banner_width, '\xC4') + "\xD9" + std::string(divider_length2, ' ') + "\xB3";
 
     // Named return value optimization is used (NRVO) when only one object can be returned
+    // As opposed to RVO when a right hand side object is returned like return myClass();
     return s;
 }
 
@@ -284,7 +285,7 @@ Player Menu::playerCreationMenu()
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
         return Player(name, isMale, roles[selectedMenuPoint]);
     }
-    // Do not return with std::move as it prohibits copy elision.
+    // LESSON: Do not return with std::move as it prohibits copy elision. Use RVO
 }
 
 int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints)
@@ -798,7 +799,7 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
                     return currPath;
                 }
                 if (visited.find(currId) == visited.end()) {
-                    // Add to visited
+                    // Add to visited, as we can have circular paths
                     visited.insert(currId);
 
                     // Add every neighbor to the stack with their path if they are known to the player

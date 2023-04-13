@@ -1,7 +1,5 @@
 #include "Item.h"
 
-Item::
-
 Item::Item(const std::string& name, const std::vector<roleName>& roles, const itemType& type, int hpMax, int damageMax, 
 	int defence, int staminaMax) :
 	name(name), roles(roles), type(type), hpMax(hpMax), damageMax(damageMax), defence(defence), staminaMax(staminaMax)

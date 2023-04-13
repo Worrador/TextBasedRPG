@@ -16,9 +16,9 @@ public:
 	Enemy(const std::string& name, int hpMax, int dmgMax, int defence, int staminaMax, int aggressivity);
 
 	// Operators
-	Enemy& operator*(const int& scaleToLevel);
+	Enemy& operator*(int scaleToLevel);
 
-	Item getRandomItem(const itemRarity& rarityName);
+	Item getRandomItem(itemRarity rarityName);
 
 	// Functions
 

@@ -16,7 +16,7 @@ Enemy::Enemy(const std::string& name, int hpMax, int dmgMax, int defence, int st
 	lootItems.emplace_back(getRandomItem(this->rarityName));
 }
 
-Enemy& Enemy::operator*(const int& scaleToLevel)
+Enemy& Enemy::operator*(int scaleToLevel)
 {
 	int scaler = std::max((int)(scaleToLevel * 0.5), 1);
 	this->setHpMax(this->getHpMax() * scaler);
@@ -36,13 +36,13 @@ Enemy& Enemy::operator*(const int& scaleToLevel)
 	return *this;
 }
 
-Item Enemy::getRandomItem(const itemRarity& rarityName) {
+Item Enemy::getRandomItem(itemRarity rarityName) {
 
 	std::vector<Item> parsedItems = ItemParser::getInstance().getParsedArmors();
 	std::vector<Item> parsedItems2 = ItemParser::getInstance().getParsedWeapons();
 	std::vector<Item> parsedItems3 = ItemParser::getInstance().getParsedConsumables();
-	parsedItems.insert(parsedItems.cbegin() + parsedItems.size() - 1, parsedItems2.begin(), parsedItems2.end());
-	parsedItems.insert(parsedItems.cbegin() + parsedItems.size() - 1, parsedItems3.begin(), parsedItems3.end());
+	parsedItems.insert(parsedItems.cbegin() + parsedItems.size(), parsedItems2.begin(), parsedItems2.end());
+	parsedItems.insert(parsedItems.cbegin() + parsedItems.size(), parsedItems3.begin(), parsedItems3.end());
 
 	// shuffle parseditems vector while we do not get an item that is good in rarity
 	int randomItemNum;

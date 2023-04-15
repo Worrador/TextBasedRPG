@@ -5,7 +5,7 @@ class IResourceParser
 {
 public:
     // Method to access the parsedItems vector
-    inline const int& getResourceError() { return resourceError; }
+    int getResourceError() { return resourceError; }
 
 protected:
     int resourceError = 0;

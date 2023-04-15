@@ -15,13 +15,12 @@
 #include <vector>
 
 using std::chrono::steady_clock;
-using secs = std::chrono::duration<double>;
+using std::chrono::duration;
 
 
 int main()
 {
     // Start parsing resources
-    auto time_thread_start = steady_clock::now();
     std::vector<std::future<int>> resourceErrors;
 
     resourceErrors.emplace_back(std::async(std::launch::async, []() {return RoleParser::getInstance().getResourceError(); }));
@@ -29,11 +28,6 @@ int main()
     resourceErrors.emplace_back(std::async(std::launch::async, []() {return EnemyParser::getInstance().getResourceError(); }));
     resourceErrors.emplace_back(std::async(std::launch::async, []() {return SettlementParser::getInstance().getResourceError(); }));
     resourceErrors.emplace_back(std::async(std::launch::async, []() {return TerrainParser::getInstance().getResourceError(); }));
-
-    using std::chrono::duration;
-    duration<double, std::milli> ms_double = steady_clock::now() - time_thread_start;
-    std::cout << "Time took to parse: " << ms_double.count() << std::endl;
-    _getch();
 
     for (auto index = 0; index < resourceErrors.size(); ++index) {
         if (resourceErrors[index].get()) {
@@ -57,7 +51,7 @@ int main()
         try {
             inFile.open("Resources\\lose_art.txt");
         }
-        catch (const std::ifstream::failure& e) {
+        catch (...) {
             std::cout << "YOU LOSE";
         }
     }
@@ -65,7 +59,7 @@ int main()
         try {
             inFile.open("Resources\\win_art.txt");
         }
-        catch (const std::ifstream::failure& e) {
+        catch (...) {
             std::cout << "YOU WIN";
         }
 

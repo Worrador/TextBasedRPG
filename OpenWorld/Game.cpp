@@ -41,7 +41,7 @@ Enemy Game::spawnEnemy()
 
 	// Generate random number and iterate until an enemy is selected
 	int randomEnemyNum = getRandomBetween(0, currentEnemiesRaritySum);
-	int enemyIndex = -1;
+	int enemyIndex{ -1 };
 
 	while (randomEnemyNum > 0) {
 		enemyIndex++;
@@ -54,7 +54,7 @@ Enemy Game::spawnEnemy()
 static auto settlements = SettlementParser::getInstance().getParsedSettlements();
 static auto terrains = TerrainParser::getInstance().getParsedTerrains();
 static std::queue<int> placesQueue;
-static int worldMapIndex = 0;
+static int worldMapIndex{};
 
 // Returns true if the selected terrain is a valid choice for the current place
 bool Game::isValidTerrainChoice(int selectedTerrainIndex, int currentPlaceIndex) {
@@ -101,7 +101,7 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 		// Choose a random settlement or terrain to add to the map
 		std::shared_ptr<Place> newPlace;
 		if (!getRandomWithChance(SETTLEMENT_TERRAIN_RATIO) || (settlements.empty())) {
-			int selectedTerrainIndex = 0;
+			int selectedTerrainIndex{};
 
 			// Keep generating a new random number until it fits the requirements
 			do {
@@ -236,7 +236,7 @@ void Game::travel(int travelOption)
 			"Run",
 			"Wait"
 		};
-		int selectedMenuPoint = 0;
+		int selectedMenuPoint{};
 		menu.menuGenerator(selectedMenuPoint, staticLines, dynamicMenuPoints, false);
 
 		switch (selectedMenuPoint) {
@@ -389,7 +389,7 @@ void Game::wait(Enemy& enemy)
 		  "Attack anyway",
 		  "Walk away"
 		};
-		int selectedMenuPoint = 0;
+		int selectedMenuPoint{};
 		menu.menuGenerator(selectedMenuPoint, staticLines, dynamicMenuPoints, false);
 		switch (selectedMenuPoint) {
 		case 0:
@@ -450,7 +450,7 @@ void Game::rest(int restOption)
 // Controls the playthrough stages
 void Game::gameLoop()
 {
-	int selectedMenuPoint = 0;
+	int selectedMenuPoint{};
 	while (result == gameResult::stillPlaying) {
 		std::vector <std::string> staticMenuLines = { menu.createBanner(worldMap[currentPoint].first->getName(), worldMap[currentPoint].first->isSettlement()) };
 		// List of menu points

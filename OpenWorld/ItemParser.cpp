@@ -32,7 +32,7 @@ void ItemParser::parseArmors()
     }
 
     // Iterate rows, we don't need the first one as it only contains the names of columns
-    for (int row = 1;; ++row)
+    for (int row{ 1 };; ++row)
     {
         // Get name of item and convert it to string
         auto name = sheet->readStr(row, 0);
@@ -101,7 +101,7 @@ void ItemParser::parseConsumables()
     }
 
     // Iterate rows, we don't need the first one as it only contains the names of columns
-    for (int row = 1;; ++row)
+    for (int row{ 1 };; ++row)
     {
         // Get name of item and convert it to string
         auto name = sheet->readStr(row, 0);
@@ -161,7 +161,7 @@ void ItemParser::parseWeapons()
     }
 
     // Iterate rows, we don't need the first one as it only contains the names of columns
-    for (int row = 1;; ++row)
+    for (int row{ 1 };; ++row)
     {
         // Get name of item and convert it to string
         auto name = sheet->readStr(row, 0);

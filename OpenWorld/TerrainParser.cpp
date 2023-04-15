@@ -80,8 +80,8 @@ void TerrainParser::parseTerrains()
                     enemiesNight.emplace_back(str2);
                 }
 
-                int enemiesDayRaritySum = 0;
-                int enemiesNightRaritySum = 0;
+                int enemiesDayRaritySum{};
+                int enemiesNightRaritySum{};
 
                 const auto& parsedEnemies = EnemyParser::getInstance().getParsedEnemies();
                 for (auto& enemyName : enemiesDay) {

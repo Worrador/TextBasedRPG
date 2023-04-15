@@ -33,14 +33,14 @@ public:
 
 private:
 	settlementSizeType settlementSize;
-	int maxConnectionSize = 0;
+	int maxConnectionSize{};
 	std::vector<Shop> settlementShops;
 	std::vector<std::pair<std::string, int>> restOptions;
 
 
 	std::vector<std::string> enemiesOutsideDay = {};
 	std::vector<std::string> enemiesOutsideNight = {};
-	int enemiesOutsideDayRaritySum = 0;
-	int enemiesOutsideNightRaritySum = 0;
+	int enemiesOutsideDayRaritySum{};
+	int enemiesOutsideNightRaritySum{};
 };
 

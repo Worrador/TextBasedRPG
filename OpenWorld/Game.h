@@ -77,8 +77,8 @@ private:
 	gameResult result = gameResult::stillPlaying;
 	Menu menu;
 	Player player;
-	int currentPoint = 0;
-	int previousPoint = 0;
+	int currentPoint{};
+	int previousPoint{};
 	
 	// Use vector for constant_time acces, as we only need to populate once (list could be used otherwise, as the insertion is more efficient)
 	std::vector<mapPoint> worldMap;

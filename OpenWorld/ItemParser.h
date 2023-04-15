@@ -48,15 +48,15 @@ private:
     std::vector<Role> parsedRoles;
 
     std::vector<Item> parsedWeapons;
-    int parsedWeaponsRaritySum = 0;
+    int parsedWeaponsRaritySum{};
     std::vector<std::string> parsedWeaponTypes;
     
     std::vector<Item> parsedArmors;
-    int parsedArmorsRaritySum = 0;
+    int parsedArmorsRaritySum{};
     std::vector<std::string> parsedArmorTypes;
     
     std::vector<Item> parsedConsumables;
-    int parsedConsumablesRaritySum = 0;
+    int parsedConsumablesRaritySum{};
     std::vector<std::string> parsedConsumableTypes;
 };
 

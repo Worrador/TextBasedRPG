@@ -204,7 +204,8 @@ Player Menu::playerCreationMenu()
             "No"
         };
 
-        int selectedMenuPoint = 0;
+        // LESSON: on primitives use initializer list so that you get an error on an iplicit type covnersion, also this inits to zero
+        int selectedMenuPoint{};
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
         if (selectedMenuPoint == 0) {
             std::cout << "\033c";
@@ -281,7 +282,7 @@ Player Menu::playerCreationMenu()
         // Consider passing by value for parameters that are always copied (no changing minds inside the function)
         // and cheap to move. This way we dont have to implement two functions (taking lvalues and rvalues)
         // Nor a template function that accepts universal references which are then forwarded correctly (if used like that)
-        int selectedMenuPoint = 0;
+        int selectedMenuPoint{};
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, false);
         return Player(name, isMale, roles[selectedMenuPoint]);
     }
@@ -303,7 +304,7 @@ int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints
 
     staticMenuLines.emplace_back("Where do you wish to travel?");
 
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
     menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true);
 
     return selectedMenuPoint;
@@ -311,7 +312,7 @@ int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints
 
 void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     while (1) {
         // List of menu points
@@ -348,7 +349,7 @@ void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vec
 
 void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
     // Generate items this should be in the location constructor
 
     while (1) {
@@ -441,7 +442,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 // Returns items that the player sold
 std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>& sellingOptions)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
     const auto& inventory = player.getInventory();
 
     // Copy only items that can be sold at this shop
@@ -536,7 +537,7 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
 
 int Menu::restMenu(Player& player, Place& currentPlace)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     std::vector <std::string> staticMenuLines = {
     "REST"
@@ -654,7 +655,7 @@ static std::string addCustomString(const std::string& color, const std::string& 
 
 void Menu::playerSheetMenu(Player& player)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     while (1) {
 
@@ -748,7 +749,7 @@ void Menu::playerSheetMenu(Player& player)
 }
 void Menu::mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     while (1) {
 
@@ -847,7 +848,7 @@ void Menu::mapMenu(const Player& player, const int& currentPointId, const std::v
 
 int Menu::quitMenu()
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     // List of menu points
     std::vector <std::string> staticMenuLines = {
@@ -866,7 +867,7 @@ int Menu::quitMenu()
 
 void Menu::useItems(Player& player)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     while (1) {
         // List of menu points
@@ -955,7 +956,7 @@ void Menu::useItems(Player& player)
 
 void Menu::unequipItems(Player& player)
 {
-    int selectedMenuPoint = 0;
+    int selectedMenuPoint{};
 
     while (1) {
         // List of menu points

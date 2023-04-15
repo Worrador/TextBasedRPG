@@ -39,8 +39,8 @@ private:
 
 	int maxConnectionSize;
 
-	int enemiesDayRaritySum = 0;
-	int enemiesNightRaritySum = 0;
+	int enemiesDayRaritySum{};
+	int enemiesNightRaritySum{};
 
 	std::string travelName;
 };

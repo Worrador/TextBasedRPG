@@ -42,7 +42,7 @@ public:
 	Game& operator=(const Game&) = delete;
 	Game& operator=(Game&&) = delete;
 
-	// Static method to return a reference to the single instance
+	// LESSON: Static method to return a reference to the single instance
 	static Game& getInstance()
 	{
 		static Game instance;
@@ -50,7 +50,7 @@ public:
 	}
 	void gameLoop();
 
-	inline const gameResult& getResult() { return result; };
+	[[nodiscard]] inline const gameResult& getResult() { return result; };
 
 private:
 

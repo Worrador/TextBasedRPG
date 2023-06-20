@@ -29,7 +29,7 @@ public:
 	Shop& getShop(shopType shop);
 
 	// Modifiers
-	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
+	void setMaxConnectionSize(const int maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
 
 private:
 	settlementSizeType settlementSize;

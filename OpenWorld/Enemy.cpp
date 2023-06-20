@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(const std::string& name, int hpMax, int dmgMax, int defence, int staminaMax, int aggressivity) :
+Enemy::Enemy(const std::string& name, const int hpMax, const int dmgMax, const int defence, const int staminaMax, const int aggressivity) :
 	Character(name, hpMax, dmgMax, (int)std::floor(dmgMax / 2), defence, staminaMax, (int)std::floor(std::max(dmgMax, hpMax) / 5)), expDrop(dmgMax + hpMax),
 	aggressivity(aggressivity)
 {

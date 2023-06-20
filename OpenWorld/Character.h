@@ -4,11 +4,11 @@
 class Character
 {
 public:
-	Character(const std::string& name, const int& hpMax, const int& dmgMax, const int& dmgMin, const int& defence, const int& staminaMax, const int& gold = 0) :
+	Character(const std::string& name, const int hpMax, const int dmgMax, const int dmgMin, const int defence, const int staminaMax, const int gold = 0) noexcept :
 		name(name), hp(hpMax), hpMax(hpMax), damageMax(dmgMax), damageMin(dmgMin), defence(defence), stamina(staminaMax),
 		staminaMax(staminaMax), gold(gold) {};
 
-	virtual ~Character();
+	virtual ~Character() {};
 
 
 	// Operators

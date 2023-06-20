@@ -42,7 +42,7 @@ void Player::levelUp()
 	setStamina(staminaMax);
 }
 
-// Take by value, so that both rvalues and lvalues will be accepted. Rvalues are moved twice, lvalues are first copied then moved. 
+// LESSON: Take by value, so that both rvalues and lvalues will be accepted. Rvalues are moved twice!!, lvalues are first copied then moved. 
 // If the item object will be only moveable in the future, then taking it as a right value ref is better. (Item&& item)
 void Player::addItem(Item item)
 {
@@ -54,7 +54,7 @@ void Player::addItem(Item item)
 		});
 }
 
-void Player::useItem(const int& itemPos)
+void Player::useItem(const int itemPos)
 {
 	//TODO: temporary consumable
 	const auto& itemtype = Inventory[itemPos].getItemType();
@@ -166,7 +166,7 @@ void Player::useItem(const int& itemPos)
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
-void Player::unequipItem(const int& itemPos)
+void Player::unequipItem(const int itemPos)
 {
 	// Unequip item without question
 

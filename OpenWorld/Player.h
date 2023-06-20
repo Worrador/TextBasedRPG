@@ -24,8 +24,8 @@ public:
 	// Functions
 	void levelUp();
 	void addItem( Item item );
-	void useItem( const int& item );
-	void unequipItem( const int& item );
+	void useItem( int item );
+	void unequipItem( int item );
 
 	// Accessors
 	inline int getHpMax() const override { return hpMax + buff_hpMax; };
@@ -59,20 +59,20 @@ public:
 	inline const playerMap& getKnownSettlements() const { return knownSettlements; };
 
 	// Stat Modifiers
-	inline void setExp(int exp) { this->exp = exp; };
-	inline void setExpNext(int expNext) { this->expNext = expNext; };
-	inline void setLevel(int level) { this->level = level; };
+	inline void setExp(const int exp) { this->exp = exp; };
+	inline void setExpNext(const int expNext) { this->expNext = expNext; };
+	inline void setLevel(const int level) { this->level = level; };
 
-	inline void addToKnownSettlements(const int& settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
-	inline void addToKnownTerrains(const int& terrainId) { map.emplace_back(terrainId); };
+	inline void addToKnownSettlements(const int settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
+	inline void addToKnownTerrains(const int terrainId) { map.emplace_back(terrainId); };
 
-	inline void setBuffHpMax(int stat) { buff_hpMax = stat; };
-	inline void setBuffDamageMax(int stat) { buff_damageMax = stat; };
-	inline void setBuffDefence(int stat) { buff_defence = stat; };
-	inline void setBuffStaminaMax(int stat) { buff_staminaMax = stat; };
+	inline void setBuffHpMax(const int stat) { buff_hpMax = stat; };
+	inline void setBuffDamageMax(const int stat) { buff_damageMax = stat; };
+	inline void setBuffDefence(const int stat) { buff_defence = stat; };
+	inline void setBuffStaminaMax(const int stat) { buff_staminaMax = stat; };
 
 	// Provide way for sell menu to modify inventory, which is always returned as const ref by the getter
-	inline void popFromInv(int pos) { Inventory.erase(Inventory.cbegin() + pos); };
+	inline void popFromInv(const int pos) { Inventory.erase(Inventory.cbegin() + pos); };
 
 
 private:

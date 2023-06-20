@@ -29,7 +29,7 @@ public:
 	inline const std::string& getName() const { return name; };
 	inline const std::string& getPreviousTerrainName() const { return previousTerrainName; };
 	inline const std::vector<std::string>& getFollowingTerrainNames() const { return followingTerrainNames; };
-	virtual void setMaxConnectionSize(const int& maxConnectionSize) = 0;
+	virtual void setMaxConnectionSize(int maxConnectionSize) = 0;
 
 	// Later make it const
 

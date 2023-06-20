@@ -56,7 +56,7 @@ class Menu
 {
 public:
 
-	// Constructors, explicit to avoid implicit conversions
+	// LESSON: Constructors, explicit to avoid implicit conversions
 	explicit Menu() : menuState(menuState::Main) {};
 
 	// Operators
@@ -80,7 +80,7 @@ public:
 	std::vector<Item> sellMenu(Player& player, const std::vector<std::string>& sellingOptions);
 	int restMenu(Player& player, Place& currentPlace);
 	void playerSheetMenu(Player& player);
-	void mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap);
+	void mapMenu(const Player& player, int currentPointId, const std::vector<mapPoint>& worldMap);
 	int quitMenu();
 	void useItems(Player& player);
 	void unequipItems(Player& player);

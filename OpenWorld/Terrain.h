@@ -30,7 +30,7 @@ public:
 	const bool isSettlement() const override { return false; }
 
 	// Modifiers
-	void setMaxConnectionSize(const int& maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
+	void setMaxConnectionSize(const int maxConnectionSize) override { this->maxConnectionSize = maxConnectionSize; };
 
 private:
 	std::vector<std::string> enemiesDay;

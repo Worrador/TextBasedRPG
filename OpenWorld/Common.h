@@ -63,6 +63,5 @@ inline int getRandomWithChance(double chance)
 
 	if (randomNumber < chance)
 		return 1;
-	else
-		return 0;
+	return 0;
 }

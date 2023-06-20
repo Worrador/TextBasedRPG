@@ -747,7 +747,7 @@ void Menu::playerSheetMenu(Player& player)
         }
     }
 }
-void Menu::mapMenu(const Player& player, const int& currentPointId, const std::vector<mapPoint>& worldMap)
+void Menu::mapMenu(const Player& player, const int currentPointId, const std::vector<mapPoint>& worldMap)
 {
     int selectedMenuPoint{};
 

@@ -5,7 +5,7 @@ class IResourceParser
 {
 public:
     // Method to access the parsedItems vector
-    int getResourceError() { return resourceError; }
+    [[nodiscard]] int getResourceError() { return resourceError; }
 
 protected:
     int resourceError{};

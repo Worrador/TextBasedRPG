@@ -4,6 +4,7 @@
 
 using shopType = std::string;
 
+// Array of shop types and size of array is also constant = NUMBER_OF_SHOP_TYPES
 constexpr auto SHOP_TYPE_ARMOR = "Armor smith";
 constexpr auto SHOP_TYPE_WEAPON = "Weapon smith";
 constexpr auto SHOP_TYPE_CONSUMABLE = "General goods merchant";

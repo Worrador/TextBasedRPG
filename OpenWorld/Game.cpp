@@ -112,7 +112,7 @@ void Game::addConnections(int currentPlaceIndex, int maxConnections) {
 			// In case of exceptions if it was called in a function like:
 			// processWidget(std::shared_ptr<Widget>(new Widget), computePriority());
 			// Then cumputePritority might throw after new but before shared_ptr constructor
-			// And its to constructor, not one (but hey, using make shared can cause virtua leakage)
+			// And its to constructor, not one (but hey, using make shared can cause virtual leakage)
 			// When a weakpointer still points to the object table, the object space remains still alocated
 			newPlace = std::make_shared<Terrain>(terrains[selectedTerrainIndex]);
 		}

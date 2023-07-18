@@ -500,11 +500,11 @@ void Game::gameLoop()
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_SHOP_WEAPON) {
 			auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get());
-			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_WEAPON).getShopItems(), ItemParser::getInstance().getParsedWeaponTypes(), settlement->getShop(MENU_TYPE_SHOP_ARMOR).getShopQuests());
+			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_WEAPON).getShopItems(), ItemParser::getInstance().getParsedWeaponTypes(), settlement->getShop(MENU_TYPE_SHOP_WEAPON).getShopQuests());
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_SHOP_CONSUMABLE) {
 			auto settlement = dynamic_cast<Settlement*>(worldMap[currentPoint].first.get());
-			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_CONSUMABLE).getShopItems(), ItemParser::getInstance().getParsedConsumableTypes(), settlement->getShop(MENU_TYPE_SHOP_ARMOR).getShopQuests());
+			menu.shopMenu(player, settlement->getShop(MENU_TYPE_SHOP_CONSUMABLE).getShopItems(), ItemParser::getInstance().getParsedConsumableTypes(), settlement->getShop(MENU_TYPE_SHOP_CONSUMABLE).getShopQuests());
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_QUIT) {
 			if (menu.quitMenu() == 0) {

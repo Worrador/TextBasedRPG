@@ -929,9 +929,9 @@ void Menu::useItems(Player& player)
         auto getStaticEquippedItems = [&player](std::stringstream& ss) ->void {
             // Build string stream object
             for (auto& equippedItem : player.getEquipment()) {
-                ss << "  " << equippedItem.getName() << std::endl;
+                ss << "        " << equippedItem.getName() << std::endl;
             }
-            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
+            ss << std::endl << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl;
             if (player.getInventory().size() == 0) {
                 ss << std::endl << "You don't have anything to equip." << std::endl;
@@ -945,16 +945,19 @@ void Menu::useItems(Player& player)
         for (auto& item : itemList) {
             dynamicMenuPoints.emplace_back(item.getName());
         }
-        //dynamicMenuPoints.emplace_back("Unequip items instead");
+        dynamicMenuPoints.emplace_back("Unequip items");
 
         const auto& consumableTypes = ItemParser::getInstance().getParsedConsumableTypes();
 
         auto getDynamicItemStats = [&itemList, &consumableTypes](std::stringstream& ss, const int selectedMenuPoint) ->void {
+
+
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
+
             // Build string stream object
-            if (selectedMenuPoint < 0) {
+            if (selectedMenuPoint < 0 || selectedMenuPoint == itemList.size()) {
                 return;
             }
-            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for:             " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by:          ";
@@ -995,7 +998,11 @@ void Menu::useItems(Player& player)
         }
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticEquippedItems, getDynamicItemStats);
 
-        if (selectedMenuPoint == ESCAPE){
+        if (selectedMenuPoint == ESCAPE) {
+            return;
+        }
+        if (selectedMenuPoint == itemList.size()) {
+            unequipItems(player);
             return;
         }
         player.useItem(selectedMenuPoint);
@@ -1013,7 +1020,6 @@ void Menu::unequipItems(Player& player)
         // List of menu points
         std::vector <std::string> staticMenuLines = {
             "EQUIPPED ITEMS:",
-            ""
         };
 
         // List the eqipped items
@@ -1025,20 +1031,28 @@ void Menu::unequipItems(Player& player)
         if (itemList.size() == 0) {
             staticMenuLines.push_back("You don't have anything to unequip.");
         }
+        dynamicMenuPoints.emplace_back("Use items\n");
 
         const auto& consumableTypes = ItemParser::getInstance().getParsedConsumableTypes();
 
         auto getDynamicItemStats = [&itemList, &player, &consumableTypes](std::stringstream& ss, const int selectedMenuPoint) ->void {
+
             // Build string stream object
             ss << MENU_DIVIDER_STRING << std::endl;
+
+
             ss << std::endl << "UNEQUIPPED ITEMS: " << std::endl << std::endl;
             for (auto& inventoryItem : player.getInventory()) {
-                ss << "  " << inventoryItem.getName() << std::endl;
+                ss << "        " << inventoryItem.getName() << std::endl;
             }
             if (player.getEquipment().size() == 0) {
                 return;
             }
-            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
+            ss << std::endl << std::endl << MENU_DIVIDER_STRING << std::endl;
+
+            if (selectedMenuPoint < 0 || selectedMenuPoint == itemList.size()) {
+                return;
+            }
             ss << std::endl << "ITEM STATISTICS: " << std::endl;
             ss << std::endl << "Sells for:             " << itemList[selectedMenuPoint].getSellGold() << " gold. " << std::endl;
             ss << "Equipable by:          ";
@@ -1080,6 +1094,10 @@ void Menu::unequipItems(Player& player)
         menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, nullptr, getDynamicItemStats);
 
         if (selectedMenuPoint == ESCAPE) {
+            return;
+        }
+        if (selectedMenuPoint == itemList.size()) {
+            useItems(player);
             return;
         }
         player.unequipItem(selectedMenuPoint);

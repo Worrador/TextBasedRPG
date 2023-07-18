@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "Quest.h"
 #include <thread>   // for std::this_thread::sleep_for
 #include <chrono>   // for std::chrono::seconds
 
@@ -24,60 +25,66 @@ public:
 	// Functions
 	void levelUp();
 	void addItem( Item item );
+	void addQuest( Quest quest);
 	void useItem( int item );
 	void unequipItem( int item );
 
 	// Accessors
-	inline int getHpMax() const override { return hpMax + buff_hpMax; };
-	inline int getDamageMin() const override { return getDamageMax() / 2; };
-	inline int getDamageMax() const override { return damageMax + buff_damageMax; };
-	inline int getDefence() const override { return defence + buff_defence; };
-	inline int getStaminaMax() const override { return staminaMax + buff_staminaMax; };
+	int getHpMax() const override { return hpMax + buff_hpMax; };
+	int getDamageMin() const override { return getDamageMax() / 2; };
+	int getDamageMax() const override { return damageMax + buff_damageMax; };
+	int getDefence() const override { return defence + buff_defence; };
+	int getStaminaMax() const override { return staminaMax + buff_staminaMax; };
 
-	inline int getRawHpMax() const { return hpMax; };
-	inline int getRawDamageMin() const { return getDamageMax() / 2; };
-	inline int getRawDamageMax() const { return damageMax; };
-	inline int getRawDefence() const { return defence; };
-	inline int getRawStaminaMax() const { return staminaMax; };
+	int getRawHpMax() const { return hpMax; };
+	int getRawDamageMin() const { return getDamageMax() / 2; };
+	int getRawDamageMax() const { return damageMax; };
+	int getRawDefence() const { return defence; };
+	int getRawStaminaMax() const { return staminaMax; };
 
 
-	inline const int & getLevel() const { return level; };
-	inline const Role& getRole() const { return role; };
-	inline const roleName& getRoleName() const { return role.getRoleName(); };
-	inline const int& getExp() const { return exp; };
-	inline const int& getExpNext() const { return expNext; };
+	const int & getLevel() const { return level; };
+	const Role& getRole() const { return role; };
+	const roleName& getRoleName() const { return role.getRoleName(); };
+	const int& getExp() const { return exp; };
+	const int& getExpNext() const { return expNext; };
 
-	inline const int& getBuffHpMax() const { return buff_hpMax; };
-	inline const int& getBuffDamageMax() const { return buff_damageMax; };
-	inline const int& getBuffDefence() const { return buff_defence; };
-	inline const int& getBuffStaminaMax() const { return buff_staminaMax; };
+	const int& getBuffHpMax() const { return buff_hpMax; };
+	const int& getBuffDamageMax() const { return buff_damageMax; };
+	const int& getBuffDefence() const { return buff_defence; };
+	const int& getBuffStaminaMax() const { return buff_staminaMax; };
 
-	inline const std::vector<Item>& getInventory() const { return Inventory; };
-	inline const std::vector<Item>& getEquipment() const { return Equipment; };
+	std::vector<Item>& getInventory() { return Inventory; };
+	std::vector<Item>& getEquipment() { return Equipment; };
 
-	inline const playerMap& getMap() const { return map; };
-	inline const playerMap& getKnownSettlements() const { return knownSettlements; };
+	const std::vector<Item>& getInventory() const { return Inventory; };
+	const std::vector<Item>& getEquipment() const { return Equipment; };
+
+	const playerMap& getMap() const { return map; };
+	const playerMap& getKnownSettlements() const { return knownSettlements; };
 
 	// Stat Modifiers
-	inline void setExp(const int exp) { this->exp = exp; };
-	inline void setExpNext(const int expNext) { this->expNext = expNext; };
-	inline void setLevel(const int level) { this->level = level; };
+	void setExp(const int exp) { this->exp = exp; };
+	void setExpNext(const int expNext) { this->expNext = expNext; };
+	void setLevel(const int level) { this->level = level; };
 
-	inline void addToKnownSettlements(const int settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
-	inline void addToKnownTerrains(const int terrainId) { map.emplace_back(terrainId); };
+	void addToKnownSettlements(const int settlementId) { knownSettlements.emplace_back(settlementId); map.emplace_back(settlementId); };
+	void addToKnownTerrains(const int terrainId) { map.emplace_back(terrainId); };
 
-	inline void setBuffHpMax(const int stat) { buff_hpMax = stat; };
-	inline void setBuffDamageMax(const int stat) { buff_damageMax = stat; };
-	inline void setBuffDefence(const int stat) { buff_defence = stat; };
-	inline void setBuffStaminaMax(const int stat) { buff_staminaMax = stat; };
+	void setBuffHpMax(const int stat) { buff_hpMax = stat; };
+	void setBuffDamageMax(const int stat) { buff_damageMax = stat; };
+	void setBuffDefence(const int stat) { buff_defence = stat; };
+	void setBuffStaminaMax(const int stat) { buff_staminaMax = stat; };
 
 	// Provide way for sell menu to modify inventory, which is always returned as const ref by the getter
-	inline void popFromInv(const int pos) { Inventory.erase(Inventory.cbegin() + pos); };
+	void popFromInv(const int pos) { Inventory.erase(Inventory.cbegin() + pos); };
+
+	const std::vector<Quest>& getQuests() const { return quests; };
 
 
 private:
 
-	inline void addToMap(const int& discoveredId) { map.emplace_back(discoveredId); };
+	void addToMap(const int& discoveredId) { map.emplace_back(discoveredId); };
 
 	const Role role;
 	const bool isMale;
@@ -95,5 +102,6 @@ private:
 	std::vector<Item> Inventory;
 	playerMap map;
 	playerMap knownSettlements;
+	std::vector<Quest> quests;
 };
 

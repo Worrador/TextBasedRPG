@@ -28,18 +28,18 @@ public:
 	friend void swap(Item& lhs, Item& rhs) noexcept;
 
 	// Accessors
-	inline const std::string& getName() const { return name; };
-	inline const std::vector<roleName>& getRoles() const { return roles; };
-	inline const int getLevel() const { return level; };
-	inline const int getBuyGold() const { return buyGold; };
-	inline const int getSellGold() const { return sellGold; };
-	inline const int getHpMax()	const { return hpMax; };
-	inline const int getDamageMax() const { return damageMax; };
-	inline const int getDefence() const { return defence; };
-	inline const int getStaminaMax() const { return staminaMax; };
-	inline const itemType& getItemType() const { return type; };
-	inline const int getRarityValue() const { return rarity; };
-	inline const itemRarity getRarityName() const { return rarityName; };
+	const std::string& getName() const { return name; };
+	const std::vector<roleName>& getRoles() const { return roles; };
+	const int getLevel() const { return level; };
+	const int getBuyGold() const { return buyGold; };
+	const int getSellGold() const { return sellGold; };
+	const int getHpMax()	const { return hpMax; };
+	const int getDamageMax() const { return damageMax; };
+	const int getDefence() const { return defence; };
+	const int getStaminaMax() const { return staminaMax; };
+	const itemType& getItemType() const { return type; };
+	const int getRarityValue() const { return rarity; };
+	const itemRarity getRarityName() const { return rarityName; };
 
 	// Modifiers
 

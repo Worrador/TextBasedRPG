@@ -160,6 +160,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemParser.cpp" />
     <ClCompile Include="Place.cpp" />
+    <ClCompile Include="Quest.cpp" />
     <ClCompile Include="RoleParser.cpp" />
     <ClCompile Include="SettlementParser.cpp" />
     <ClCompile Include="Shop.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemParser.h" />
     <ClInclude Include="Place.h" />
+    <ClInclude Include="Quest.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RoleParser.h" />
     <ClInclude Include="SettlementParser.h" />

@@ -54,6 +54,15 @@ void Player::addItem(Item item)
 		});
 }
 
+inline void Player::addQuest(Quest quest) {
+	quests.push_back(std::move(quest));
+
+	// Reorder items based on name
+	std::sort(quests.begin(), quests.end(), [](const auto& itemA, const auto& itemB) {
+		return itemA.getName() < itemB.getName();
+		});
+}
+
 void Player::useItem(const int itemPos)
 {
 	//TODO: temporary consumable

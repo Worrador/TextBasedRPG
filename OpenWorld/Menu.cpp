@@ -310,7 +310,8 @@ int Menu::travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints
     return selectedMenuPoint;
 }
 
-void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions)
+void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions, 
+    const std::vector<Quest>& quests)
 {
     int selectedMenuPoint{};
 
@@ -322,7 +323,8 @@ void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vec
 
         std::vector <std::string> dynamicMenuPoints = {
             "Buy",
-            "Sell"
+            "Sell",
+            "Check quests"
         };
 
         if ((int)dynamicMenuPoints.size() == 0) {
@@ -338,6 +340,9 @@ void Menu::shopMenu(Player& player, std::vector<Item>& shopItems, const std::vec
             for (auto& item : sellMenu(player, sellingOptions)) {
                 shopItems.emplace_back(std::move(item));
             }
+            break;
+        case 2:
+            questMenu(player, quests);
             break;
         case ESCAPE:
             return;
@@ -359,7 +364,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
         };
         std::vector <std::string> dynamicMenuPoints;
 
-        for (auto& option : shopItems) {
+        for (const auto& option : shopItems) {
             dynamicMenuPoints.push_back(option.getName());
         }
 
@@ -443,7 +448,7 @@ void Menu::buyMenu(Player& player, std::vector<Item>& shopItems)
 std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>& sellingOptions)
 {
     int selectedMenuPoint{};
-    const auto& inventory = player.getInventory();
+    auto& inventory = player.getInventory();
 
     // Copy only items that can be sold at this shop
     std::vector<int> sellInventoryIds;
@@ -463,7 +468,7 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
             }
         }
 
-        for (auto& id : sellInventoryIds) {
+        for (int id : sellInventoryIds) {
             dynamicMenuPoints.emplace_back(inventory[id].getName());
         }
 
@@ -533,6 +538,51 @@ std::vector<Item> Menu::sellMenu(Player& player, const std::vector<std::string>&
         player.popFromInv(sellInventoryIds[selectedMenuPoint]);
         sellInventoryIds.erase(sellInventoryIds.cbegin() + selectedMenuPoint);
     }
+}
+
+void Menu::questMenu(Player& player, const std::vector<Quest>& quests) {
+
+    int selectedMenuPoint{};
+    // Generate items this should be in the location constructor
+
+    while (1) {
+        // List of menu points
+        std::vector <std::string> staticMenuLines = {
+            "QUESTS AVAILABLE"
+        };
+        std::vector <std::string> dynamicMenuPoints;
+
+        for (const auto& option : quests) {
+            dynamicMenuPoints.emplace_back(option.getName());
+        }
+
+        auto getStaticPlayerGold = [&player](std::stringstream& ss) ->void {
+            // Build string stream object
+            ss << std::endl << "Gold: " << player.getGold() << std::endl;
+        };
+
+        const auto& consumableTypes = ItemParser::getInstance().getParsedConsumableTypes();
+
+        auto getDynamicQuestText = [&quests](std::stringstream& ss, const int selectedMenuPoint) ->void {
+            // Build string stream object
+            if (selectedMenuPoint < 0) {
+                return;
+            }
+
+            ss << std::endl << MENU_DIVIDER_STRING << std::endl;
+            ss << std::endl << "Task: " << quests[selectedMenuPoint].getText() << std::endl;
+
+        };
+        if ((int)dynamicMenuPoints.size() == 0) {
+            selectedMenuPoint = -1; // indicating error for menugenerator
+        }
+        menuGenerator(selectedMenuPoint, staticMenuLines, dynamicMenuPoints, true, getStaticPlayerGold, getDynamicQuestText);
+
+        if (selectedMenuPoint == ESCAPE) {
+            return;
+        }
+    }
+
 }
 
 int Menu::restMenu(Player& player, Place& currentPlace)
@@ -703,7 +753,7 @@ void Menu::playerSheetMenu(Player& player)
 
             ss << "INVENTORY" << std::endl << std::endl;
             ss << player.getGold() << " gold" << std::endl;
-            for (auto& item : player.getInventory()) {
+            for (const auto& item : player.getInventory()) {
                 ss << item.getName() << std::endl;
             }
             ss << std::endl;
@@ -887,7 +937,6 @@ void Menu::useItems(Player& player)
                 ss << std::endl << "You don't have anything to equip." << std::endl;
                 return;
             }
-
         };
 
         // List the eqipped items
@@ -896,6 +945,8 @@ void Menu::useItems(Player& player)
         for (auto& item : itemList) {
             dynamicMenuPoints.emplace_back(item.getName());
         }
+        //dynamicMenuPoints.emplace_back("Unequip items instead");
+
         const auto& consumableTypes = ItemParser::getInstance().getParsedConsumableTypes();
 
         auto getDynamicItemStats = [&itemList, &consumableTypes](std::stringstream& ss, const int selectedMenuPoint) ->void {

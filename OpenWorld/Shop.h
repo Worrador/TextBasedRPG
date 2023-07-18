@@ -1,5 +1,6 @@
 #pragma once
 #include "Item.h"
+#include "Quest.h"
 #include <string>
 
 using shopType = std::string;
@@ -22,17 +23,22 @@ public:
 
 	// Accessors
 	inline const std::string& getShopName() const { return shopName; };
-	inline std::vector<Item>& getShopItems() { 
+	inline std::vector<Item>& getShopItems() {
 		// Reorder items based on name
 		std::sort(shopItems.begin(), shopItems.end(), [](const auto& itemA, const auto& itemB) {
 			return itemA.getName() < itemB.getName();
 			});
 
-		return shopItems; 
+		return shopItems;
+	};
+
+	const std::vector<Quest>& getShopQuests() const {
+		return quests;
 	};
 
 
 private:
 	shopType shopName;	// Armor smith, Weapon smith, Potion brewer
 	std::vector<Item> shopItems;
+	std::vector<Quest> quests{ Quest{"Hunt a Vampire. \nVampires live in caves.\n Reward: 5 gold.\n" } };
 };

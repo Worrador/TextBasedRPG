@@ -84,6 +84,9 @@
     <ClCompile Include="ExcelHandler.cpp">
       <Filter>Source Files\ResourceParsers</Filter>
     </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>Source Files\GameData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -144,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExcelHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -75,11 +75,12 @@ public:
 
 	Player playerCreationMenu();
 	int travelMenu(Player& player, std::vector<std::string>& dynamicMenuPoints);
-	void shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions);
+	void shopMenu(Player& player, std::vector<Item>& shopItems, const std::vector<std::string>& sellingOptions, const std::vector<Quest>& quests);
 	void buyMenu(Player& player, std::vector<Item>& shopItems);
 	std::vector<Item> sellMenu(Player& player, const std::vector<std::string>& sellingOptions);
 	int restMenu(Player& player, Place& currentPlace);
 	void playerSheetMenu(Player& player);
+	void questMenu(Player& player, const std::vector<Quest>& quests);
 	void mapMenu(const Player& player, int currentPointId, const std::vector<mapPoint>& worldMap);
 	int quitMenu();
 	void useItems(Player& player);

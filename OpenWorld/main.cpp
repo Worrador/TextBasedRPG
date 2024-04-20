@@ -47,15 +47,16 @@ int main()
     std::ifstream inFile;
     std::stringstream ss;
 
-    if (game.getResult() == gameResult::Lose) {
+    switch (game.getResult()) {
+    case gameResult::Lose:
         try {
             inFile.open("Resources\\lose_art.txt");
         }
         catch (...) {
             std::cout << "YOU LOSE";
         }
-    }
-    else {
+
+    case gameResult::Win:
         try {
             inFile.open("Resources\\win_art.txt");
         }
@@ -63,7 +64,12 @@ int main()
             std::cout << "YOU WIN";
         }
 
+ 
+    case gameResult::Quit:
+    default:
+        std::cout << "GAME OVER";
     }
+
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
             ss << line << std::endl;

@@ -508,6 +508,7 @@ void Game::gameLoop()
 		}
 		else if (dynamicMenuPoints[selectedMenuPoint] == MENU_TYPE_QUIT) {
 			if (menu.quitMenu() == 0) {
+				result = gameResult::Quit;
 				return;
 			}
 		}

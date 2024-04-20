@@ -22,7 +22,8 @@ constexpr auto MENU_TYPE_QUIT				= "Quit";
 enum class gameResult {
 	Lose = -1,
 	stillPlaying = 0,
-	Win = 1
+	Win = 1,
+	Quit = 2
 };
 
 
@@ -50,7 +51,7 @@ public:
 	}
 	void gameLoop();
 
-	[[nodiscard]] inline const gameResult& getResult() { return result; };
+	[[nodiscard]] inline const gameResult& getResult() const { return result; };
 
 private:
 

@@ -9,7 +9,9 @@ public:
 	Place(const std::string& name, const std::string& previousTerrainName = "", const std::vector<std::string>& followingTerrainNames = { "" }) :
 		name(name), previousTerrainName(previousTerrainName), followingTerrainNames(followingTerrainNames) {};
 
-	virtual ~Place() {};
+	// LESSON: class member functions defined directly in the class declaration are implicitly inline, as you can't split up class declarations, 
+	// so for those you don't have to specifically use inline keyword.
+	virtual ~Place() {}
 	// Operators
 
 	// Functions
